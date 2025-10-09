@@ -21,6 +21,7 @@ from fastapi.staticfiles import StaticFiles
 
 from .api_routes.agent_chat_api import router as agent_chat_router
 from .api_routes.bug_report_api import router as bug_report_router
+from .api_routes.chat_api import router as chat_router  # Lovable integration endpoints
 from .api_routes.internal_api import router as internal_router
 from .api_routes.knowledge_api import router as knowledge_router
 from .api_routes.mcp_api import router as mcp_router
@@ -180,6 +181,7 @@ app.include_router(settings_router)
 app.include_router(mcp_router)
 # app.include_router(mcp_client_router)  # Removed - not part of new architecture
 app.include_router(knowledge_router)
+app.include_router(chat_router)  # Lovable integration (/api/chat, /api/knowledge/version)
 app.include_router(projects_router)
 app.include_router(progress_router)
 app.include_router(agent_chat_router)
