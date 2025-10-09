@@ -1,0 +1,15 @@
+# Ignore unnecessary files for Railway deployment
+archon-ui-main/
+docs/
+.github/
+*.md
+.git/
+.claude/
+PRPs/
+migration/
+tests/
+*.pdf
+smart-grant-buddy/
+node_modules/
+.env
+.env.local

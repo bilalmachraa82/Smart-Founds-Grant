@@ -17,6 +17,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from .api_routes.agent_chat_api import router as agent_chat_router
 from .api_routes.bug_report_api import router as bug_report_router
@@ -185,6 +186,12 @@ app.include_router(agent_chat_router)
 app.include_router(internal_router)
 app.include_router(bug_report_router)
 
+# Mount static files for frontend (if directory exists)
+import os
+static_dir = "/var/www/html"
+if os.path.exists(static_dir):
+    # Mount under /app to avoid shadowing API endpoints like /health
+    app.mount("/app", StaticFiles(directory=static_dir, html=True), name="static")
 
 # Root endpoint
 @app.get("/")
@@ -202,7 +209,60 @@ async def root():
 # Health check endpoint
 @app.get("/health")
 async def health_check(response: Response):
-    """Health check endpoint that indicates true readiness including credential loading."""
+    """
+    Health check endpoint for Railway deployment.
+    Always returns 200 OK to keep service healthy, but includes detailed status.
+    Use /api/health for strict health checks with 503 on errors.
+    """
+    from datetime import datetime
+
+    # Check if initialization is complete
+    if not _initialization_complete:
+        # Railway-friendly: return 200 but indicate not ready
+        return {
+            "status": "initializing",
+            "service": "archon-backend",
+            "timestamp": datetime.now().isoformat(),
+            "message": "Backend is starting up, credentials loading...",
+            "ready": False,
+            "http_status": 200,
+        }
+
+    # Check for required database schema (non-blocking)
+    schema_status = await _check_database_schema()
+    if not schema_status["valid"]:
+        # Railway-friendly: return 200 but indicate migration needed
+        return {
+            "status": "migration_required",
+            "service": "archon-backend",
+            "timestamp": datetime.now().isoformat(),
+            "ready": True,  # Service is running, just needs migration
+            "migration_required": True,
+            "message": schema_status["message"],
+            "migration_instructions": "Run: python3 run_migration.py OR execute migration/complete_setup.sql in Supabase SQL Editor",
+            "schema_valid": False,
+            "http_status": 200,
+        }
+
+    # All checks passed
+    return {
+        "status": "healthy",
+        "service": "archon-backend",
+        "timestamp": datetime.now().isoformat(),
+        "ready": True,
+        "credentials_loaded": True,
+        "schema_valid": True,
+        "http_status": 200,
+    }
+
+
+# API health check endpoint - strict version that returns 503 on errors
+@app.get("/api/health")
+async def api_health_check(response: Response):
+    """
+    Strict API health check endpoint - returns 503 on initialization or migration errors.
+    Use this for internal health checks. Railway uses /health which is more permissive.
+    """
     from datetime import datetime
 
     # Check if initialization is complete
@@ -227,7 +287,7 @@ async def health_check(response: Response):
             "ready": False,
             "migration_required": True,
             "message": schema_status["message"],
-            "migration_instructions": "Open Supabase Dashboard → SQL Editor → Run: migration/add_source_url_display_name.sql",
+            "migration_instructions": "Run: python3 run_migration.py OR execute migration/complete_setup.sql in Supabase SQL Editor",
             "schema_valid": False
         }
 
@@ -239,13 +299,6 @@ async def health_check(response: Response):
         "credentials_loaded": True,
         "schema_valid": True,
     }
-
-
-# API health check endpoint (alias for /health at /api/health)
-@app.get("/api/health")
-async def api_health_check(response: Response):
-    """API health check endpoint - alias for /health."""
-    return await health_check(response)
 
 
 # Cache schema check result to avoid repeated database queries
