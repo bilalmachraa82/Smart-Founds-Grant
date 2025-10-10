@@ -297,6 +297,8 @@ Se for sobre estratégia, fornece recomendações concretas e justificadas.
                     # Check if using AnthropicAdapter or OpenAI client
                     if hasattr(client, 'create_completion'):
                         # AnthropicAdapter
+                        # Max tokens set to 16000 for premium quality analysis
+                        # Claude 4.5 supports up to 200K output tokens
                         response = await client.create_completion(
                             model=llm_model,
                             messages=[
@@ -304,7 +306,7 @@ Se for sobre estratégia, fornece recomendações concretas e justificadas.
                                 {"role": "user", "content": user_prompt}
                             ],
                             temperature=0.3,
-                            max_tokens=4000
+                            max_tokens=16000
                         )
                         answer_text = response.choices[0].message.content
                     else:
@@ -316,7 +318,7 @@ Se for sobre estratégia, fornece recomendações concretas e justificadas.
                                 {"role": "user", "content": user_prompt}
                             ],
                             temperature=0.3,
-                            max_tokens=4000
+                            max_tokens=16000
                         )
                         answer_text = response.choices[0].message.content
 
