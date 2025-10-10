@@ -394,6 +394,12 @@ class CredentialService:
             # Get the selected provider
             provider = rag_settings.get("LLM_PROVIDER", "openai")
 
+            # IMPORTANT: Anthropic doesn't support embeddings
+            # Always use OpenAI for embeddings when LLM provider is Anthropic
+            if service_type == "embedding" and provider == "anthropic":
+                logger.info("Using OpenAI for embeddings (Anthropic doesn't support embeddings API)")
+                provider = "openai"
+
             # Get API key for this provider
             api_key = await self._get_provider_api_key(provider)
 
@@ -402,7 +408,7 @@ class CredentialService:
 
             # Get models
             chat_model = rag_settings.get("MODEL_CHOICE", "")
-            embedding_model = rag_settings.get("EMBEDDING_MODEL", "")
+            embedding_model = rag_settings.get("EMBEDDING_MODEL", "text-embedding-3-small")
 
             return {
                 "provider": provider,
@@ -410,6 +416,7 @@ class CredentialService:
                 "base_url": base_url,
                 "chat_model": chat_model,
                 "embedding_model": embedding_model,
+                "llm_model": chat_model,  # Add explicit llm_model field
             }
 
         except Exception as e:
@@ -422,6 +429,7 @@ class CredentialService:
                 "base_url": None,
                 "chat_model": "",
                 "embedding_model": "",
+                "llm_model": "",
             }
 
     async def _get_provider_api_key(self, provider: str) -> str | None:
