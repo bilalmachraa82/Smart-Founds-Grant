@@ -14,8 +14,9 @@ class AnthropicAdapter:
     """Adapter to make Anthropic API compatible with OpenAI format"""
 
     def __init__(self, api_key: str):
-        self.client = AsyncAnthropic(api_key=api_key)
-        logger.info("Anthropic adapter initialized")
+        # Extended timeout for Claude Sonnet 4.5 with extended thinking (up to 5 minutes)
+        self.client = AsyncAnthropic(api_key=api_key, timeout=300.0)
+        logger.info("Anthropic adapter initialized with 300s timeout")
 
     async def create_completion(
         self,
