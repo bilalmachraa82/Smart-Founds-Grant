@@ -14,6 +14,8 @@ from pydantic import BaseModel, Field
 
 from ..config.logfire_config import get_logger, safe_logfire_error, safe_logfire_info
 from ..services.search.rag_service import RAGService
+from ..services.llm_provider_service import get_llm_client
+from ..services.credential_service import credential_service
 from ..utils import get_supabase_client
 
 # Get logger
@@ -244,16 +246,74 @@ async def chat_endpoint(request: ChatRequest):
                 score=chunk.get("similarity_score") or chunk.get("rerank_score")
             ))
 
-        # Generate answer from top results
-        # TODO: In future, integrate with LLM to generate answer from chunks
-        # For now, return concatenated content as answer
-        answer_text = "\n\n".join([
-            f"From {c.source}: {c.text}"
-            for c in citations[:3]  # Top 3 citations
-        ])
-
-        if not answer_text:
+        # Generate answer using Claude 4.5
+        if not citations:
             answer_text = "No relevant information found in knowledge base."
+        else:
+            # Get LLM settings
+            provider_config = await credential_service.get_active_provider("llm")
+            llm_model = provider_config.get("llm_model", "claude-sonnet-4-5-20250929")
+
+            # Build context from citations
+            context_text = "\n\n".join([
+                f"[Fonte: {c.source}]\n{chunk.get('content', '')}"
+                for chunk, c in zip(result.get("results", [])[:5], citations[:5])
+            ])
+
+            # Build prompt for Claude
+            system_prompt = """És um especialista em análise de candidaturas a fundos europeus em Portugal.
+Analisa candidaturas com rigor técnico, citando sempre as fontes legais relevantes.
+Responde em Português europeu de forma clara, estruturada e profissional."""
+
+            user_prompt = f"""# CONTEXTO DA BASE DE CONHECIMENTO
+
+{context_text}
+
+---
+
+# PERGUNTA DO UTILIZADOR
+
+{request.query}
+
+---
+
+# INSTRUÇÕES
+
+Com base EXCLUSIVAMENTE no contexto fornecido acima, responde à pergunta do utilizador de forma:
+- **Detalhada e fundamentada**: Cita os documentos e artigos relevantes
+- **Estruturada**: Usa headings (##, ###) e listas quando apropriado
+- **Profissional**: Mantém tom técnico e objetivo
+- **Completa**: Cobre todos os aspectos relevantes da pergunta
+
+Se a pergunta for sobre elegibilidade de uma candidatura, avalia todos os critérios relevantes.
+Se for sobre estratégia, fornece recomendações concretas e justificadas.
+"""
+
+            # Call Claude 4.5
+            try:
+                async with get_llm_client() as client:
+                    safe_logfire_info(f"Calling LLM | model={llm_model}")
+
+                    response = await client.create_completion(
+                        model=llm_model,
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt}
+                        ],
+                        temperature=0.3,  # Lower temperature for more factual responses
+                        max_tokens=4000
+                    )
+
+                    answer_text = response.choices[0].message.content
+                    safe_logfire_info(f"LLM response generated | length={len(answer_text)}")
+
+            except Exception as e:
+                safe_logfire_error(f"LLM generation failed | error={str(e)}")
+                # Fallback to concatenated context
+                answer_text = "\n\n".join([
+                    f"From {c.source}: {c.text}"
+                    for c in citations[:3]
+                ])
 
         response = ChatResponse(
             answer=answer_text,
