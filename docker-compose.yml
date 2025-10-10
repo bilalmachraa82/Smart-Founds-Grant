@@ -144,7 +144,34 @@ services:
       retries: 3
       start_period: 40s
 
-  # Frontend
+  # Smart Grant Buddy Frontend
+  smart-grant-frontend:
+    build: ./frontend
+    container_name: smart-grant-buddy
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    environment:
+      - VITE_API_URL=http://${HOST:-localhost}:${ARCHON_SERVER_PORT:-8181}
+      - VITE_ARCHON_SERVER_PORT=${ARCHON_SERVER_PORT:-8181}
+      - VITE_SUPABASE_URL=${SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - HOST=${HOST:-localhost}
+      - PROD=${PROD:-false}
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    depends_on:
+      archon-server:
+        condition: service_healthy
+
+  # Original Archon Frontend (opcional)
   archon-frontend:
     build: ./archon-ui-main
     container_name: archon-ui

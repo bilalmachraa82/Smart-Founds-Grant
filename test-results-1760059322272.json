@@ -1,0 +1,103 @@
+{
+  "timestamp": "2025-10-10T01:22:00.068Z",
+  "companyData": {
+    "name": "InnovaTech Solutions Lda",
+    "nif": "515789432",
+    "investment": 450000,
+    "employees": 35,
+    "turnover": 2500000,
+    "projectDescription": "Projeto de Investigação e Desenvolvimento focado na criação de uma plataforma de Inteligência Artificial para otimização de processos industriais.\n\nO projeto visa desenvolver algoritmos avançados de machine learning e visão computacional para automatização de processos de controlo de qualidade na indústria transformadora.\n\nInclui componentes de:\n- Desenvolvimento de modelos de IA proprietários\n- Integração com sistemas IoT industriais\n- Interface web para gestão e monitorização em tempo real\n- Sistema de análise preditiva para manutenção preventiva\n\nO projeto promove a transformação digital e inovação tecnológica, alinhado com os objetivos da Agenda Digital Portuguesa e do PRR."
+  },
+  "tests": [
+    {
+      "test": "Frontend Accessibility",
+      "status": "PASS",
+      "details": {
+        "statusCode": 200,
+        "contentLength": 14318,
+        "hasContent": true
+      },
+      "timestamp": "2025-10-10T01:22:00.382Z"
+    },
+    {
+      "test": "Legal Version Endpoint",
+      "status": "PASS",
+      "details": {
+        "statusCode": 200,
+        "hasVersionHash": false,
+        "response": {
+          "version": "03/C05-i14.01/2025",
+          "hash": "f9f8fae2e5fd85f4",
+          "lastUpdated": "2025-10-10T00:50:17.691773+00:00",
+          "totalSources": 9,
+          "totalChunks": 35,
+          "documents": [
+            "Aviso 03/C05-i14.01/2025",
+            "Portaria 286/2025/1",
+            "Regulamento UE 2023/2831"
+          ]
+        }
+      },
+      "timestamp": "2025-10-10T01:22:01.790Z"
+    },
+    {
+      "test": "Railway Backend Health",
+      "status": "PASS",
+      "details": {
+        "statusCode": 200,
+        "response": "{\"status\":\"healthy\",\"service\":\"archon-backend\",\"timestamp\":\"2025-10-10T01:22:02.166844\",\"ready\":true,\"credentials_loaded\":true,\"schema_valid\":true,\"http_status\":200}"
+      },
+      "timestamp": "2025-10-10T01:22:02.093Z"
+    },
+    {
+      "test": "AI Analysis Endpoint",
+      "status": "FAIL",
+      "details": {
+        "statusCode": 400,
+        "responseTime": "178ms",
+        "responseTimeOk": true,
+        "hasEligibility": false,
+        "hasIncentive": false,
+        "hasScoring": false,
+        "hasCitations": false,
+        "citationCount": 0,
+        "hasDocuments": false,
+        "responseKeys": [
+          "error"
+        ]
+      },
+      "timestamp": "2025-10-10T01:22:02.271Z"
+    },
+    {
+      "test": "Response Structure Validation",
+      "status": "PARTIAL",
+      "details": {
+        "hasEligibilityAnalysis": false,
+        "hasIncentiveCalculation": false,
+        "hasScoringInfo": false,
+        "hasCitations": false,
+        "citationCount": 0,
+        "expectedCitationCount": false,
+        "hasGeneratedDocuments": false,
+        "responseTimeUnder30s": true
+      },
+      "timestamp": "2025-10-10T01:22:02.271Z"
+    },
+    {
+      "test": "Detailed Analysis Output",
+      "status": "INFO",
+      "details": {
+        "fullResponse": {
+          "error": "Missing required fields"
+        },
+        "eligibility": "N/A",
+        "incentive": "N/A",
+        "scoring": "N/A",
+        "citationsSample": [],
+        "documents": "N/A"
+      },
+      "timestamp": "2025-10-10T01:22:02.271Z"
+    }
+  ],
+  "overallStatus": "FAILING"
+}

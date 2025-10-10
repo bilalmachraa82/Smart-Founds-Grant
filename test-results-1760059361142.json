@@ -1,0 +1,211 @@
+{
+  "timestamp": "2025-10-10T01:22:39.226Z",
+  "companyData": {
+    "name": "InnovaTech Solutions Lda",
+    "nif": "515789432",
+    "investment": 450000,
+    "employees": 35,
+    "turnover": 2500000,
+    "projectDescription": "Projeto de Investigação e Desenvolvimento focado na criação de uma plataforma de Inteligência Artificial para otimização de processos industriais.\n\nO projeto visa desenvolver algoritmos avançados de machine learning e visão computacional para automatização de processos de controlo de qualidade na indústria transformadora.\n\nInclui componentes de:\n- Desenvolvimento de modelos de IA proprietários\n- Integração com sistemas IoT industriais\n- Interface web para gestão e monitorização em tempo real\n- Sistema de análise preditiva para manutenção preventiva\n\nO projeto promove a transformação digital e inovação tecnológica, alinhado com os objetivos da Agenda Digital Portuguesa e do PRR."
+  },
+  "tests": [
+    {
+      "test": "Frontend Accessibility",
+      "status": "PASS",
+      "details": {
+        "statusCode": 200,
+        "contentLength": 14318,
+        "hasContent": true
+      },
+      "timestamp": "2025-10-10T01:22:39.444Z"
+    },
+    {
+      "test": "Legal Version Endpoint",
+      "status": "PASS",
+      "details": {
+        "statusCode": 200,
+        "hasVersionHash": false,
+        "response": {
+          "version": "03/C05-i14.01/2025",
+          "hash": "f9f8fae2e5fd85f4",
+          "lastUpdated": "2025-10-10T00:50:17.691773+00:00",
+          "totalSources": 9,
+          "totalChunks": 35,
+          "documents": [
+            "Aviso 03/C05-i14.01/2025",
+            "Portaria 286/2025/1",
+            "Regulamento UE 2023/2831"
+          ]
+        }
+      },
+      "timestamp": "2025-10-10T01:22:40.128Z"
+    },
+    {
+      "test": "Railway Backend Health",
+      "status": "PASS",
+      "details": {
+        "statusCode": 200,
+        "response": "{\"status\":\"healthy\",\"service\":\"archon-backend\",\"timestamp\":\"2025-10-10T01:22:40.356061\",\"ready\":true,\"credentials_loaded\":true,\"schema_valid\":true,\"http_status\":200}"
+      },
+      "timestamp": "2025-10-10T01:22:40.290Z"
+    },
+    {
+      "test": "AI Analysis Endpoint",
+      "status": "PASS",
+      "details": {
+        "statusCode": 200,
+        "responseTime": "851ms",
+        "responseTimeOk": true,
+        "hasEligibility": false,
+        "hasIncentive": false,
+        "hasScoring": false,
+        "hasCitations": true,
+        "citationCount": 5,
+        "hasDocuments": false,
+        "responseKeys": [
+          "human",
+          "response_json",
+          "citations",
+          "total_found",
+          "search_mode"
+        ]
+      },
+      "timestamp": "2025-10-10T01:22:41.142Z"
+    },
+    {
+      "test": "Response Structure Validation",
+      "status": "PARTIAL",
+      "details": {
+        "hasEligibilityAnalysis": false,
+        "hasIncentiveCalculation": false,
+        "hasScoringInfo": false,
+        "hasCitations": true,
+        "citationCount": 5,
+        "expectedCitationCount": false,
+        "hasGeneratedDocuments": false,
+        "responseTimeUnder30s": true
+      },
+      "timestamp": "2025-10-10T01:22:41.142Z"
+    },
+    {
+      "test": "Detailed Analysis Output",
+      "status": "INFO",
+      "details": {
+        "fullResponse": {
+          "human": "From unknown: --- Page 1 ---\nAVISO DE ABERTURA DE CONCURSO\nInvestimento C05-i14.01: “Inovação Empresarial”\nAviso 03/C05-i14.01/2025\nLinha “IA nas PME”\nPortaria n.º 286/2025/1, de 14 de agosto\n30/09/2025\nPágina 1 de...\n\nFrom unknown: --- Page 4 ---\n2 Objetivos e prioridades visadas no AAC\nA tipologia de operação “IA nas PMEs” tem por objetivo o apoio à adoção de soluções de\ninteligência artificial por micro, pequenas e médias empr...\n\nFrom unknown: --- Page 2 ---\n2/19\n1/5202/682\nº.n\nairatroP\n1.ª série\nN.º 156\n14-08-2025\nFoi obtido o parecer favorável da comissão técnica dos sistemas de incentivos, nos termos do\nartigo 7.º do Decreto-Lei n.º 6/20...",
+          "response_json": {
+            "eligibility": {
+              "eligible": true,
+              "criteria": [
+                {
+                  "criterion": "PME",
+                  "met": true,
+                  "citation": "Aviso 03/C05-i14.01/2025, Art. 3.1"
+                },
+                {
+                  "criterion": "Região Elegível",
+                  "met": true,
+                  "citation": "Aviso 03/C05-i14.01/2025, Art. 4.2"
+                }
+              ]
+            },
+            "incentive": {
+              "amount": 337500,
+              "rate": 0.75,
+              "breakdown": {
+                "Equipamentos": 202500,
+                "Software": 135000
+              }
+            },
+            "scoring": {
+              "score": 7.5,
+              "class": "A",
+              "goals": {
+                "jobs": 50,
+                "export": 30,
+                "productivity": 40
+              }
+            },
+            "documents": {
+              "markdown": "# Memória Descritiva...",
+              "csv": "Rubrica,Valor...",
+              "copyMap": "🎯 COPY MAP..."
+            }
+          },
+          "citations": [
+            {
+              "source": "unknown",
+              "page": null,
+              "text": "--- Page 1 ---\nAVISO DE ABERTURA DE CONCURSO\nInvestimento C05-i14.01: “Inovação Empresarial”\nAviso 03/C05-i14.01/2025\nLinha “IA nas PME”\nPortaria n.º 286/2025/1, de 14 de agosto\n30/09/2025\nPágina 1 de...",
+              "score": 0.710869942799818
+            },
+            {
+              "source": "unknown",
+              "page": null,
+              "text": "--- Page 4 ---\n2 Objetivos e prioridades visadas no AAC\nA tipologia de operação “IA nas PMEs” tem por objetivo o apoio à adoção de soluções de\ninteligência artificial por micro, pequenas e médias empr...",
+              "score": 0.657633783048312
+            },
+            {
+              "source": "unknown",
+              "page": null,
+              "text": "--- Page 2 ---\n2/19\n1/5202/682\nº.n\nairatroP\n1.ª série\nN.º 156\n14-08-2025\nFoi obtido o parecer favorável da comissão técnica dos sistemas de incentivos, nos termos do\nartigo 7.º do Decreto-Lei n.º 6/20...",
+              "score": 0.644065188150053
+            },
+            {
+              "source": "unknown",
+              "page": null,
+              "text": "--- Page 6 ---\npositivo;\ni) Declarar que desenvolve o projeto em estabelecimento(s) legalmente\nconstituído(s) em qualquer uma das regiões NUTS II do território do continente;\nj) Não se enquadrar no co...",
+              "score": 0.634660033068649
+            },
+            {
+              "source": "unknown",
+              "page": null,
+              "text": "--- Page 1 ---\n1/19\n1/5202/682\nº.n\nairatroP\n1.ª série\nN.º 156\n14-08-2025\nECONOMIA E COESÃO TERRITORIAL\nPortaria n.º 286/2025/1, de 14 de agosto\nSumário: Cria o sistema de incentivos «Instrumento Finan...",
+              "score": 0.634096769309814
+            }
+          ],
+          "total_found": 25,
+          "search_mode": "hybrid"
+        },
+        "eligibility": "N/A",
+        "incentive": "N/A",
+        "scoring": "N/A",
+        "citationsSample": [
+          {
+            "source": "unknown",
+            "page": null,
+            "text": "--- Page 1 ---\nAVISO DE ABERTURA DE CONCURSO\nInvestimento C05-i14.01: “Inovação Empresarial”\nAviso 03/C05-i14.01/2025\nLinha “IA nas PME”\nPortaria n.º 286/2025/1, de 14 de agosto\n30/09/2025\nPágina 1 de...",
+            "score": 0.710869942799818
+          },
+          {
+            "source": "unknown",
+            "page": null,
+            "text": "--- Page 4 ---\n2 Objetivos e prioridades visadas no AAC\nA tipologia de operação “IA nas PMEs” tem por objetivo o apoio à adoção de soluções de\ninteligência artificial por micro, pequenas e médias empr...",
+            "score": 0.657633783048312
+          },
+          {
+            "source": "unknown",
+            "page": null,
+            "text": "--- Page 2 ---\n2/19\n1/5202/682\nº.n\nairatroP\n1.ª série\nN.º 156\n14-08-2025\nFoi obtido o parecer favorável da comissão técnica dos sistemas de incentivos, nos termos do\nartigo 7.º do Decreto-Lei n.º 6/20...",
+            "score": 0.644065188150053
+          },
+          {
+            "source": "unknown",
+            "page": null,
+            "text": "--- Page 6 ---\npositivo;\ni) Declarar que desenvolve o projeto em estabelecimento(s) legalmente\nconstituído(s) em qualquer uma das regiões NUTS II do território do continente;\nj) Não se enquadrar no co...",
+            "score": 0.634660033068649
+          },
+          {
+            "source": "unknown",
+            "page": null,
+            "text": "--- Page 1 ---\n1/19\n1/5202/682\nº.n\nairatroP\n1.ª série\nN.º 156\n14-08-2025\nECONOMIA E COESÃO TERRITORIAL\nPortaria n.º 286/2025/1, de 14 de agosto\nSumário: Cria o sistema de incentivos «Instrumento Finan...",
+            "score": 0.634096769309814
+          }
+        ],
+        "documents": "N/A"
+      },
+      "timestamp": "2025-10-10T01:22:41.142Z"
+    }
+  ],
+  "overallStatus": "WORKING"
+}
