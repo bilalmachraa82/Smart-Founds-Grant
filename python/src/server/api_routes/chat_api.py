@@ -281,7 +281,16 @@ QUANDO APLICÁVEL, GERA 3 CENÁRIOS DE INVESTIMENTO:
 - **Recomendado** (~85-95% do teto): Equilibrado entre qualidade/risco/impacto
 - **Completo** (~100% do teto): Maximiza impacto e score de mérito
 
-Itens que excedam o teto → coloca em backlog (fase futura/expansão)."""
+Itens que excedam o teto → coloca em backlog (fase futura/expansão).
+
+ADAPTAÇÃO AO SETOR (CAE):
+Quando propor use cases IA, adapta ao sector da empresa:
+- **CAE 62010 (Programação informática)**: GitHub Copilot, code assistants, automated testing, CI/CD automation, code review IA
+- **CAE 70220 (Consultoria gestão)**: Microsoft 365 Copilot, knowledge management (Notion AI), CRM inteligente, análise dados clientes, assistente virtual tarefas
+- **CAE 47910 (Comércio online)**: Chatbots atendimento/vendas, motor recomendação produtos (ML), previsão procura/stock inteligente, análise sentimento reviews
+- **CAE 56101 (Restaurantes)**: Previsão procura & gestão compras inteligente, chatbot reservas (WhatsApp/IG), otimização pricing dinâmico (happy hours IA)
+- **CAE 47190 (Comércio retalho)**: Sistema checkout automático, análise comportamento clientes (computer vision), gestão stock preditiva, personalização ofertas
+- **OUTROS SETORES**: Identifica o CAE e propõe ferramentas relevantes (automation, data analysis, customer service, operations optimization)"""
 
             user_prompt = f"""# CONTEXTO DA BASE DE CONHECIMENTO
 
@@ -361,17 +370,74 @@ Apontar despesas NÃO elegíveis (se houver).
 - Tetos e prazos [citar artigo]
 - Nota: até 95% do incentivo antes do PTRF [citar]
 
-## H) CHECKLIST SUBMISSÃO
-Lista verificação (formato tickable com [ ]) de 12-15 documentos obrigatórios: Certificação PME, Certidão permanente, IES, Situação tributária, RCBE, Orçamentos (3 cotações >€5k), Declarações DNSH/duplo financiamento/co-financiamento, Plano formação, etc. [citar fontes]
+## H) CHECKLIST SUBMISSÃO (TICKABLE)
+Lista verificação com checkboxes [ ]:
+- [ ] Certificação PME válida [citar fonte]
+- [ ] Certidão permanente empresa
+- [ ] IES [ano] (Quadros específicos necessários)
+- [ ] Declaração situação tributária/contributiva regularizada
+- [ ] Comprovativo RCBE atualizado
+- [ ] Memória descritiva projeto detalhada
+- [ ] Orçamentos fornecedores (3 cotações para valores >€5k)
+- [ ] Plano formação detalhado (se aplicável)
+- [ ] Contratos/cartas intenção (se aplicável)
+- [ ] Declaração cumprimento DNSH [citar checklist]
+- [ ] Declaração não duplicação financiamento UE
+- [ ] Declaração capacidade co-financiamento
+- [ ] Business case/análise viabilidade económica
+- [ ] Política RGPD empresa + DPAs fornecedores
+- [ ] Cronograma Gantt detalhado
+- [ ] Declaração auxílios de minimis recebidos (últimos 3 anos)
+- [ ] Comprovativo titularidade conta bancária
+- [ ] Procuração (se representante legal diferente)
 
-## I) MAPA COPY-PASTE SIGA-BF
-Tabela 3 colunas (Campo SIGA | Valor | Fonte) com campos chave: NIF, Denominação, CAE, NUTS II, Dimensão, Investimento, Taxa incentivo, Prazo, Datas, Empregos, VAB. [10-15 linhas principais]
+## I) COPY MAP SIGA-BF (Mapa Correspondência)
+Tabela com 3 colunas para copy-paste direto:
+| Campo SIGA-BF | Valor a Copiar | Fonte de Validação |
+|---------------|----------------|---------------------|
+| NIF Beneficiário | [valor] | Certidão permanente |
+| Denominação Social | [valor completo] | Certidão permanente |
+| CAE Principal | [código 5 dígitos] | Certidão permanente |
+| Região NUTS II | [código] | Código INE [localidade] |
+| Dimensão Empresa | [Micro/Pequena/Média] | Certificação PME IAPMEI |
+| Investimento Total Elegível | €[valor] | Orçamento detalhado anexo |
+| Taxa Incentivo Base | [%] | [Aviso, p.X, art.Y] |
+| Incentivo Total Solicitado | €[valor] | Cálculo: Investimento × Taxa |
+| Co-financiamento Empresa | €[valor] | Declaração capacidade |
+| Prazo Execução (meses) | [X] | Cronograma Gantt |
+| Data Início Prevista | [DD/MM/AAAA] | Pós-aprovação estimada |
+| Data Fim Prevista | [DD/MM/AAAA] | Cronograma + prazo |
+| Postos Trabalho Criados | [nº] | Declaração beneficiário |
+| Crescimento VAB Projetado | +[%] | Business case |
+| Código Tipologia Investimento | [código] | [Aviso, anexo] |
+| Domínio Investimento | [código domínio] | [Aviso, lista] |
+| Objetivos Específicos UE | [códigos] | Regulamento UE anexo |
 
-## J) RISCOS & MITIGAÇÃO
-Matriz 6 colunas (Risco | Prob | €Impacto | Mitigação | Contingência | Owner) com 6-8 riscos críticos: RGPD, DNSH, duplo financiamento, atrasos, fornecedores, adoção. [conciso]
+## J) GESTÃO DE RISCOS (Matriz Detalhada)
+Tabela 6 colunas para gestão proativa:
+| Risco | Probabilidade | Impacto (€) | Mitigação | Contingência | Responsável |
+|-------|---------------|-------------|-----------|--------------|-------------|
+| RGPD/Privacidade dados | [Baixa/Média/Alta] | €[X] | [ações preventivas] | [plano B] | [role/cargo] |
+| DNSH compliance | [Baixa/Média/Alta] | €[X] | [validação prévia] | [alternativas] | [role] |
+| Duplo financiamento UE | [Baixa/Média/Alta] | €[X] | [controlo interno] | [correção] | [role] |
+| Atraso execução projeto | [Baixa/Média/Alta] | €[X] | [buffer temporal] | [reescalonamento] | [role] |
+| Fornecedor falha entrega | [Baixa/Média/Alta] | €[X] | [fornecedores backup] | [alternativas] | [role] |
+| Adoção baixa equipa | [Baixa/Média/Alta] | €[X] | [formação intensiva] | [apoio externo] | [role] |
+| Mudança legislação | [Baixa/Média/Alta] | €[X] | [monitorização] | [adaptação] | [role] |
+| Ultrapassar orçamento | [Baixa/Média/Alta] | €[X] | [margem segurança] | [redução âmbito] | [role] |
 
-## K) AUDIT TRAIL
-Tabela metadados: ID Sessão, Data, Documentos base, Fontes dados empresa, Metodologia estimativas, Autor (Archon + Claude Sonnet 4.5).
+## K) AUDIT TRAIL & RASTREABILIDADE
+Tabela metadados para transparência total:
+| Atributo | Valor |
+|----------|-------|
+| ID Sessão | [formato: EMPRESA-AVISO-YYYYMMDD-v1.0] |
+| Data Geração | [YYYY-MM-DDTHH:MM:SSZ ISO-8601] |
+| Documentos Base | • [Aviso X, versão Y, data publicação]<br>• [Portaria Z, data]<br>• [Regulamento UE, data] |
+| Fontes Dados Empresa | [eInforma/Racius/website oficial/declarado cliente] |
+| Metodologia Estimativas | [explicar cálculos VN/VAB/ROI se aplicável] |
+| Pressupostos Assumidos | [listar se houver gaps informação] |
+| Autor/Sistema | Archon Knowledge Engine v[versão] |
+| Modelo IA | Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) |
 
 ## L) PRÓXIMAS AÇÕES
 Box 💡 no fim de cada secção relevante com passo concreto seguinte.
@@ -389,9 +455,10 @@ Box 💡 no fim de cada secção relevante com passo concreto seguinte.
                     # Check if using AnthropicAdapter or OpenAI client
                     if hasattr(client, 'create_completion'):
                         # AnthropicAdapter
-                        # Max tokens set to 16000 for balanced output (12 sections)
-                        # Supports: Dashboard, Budget Tiers, Checklist, SIGA Map, Audit Trail
-                        # Trade-off: Quality over extreme length (optimized for 2-3min generation)
+                        # Max tokens set to 18000 for PREMIUM quality output (12 sections A-L)
+                        # Detailed examples: 18-item checklist, 17-field SIGA map, 8-risk matrix, audit trail
+                        # CAE-specific use cases, Budget Gate, 3-tier scenarios
+                        # Priority: Quality over speed (accepts 3-4min generation for ultra-premium reports)
                         response = await client.create_completion(
                             model=llm_model,
                             messages=[
@@ -399,7 +466,7 @@ Box 💡 no fim de cada secção relevante com passo concreto seguinte.
                                 {"role": "user", "content": user_prompt}
                             ],
                             temperature=0.3,
-                            max_tokens=16000
+                            max_tokens=18000
                         )
                         answer_text = response.choices[0].message.content
                     else:
@@ -411,7 +478,7 @@ Box 💡 no fim de cada secção relevante com passo concreto seguinte.
                                 {"role": "user", "content": user_prompt}
                             ],
                             temperature=0.3,
-                            max_tokens=16000
+                            max_tokens=18000
                         )
                         answer_text = response.choices[0].message.content
 
