@@ -294,17 +294,32 @@ Se for sobre estratégia, fornece recomendações concretas e justificadas.
                 async with get_llm_client() as client:
                     safe_logfire_info(f"Calling LLM | model={llm_model}")
 
-                    response = await client.create_completion(
-                        model=llm_model,
-                        messages=[
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_prompt}
-                        ],
-                        temperature=0.3,  # Lower temperature for more factual responses
-                        max_tokens=4000
-                    )
+                    # Check if using AnthropicAdapter or OpenAI client
+                    if hasattr(client, 'create_completion'):
+                        # AnthropicAdapter
+                        response = await client.create_completion(
+                            model=llm_model,
+                            messages=[
+                                {"role": "system", "content": system_prompt},
+                                {"role": "user", "content": user_prompt}
+                            ],
+                            temperature=0.3,
+                            max_tokens=4000
+                        )
+                        answer_text = response.choices[0].message.content
+                    else:
+                        # OpenAI client
+                        response = await client.chat.completions.create(
+                            model=llm_model,
+                            messages=[
+                                {"role": "system", "content": system_prompt},
+                                {"role": "user", "content": user_prompt}
+                            ],
+                            temperature=0.3,
+                            max_tokens=4000
+                        )
+                        answer_text = response.choices[0].message.content
 
-                    answer_text = response.choices[0].message.content
                     safe_logfire_info(f"LLM response generated | length={len(answer_text)}")
 
             except Exception as e:
