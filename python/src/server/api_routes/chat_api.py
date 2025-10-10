@@ -295,9 +295,9 @@ Itens que excedam o teto → coloca em backlog (fase futura/expansão)."""
 
 ---
 
-# INSTRUÇÕES DE OUTPUT (PROPOSTA ACTIONABLE)
+# INSTRUÇÕES DE OUTPUT
 
-Com base EXCLUSIVAMENTE no contexto fornecido, fornece uma análise COMPLETA E PRONTA A USAR com as seguintes secções:
+Com base EXCLUSIVAMENTE no contexto fornecido, fornece uma análise COMPLETA com as seguintes secções:
 
 ## A) DASHBOARD (Resumo Executivo no topo)
 Badges com indicadores-chave:
@@ -361,90 +361,24 @@ Apontar despesas NÃO elegíveis (se houver).
 - Tetos e prazos [citar artigo]
 - Nota: até 95% do incentivo antes do PTRF [citar]
 
-## H) CHECKLIST SUBMISSÃO (TICKABLE)
-Lista verificação com checkboxes [ ]:
-- [ ] Certificação PME válida [citar]
-- [ ] Certidão permanente empresa
-- [ ] IES [ano] (Quadros X, Y, Z)
-- [ ] Declaração situação tributária/contributiva regularizada
-- [ ] Comprovativo RCBE atualizado
-- [ ] Memória descritiva projeto (mín. X páginas)
-- [ ] Orçamentos fornecedores (3 cotações para valores >€5k)
-- [ ] Plano formação detalhado
-- [ ] Contratos/cartas intenção
-- [ ] Declaração cumprimento DNSH [citar checklist]
-- [ ] Declaração não duplicação financiamento UE
-- [ ] Declaração capacidade co-financiamento
-- [ ] Business case/análise ROI
-- [ ] Política RGPD empresa + DPAs fornecedores
-... [15-20 items total]
+## H) CHECKLIST SUBMISSÃO
+Lista verificação (formato tickable com [ ]) de 12-15 documentos obrigatórios: Certificação PME, Certidão permanente, IES, Situação tributária, RCBE, Orçamentos (3 cotações >€5k), Declarações DNSH/duplo financiamento/co-financiamento, Plano formação, etc. [citar fontes]
 
-## I) COPY MAP SIGA-BF (Mapa Correspondência)
-Tabela com 3 colunas:
-| Campo SIGA-BF | Valor a Copiar | Fonte de Validação |
-|---------------|----------------|---------------------|
-| NIF Beneficiário | [valor] | Certidão permanente |
-| Denominação | [valor] | Certidão permanente |
-| CAE Principal | [valor] | Certidão permanente |
-| Região NUTS II | [código] | Código INE [localidade] |
-| Dimensão Empresa | [Micro/Pequena/Média] | Certificação PME IAPMEI |
-| Investimento Total Elegível | €[valor] | Orçamento detalhado anexo |
-| Taxa Incentivo Base | [%] | [Aviso, p.X, art.Y] |
-| Incentivo Total Solicitado | €[valor] | Cálculo: [fórmula] |
-| Co-financiamento Empresa | €[valor] | Declaração capacidade |
-| Prazo Execução (meses) | [X] | Cronograma Gantt |
-| Data Início Prevista | [DD/MM/AAAA] | Pós-aprovação |
-| Data Fim Prevista | [DD/MM/AAAA] | Cronograma |
-| Postos Trabalho Criados | [nº] | Declaração beneficiário |
-| Crescimento VAB Projetado | +[%] | Business case |
-... [incluir todos os campos obrigatórios do formulário]
+## I) MAPA COPY-PASTE SIGA-BF
+Tabela 3 colunas (Campo SIGA | Valor | Fonte) com campos chave: NIF, Denominação, CAE, NUTS II, Dimensão, Investimento, Taxa incentivo, Prazo, Datas, Empregos, VAB. [10-15 linhas principais]
 
-## J) GESTÃO DE RISCOS (Matriz Detalhada)
-Tabela:
-| Risco | Probabilidade | Impacto (€) | Mitigação | Contingência | Responsável |
-|-------|---------------|-------------|-----------|--------------|-------------|
-| RGPD/Privacidade | [Baixa/Média/Alta] | €[X] | [acções] | [plano B] | [role] |
-| DNSH compliance | ... | ... | ... | ... | ... |
-| Duplo financiamento | ... | ... | ... | ... | ... |
-| Atraso execução | ... | ... | ... | ... | ... |
-| Fornecedor falha | ... | ... | ... | ... | ... |
-| Adoção baixa equipa | ... | ... | ... | ... | ... |
-... [6-10 riscos principais]
+## J) RISCOS & MITIGAÇÃO
+Matriz 6 colunas (Risco | Prob | €Impacto | Mitigação | Contingência | Owner) com 6-8 riscos críticos: RGPD, DNSH, duplo financiamento, atrasos, fornecedores, adoção. [conciso]
 
-## K) AMBIGUIDADES & ALTERNATIVAS (se aplicável)
-Se houver interpretações diferentes do aviso:
-- **Versão A**: [cenário conservador] → Impacto: [descrição]
-- **Versão B**: [cenário agressivo] → Impacto: [descrição]
-- **Recomendação**: [opção prudente], [justificação] [citar]
+## K) AUDIT TRAIL
+Tabela metadados: ID Sessão, Data, Documentos base, Fontes dados empresa, Metodologia estimativas, Autor (Archon + Claude Sonnet 4.5).
 
-## L) AUDIT TRAIL & RASTREABILIDADE
-Tabela metadados:
-| Atributo | Valor |
-|----------|-------|
-| ID Sessão | [GUID ou timestamp único] |
-| Data Geração | [YYYY-MM-DDTHH:MM:SSZ ISO-8601] |
-| Documentos Base | • [Aviso X, versão Y, data]<br>• [Portaria Z, data]<br>• [Regulamento UE, data] |
-| Fontes Dados Empresa | [eInforma/Racius/website oficial/declarado cliente] |
-| Metodologia Estimativas | [explicar cálculos VN/VAB/ROI se aplicável] |
-| Diferenciais vs Outros Cenários | [se houver comparação] |
-| Autor/Sistema | Archon Knowledge Engine v[versão] |
-| Modelo IA | Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) |
-
-## M) PRÓXIMA AÇÃO SUGERIDA (no fim de cada secção relevante)
-Box com ícone 💡:
-"**Próxima Ação**: [passo concreto seguinte, ex: 'Obter Certificação PME no portal IAPMEI']"
+## L) PRÓXIMAS AÇÕES
+Box 💡 no fim de cada secção relevante com passo concreto seguinte.
 
 ---
 
-FORMATO OBRIGATÓRIO:
-- **Língua**: Português europeu (pt-PT) formal
-- **Estrutura**: Markdown com headings ##, ###, tabelas, listas
-- **Citações**: SEMPRE [Aviso, p.X] ou [Anexo Y, sec.Z] em afirmações normativas
-- **Tom**: Profissional, técnico, objectivo, actionable (não académico)
-- **Completude**: Cobrir TODAS as secções A-M quando aplicável
-
-Se dados essenciais faltarem para secções específicas, indica claramente:
-"❌ Informação não disponível no contexto fornecido: [especificar o que falta]"
+**FORMATO**: Português pt-PT, Markdown, citações obrigatórias [fonte, p.X], tom profissional/actionable. Cobrir secções A-L. Se faltar info: "❌ Info não disponível: [especificar]"
 """
 
             # Call Claude 4.5
@@ -455,10 +389,9 @@ Se dados essenciais faltarem para secções específicas, indica claramente:
                     # Check if using AnthropicAdapter or OpenAI client
                     if hasattr(client, 'create_completion'):
                         # AnthropicAdapter
-                        # Max tokens set to 20000 for actionable proposals with checklist/copy map
-                        # Increased from 16K to support: Dashboard, 3 Budget Tiers, Checklist,
-                        # Copy Map SIGA-BF, Audit Trail, Next Actions, Risk Matrix
-                        # Claude 4.5 supports up to 200K output tokens
+                        # Max tokens set to 16000 for balanced output (12 sections)
+                        # Supports: Dashboard, Budget Tiers, Checklist, SIGA Map, Audit Trail
+                        # Trade-off: Quality over extreme length (optimized for 2-3min generation)
                         response = await client.create_completion(
                             model=llm_model,
                             messages=[
@@ -466,7 +399,7 @@ Se dados essenciais faltarem para secções específicas, indica claramente:
                                 {"role": "user", "content": user_prompt}
                             ],
                             temperature=0.3,
-                            max_tokens=20000
+                            max_tokens=16000
                         )
                         answer_text = response.choices[0].message.content
                     else:
@@ -478,7 +411,7 @@ Se dados essenciais faltarem para secções específicas, indica claramente:
                                 {"role": "user", "content": user_prompt}
                             ],
                             temperature=0.3,
-                            max_tokens=20000
+                            max_tokens=16000
                         )
                         answer_text = response.choices[0].message.content
 
