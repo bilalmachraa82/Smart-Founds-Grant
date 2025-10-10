@@ -261,9 +261,27 @@ async def chat_endpoint(request: ChatRequest):
             ])
 
             # Build prompt for Claude
-            system_prompt = """És um especialista em análise de candidaturas a fundos europeus em Portugal.
+            system_prompt = """És um consultor sénior especializado em candidaturas a fundos europeus em Portugal.
 Analisa candidaturas com rigor técnico, citando sempre as fontes legais relevantes.
-Responde em Português europeu de forma clara, estruturada e profissional."""
+Responde em Português europeu de forma clara, estruturada e profissional.
+
+ANTES de elaborar qualquer proposta, VALIDA sempre:
+1. Teto máximo de investimento (€) e elegibilidade mínima (geralmente ≥ €5.000)
+2. Cofinanciamento disponível (tipicamente ≥ 25% do investimento elegível)
+3. Distribuição preferencial (SaaS/Software/Consultoria/Formação/Equipamentos/RH)
+4. Janela temporal (data início/fim) e restrições específicas (RGPD, cloud/on-prem, setor regulado)
+
+REGRAS DE BLOQUEIO CRÍTICAS:
+- Se investimento < mínimo elegível → Explica e sugere como atingir limiar
+- Se soma rubricas > teto disponível → NÃO prossegue; emite ALERTA e sugere ajustes
+- Se taxa incentivo > máximo regulamentar → Alerta e ajusta automaticamente
+
+QUANDO APLICÁVEL, GERA 3 CENÁRIOS DE INVESTIMENTO:
+- **Essencial** (~60-80% do teto): Mínimo viável para cumprir objectivos base
+- **Recomendado** (~85-95% do teto): Equilibrado entre qualidade/risco/impacto
+- **Completo** (~100% do teto): Maximiza impacto e score de mérito
+
+Itens que excedam o teto → coloca em backlog (fase futura/expansão)."""
 
             user_prompt = f"""# CONTEXTO DA BASE DE CONHECIMENTO
 
@@ -277,16 +295,156 @@ Responde em Português europeu de forma clara, estruturada e profissional."""
 
 ---
 
-# INSTRUÇÕES
+# INSTRUÇÕES DE OUTPUT (PROPOSTA ACTIONABLE)
 
-Com base EXCLUSIVAMENTE no contexto fornecido acima, responde à pergunta do utilizador de forma:
-- **Detalhada e fundamentada**: Cita os documentos e artigos relevantes
-- **Estruturada**: Usa headings (##, ###) e listas quando apropriado
-- **Profissional**: Mantém tom técnico e objetivo
-- **Completa**: Cobre todos os aspectos relevantes da pergunta
+Com base EXCLUSIVAMENTE no contexto fornecido, fornece uma análise COMPLETA E PRONTA A USAR com as seguintes secções:
 
-Se a pergunta for sobre elegibilidade de uma candidatura, avalia todos os critérios relevantes.
-Se for sobre estratégia, fornece recomendações concretas e justificadas.
+## A) DASHBOARD (Resumo Executivo no topo)
+Badges com indicadores-chave:
+- **Elegibilidade**: ✓ SIM / ✗ NÃO / ⚠️ CONDICIONAL
+- **Investimento Elegível**: €X.XXX
+- **Incentivo Estimado**: €X.XXX (taxa%)
+- **Mérito Projeto (MP)**: X,XX (se aplicável)
+- **Risco Global**: BAIXO/MÉDIO/ALTO
+- **Deadlines Críticos**: [Data submissão]
+
+## B) AVALIAÇÃO DE ELEGIBILIDADE
+Veredito fundamentado + bullets com provas:
+- Dimensão PME: status [citar artigo]
+- Localização/Região: status [citar]
+- Setor/CAE: status [citar]
+- Investimento mínimo/máximo: status [citar]
+- Prazo execução: status [citar]
+- Obrigações pré-candidatura (certificações, declarações)
+
+## C) PROJETO PROPOSTO (adaptado ao CAE/atividade)
+- 3-5 casos de uso IA/digitalização (especificar ferramentas)
+- Dados necessários e arquitetura técnica
+- KPIs mensuráveis (SMART)
+- Roadmap faseado (trimestres/marcos)
+- Plano de Formação (perfis, módulos, horas)
+- Consultoria (marcos, horas, validar 3 cotações)
+- Software/SaaS e Equipamentos (quando fizer sentido), com justificativa de elegibilidade [citar]
+
+## D) ORÇAMENTO & INCENTIVO (3 CENÁRIOS SE APLICÁVEL)
+Tabelas por rubrica elegível:
+- SaaS/Software | Consultoria | Formação | Equipamentos | RH dedicados (≤2) | ROC/CC (≤€2.500) | Outras
+
+**Para CADA cenário** (Essencial/Recomendado/Completo):
+- Investimento total elegível
+- Cálculo incentivo: min(taxa × elegíveis, máximo) [citar fórmula]
+- Co-financiamento necessário
+- Distribuição percentual por rubrica
+
+Apontar despesas NÃO elegíveis (se houver).
+
+## E) SCORING DE MÉRITO (MP) — SE APLICÁVEL
+- Explicar grelha de avaliação [citar anexo]
+- Calcular MP = 0,50A + 0,50B (ou fórmula específica do aviso)
+- **Tabela "Impacto de Metas"** (cenários):
+  ```
+  | Alteração | Score Actual | Score Novo | Impacto MP |
+  |-----------|--------------|------------|------------|
+  | +1 emprego | X pts       | Y pts      | MP = ?     |
+  | +10% VAB   | X pts       | Y pts      | MP = ?     |
+  ```
+
+## F) CRONOGRAMA FASEADO
+- Gantt simplificado (fases/marcos/meses)
+- Prazo máximo: [X] meses [citar]
+- Milestones críticos com entregáveis
+
+## G) PLANO DE PAGAMENTOS
+- PTA (Pedido Título de Atribuição)
+- PTRI (Pedidos de Transferência de Reembolso Intermédios)
+- PTRF (Pedido de Transferência de Reembolso Final)
+- Tetos e prazos [citar artigo]
+- Nota: até 95% do incentivo antes do PTRF [citar]
+
+## H) CHECKLIST SUBMISSÃO (TICKABLE)
+Lista verificação com checkboxes [ ]:
+- [ ] Certificação PME válida [citar]
+- [ ] Certidão permanente empresa
+- [ ] IES [ano] (Quadros X, Y, Z)
+- [ ] Declaração situação tributária/contributiva regularizada
+- [ ] Comprovativo RCBE atualizado
+- [ ] Memória descritiva projeto (mín. X páginas)
+- [ ] Orçamentos fornecedores (3 cotações para valores >€5k)
+- [ ] Plano formação detalhado
+- [ ] Contratos/cartas intenção
+- [ ] Declaração cumprimento DNSH [citar checklist]
+- [ ] Declaração não duplicação financiamento UE
+- [ ] Declaração capacidade co-financiamento
+- [ ] Business case/análise ROI
+- [ ] Política RGPD empresa + DPAs fornecedores
+... [15-20 items total]
+
+## I) COPY MAP SIGA-BF (Mapa Correspondência)
+Tabela com 3 colunas:
+| Campo SIGA-BF | Valor a Copiar | Fonte de Validação |
+|---------------|----------------|---------------------|
+| NIF Beneficiário | [valor] | Certidão permanente |
+| Denominação | [valor] | Certidão permanente |
+| CAE Principal | [valor] | Certidão permanente |
+| Região NUTS II | [código] | Código INE [localidade] |
+| Dimensão Empresa | [Micro/Pequena/Média] | Certificação PME IAPMEI |
+| Investimento Total Elegível | €[valor] | Orçamento detalhado anexo |
+| Taxa Incentivo Base | [%] | [Aviso, p.X, art.Y] |
+| Incentivo Total Solicitado | €[valor] | Cálculo: [fórmula] |
+| Co-financiamento Empresa | €[valor] | Declaração capacidade |
+| Prazo Execução (meses) | [X] | Cronograma Gantt |
+| Data Início Prevista | [DD/MM/AAAA] | Pós-aprovação |
+| Data Fim Prevista | [DD/MM/AAAA] | Cronograma |
+| Postos Trabalho Criados | [nº] | Declaração beneficiário |
+| Crescimento VAB Projetado | +[%] | Business case |
+... [incluir todos os campos obrigatórios do formulário]
+
+## J) GESTÃO DE RISCOS (Matriz Detalhada)
+Tabela:
+| Risco | Probabilidade | Impacto (€) | Mitigação | Contingência | Responsável |
+|-------|---------------|-------------|-----------|--------------|-------------|
+| RGPD/Privacidade | [Baixa/Média/Alta] | €[X] | [acções] | [plano B] | [role] |
+| DNSH compliance | ... | ... | ... | ... | ... |
+| Duplo financiamento | ... | ... | ... | ... | ... |
+| Atraso execução | ... | ... | ... | ... | ... |
+| Fornecedor falha | ... | ... | ... | ... | ... |
+| Adoção baixa equipa | ... | ... | ... | ... | ... |
+... [6-10 riscos principais]
+
+## K) AMBIGUIDADES & ALTERNATIVAS (se aplicável)
+Se houver interpretações diferentes do aviso:
+- **Versão A**: [cenário conservador] → Impacto: [descrição]
+- **Versão B**: [cenário agressivo] → Impacto: [descrição]
+- **Recomendação**: [opção prudente], [justificação] [citar]
+
+## L) AUDIT TRAIL & RASTREABILIDADE
+Tabela metadados:
+| Atributo | Valor |
+|----------|-------|
+| ID Sessão | [GUID ou timestamp único] |
+| Data Geração | [YYYY-MM-DDTHH:MM:SSZ ISO-8601] |
+| Documentos Base | • [Aviso X, versão Y, data]<br>• [Portaria Z, data]<br>• [Regulamento UE, data] |
+| Fontes Dados Empresa | [eInforma/Racius/website oficial/declarado cliente] |
+| Metodologia Estimativas | [explicar cálculos VN/VAB/ROI se aplicável] |
+| Diferenciais vs Outros Cenários | [se houver comparação] |
+| Autor/Sistema | Archon Knowledge Engine v[versão] |
+| Modelo IA | Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) |
+
+## M) PRÓXIMA AÇÃO SUGERIDA (no fim de cada secção relevante)
+Box com ícone 💡:
+"**Próxima Ação**: [passo concreto seguinte, ex: 'Obter Certificação PME no portal IAPMEI']"
+
+---
+
+FORMATO OBRIGATÓRIO:
+- **Língua**: Português europeu (pt-PT) formal
+- **Estrutura**: Markdown com headings ##, ###, tabelas, listas
+- **Citações**: SEMPRE [Aviso, p.X] ou [Anexo Y, sec.Z] em afirmações normativas
+- **Tom**: Profissional, técnico, objectivo, actionable (não académico)
+- **Completude**: Cobrir TODAS as secções A-M quando aplicável
+
+Se dados essenciais faltarem para secções específicas, indica claramente:
+"❌ Informação não disponível no contexto fornecido: [especificar o que falta]"
 """
 
             # Call Claude 4.5
@@ -297,7 +455,9 @@ Se for sobre estratégia, fornece recomendações concretas e justificadas.
                     # Check if using AnthropicAdapter or OpenAI client
                     if hasattr(client, 'create_completion'):
                         # AnthropicAdapter
-                        # Max tokens set to 16000 for premium quality analysis
+                        # Max tokens set to 20000 for actionable proposals with checklist/copy map
+                        # Increased from 16K to support: Dashboard, 3 Budget Tiers, Checklist,
+                        # Copy Map SIGA-BF, Audit Trail, Next Actions, Risk Matrix
                         # Claude 4.5 supports up to 200K output tokens
                         response = await client.create_completion(
                             model=llm_model,
@@ -306,7 +466,7 @@ Se for sobre estratégia, fornece recomendações concretas e justificadas.
                                 {"role": "user", "content": user_prompt}
                             ],
                             temperature=0.3,
-                            max_tokens=16000
+                            max_tokens=20000
                         )
                         answer_text = response.choices[0].message.content
                     else:
@@ -318,7 +478,7 @@ Se for sobre estratégia, fornece recomendações concretas e justificadas.
                                 {"role": "user", "content": user_prompt}
                             ],
                             temperature=0.3,
-                            max_tokens=16000
+                            max_tokens=20000
                         )
                         answer_text = response.choices[0].message.content
 
