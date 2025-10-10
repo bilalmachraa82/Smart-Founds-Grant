@@ -13,6 +13,7 @@ import openai
 
 from ..config.logfire_config import get_logger
 from .credential_service import credential_service
+from .anthropic_adapter import AnthropicAdapter
 
 logger = get_logger(__name__)
 
@@ -117,6 +118,14 @@ async def get_llm_client(provider: str | None = None, use_embedding_provider: bo
                 base_url=base_url or "https://generativelanguage.googleapis.com/v1beta/openai/",
             )
             logger.info("Google Gemini client created successfully")
+
+        elif provider_name == "anthropic":
+            if not api_key:
+                raise ValueError("Anthropic API key not found")
+
+            # Create Anthropic adapter (provides OpenAI-compatible interface)
+            client = AnthropicAdapter(api_key=api_key)
+            logger.info("Anthropic client created successfully")
 
         else:
             raise ValueError(f"Unsupported LLM provider: {provider_name}")
