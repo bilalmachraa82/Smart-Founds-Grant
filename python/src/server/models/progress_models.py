@@ -1,6 +1,6 @@
 """Standardized progress response models for consistent API responses."""
 
-from typing import Any, Literal
+from typing import Any, Literal, Optional, List
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -8,18 +8,18 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 class ProgressDetails(BaseModel):
     """Detailed progress information for granular tracking."""
 
-    current_chunk: int | None = Field(None, alias="currentChunk")
-    total_chunks: int | None = Field(None, alias="totalChunks")
-    current_batch: int | None = Field(None, alias="currentBatch")
-    total_batches: int | None = Field(None, alias="totalBatches")
-    current_operation: str | None = Field(None, alias="currentOperation")
-    chunks_per_second: float | None = Field(None, alias="chunksPerSecond")
-    estimated_time_remaining: int | None = Field(None, alias="estimatedTimeRemaining")
-    elapsed_time: int | None = Field(None, alias="elapsedTime")
-    pages_crawled: int | None = Field(None, alias="pagesCrawled")
-    total_pages: int | None = Field(None, alias="totalPages")
-    embeddings_created: int | None = Field(None, alias="embeddingsCreated")
-    code_blocks_found: int | None = Field(None, alias="codeBlocksFound")
+    current_chunk: Optional[int] = Field(None, alias="currentChunk")
+    total_chunks: Optional[int] = Field(None, alias="totalChunks")
+    current_batch: Optional[int] = Field(None, alias="currentBatch")
+    total_batches: Optional[int] = Field(None, alias="totalBatches")
+    current_operation: Optional[str] = Field(None, alias="currentOperation")
+    chunks_per_second: Optional[float] = Field(None, alias="chunksPerSecond")
+    estimated_time_remaining: Optional[int] = Field(None, alias="estimatedTimeRemaining")
+    elapsed_time: Optional[int] = Field(None, alias="elapsedTime")
+    pages_crawled: Optional[int] = Field(None, alias="pagesCrawled")
+    total_pages: Optional[int] = Field(None, alias="totalPages")
+    embeddings_created: Optional[int] = Field(None, alias="embeddingsCreated")
+    code_blocks_found: Optional[int] = Field(None, alias="codeBlocksFound")
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -31,13 +31,13 @@ class BaseProgressResponse(BaseModel):
     status: str
     progress: float = Field(ge=0, le=100, description="Progress percentage 0-100")
     message: str = ""
-    error: str | None = None
+    error: Optional[str] = None
 
     # Current operation details
-    current_step: str | None = Field(None, alias="currentStep")
-    step_message: str | None = Field(None, alias="stepMessage")
-    logs: list[str] = Field(default_factory=list)
-    details: ProgressDetails | None = None
+    current_step: Optional[str] = Field(None, alias="currentStep")
+    step_message: Optional[str] = Field(None, alias="stepMessage")
+    logs: List[str] = Field(default_factory=list)
+    details: Optional[ProgressDetails] = None
 
     @field_validator("logs", mode="before")
     @classmethod
@@ -75,10 +75,10 @@ class CrawlProgressResponse(BaseProgressResponse):
     ]
 
     # Crawl-specific fields
-    current_url: str | None = Field(None, alias="currentUrl")
+    current_url: Optional[str] = Field(None, alias="currentUrl")
     total_pages: int = Field(0, alias="totalPages")
     processed_pages: int = Field(0, alias="processedPages")
-    crawl_type: str | None = Field(None, alias="crawlType")  # 'normal', 'sitemap', 'llms-txt', 'refresh'
+    crawl_type: Optional[str] = Field(None, alias="crawlType")  # 'normal', 'sitemap', 'llms-txt', 'refresh'
 
     # Code extraction specific fields
     code_blocks_found: int = Field(0, alias="codeBlocksFound")
@@ -89,20 +89,20 @@ class CrawlProgressResponse(BaseProgressResponse):
     total_summaries: int = Field(0, alias="totalSummaries")
 
     # Batch processing fields
-    parallel_workers: int | None = Field(None, alias="parallelWorkers")
-    total_jobs: int | None = Field(None, alias="totalJobs")
-    total_batches: int | None = Field(None, alias="totalBatches")
+    parallel_workers: Optional[int] = Field(None, alias="parallelWorkers")
+    total_jobs: Optional[int] = Field(None, alias="totalJobs")
+    total_batches: Optional[int] = Field(None, alias="totalBatches")
     completed_batches: int = Field(0, alias="completedBatches")
     active_workers: int = Field(0, alias="activeWorkers")
-    current_batch: int | None = Field(None, alias="currentBatch")
+    current_batch: Optional[int] = Field(None, alias="currentBatch")
     chunks_in_batch: int = Field(0, alias="chunksInBatch")
-    total_chunks_in_batch: int | None = Field(None, alias="totalChunksInBatch")
+    total_chunks_in_batch: Optional[int] = Field(None, alias="totalChunksInBatch")
 
     # Results (when completed)
-    chunks_stored: int | None = Field(None, alias="chunksStored")
-    word_count: int | None = Field(None, alias="wordCount")
-    source_id: str | None = Field(None, alias="sourceId")
-    duration: str | None = None
+    chunks_stored: Optional[int] = Field(None, alias="chunksStored")
+    word_count: Optional[int] = Field(None, alias="wordCount")
+    source_id: Optional[str] = Field(None, alias="sourceId")
+    duration: Optional[str] = None
 
     @field_validator("duration", mode="before")
     @classmethod
@@ -128,13 +128,13 @@ class UploadProgressResponse(BaseProgressResponse):
 
     # Upload-specific fields
     upload_type: Literal["document"] = Field("document", alias="uploadType")
-    file_name: str | None = Field(None, alias="fileName")
-    file_type: str | None = Field(None, alias="fileType")
+    file_name: Optional[str] = Field(None, alias="fileName")
+    file_type: Optional[str] = Field(None, alias="fileType")
 
     # Results (when completed)
-    chunks_stored: int | None = Field(None, alias="chunksStored")
-    word_count: int | None = Field(None, alias="wordCount")
-    source_id: str | None = Field(None, alias="sourceId")
+    chunks_stored: Optional[int] = Field(None, alias="chunksStored")
+    word_count: Optional[int] = Field(None, alias="wordCount")
+    source_id: Optional[str] = Field(None, alias="sourceId")
 
     model_config = ConfigDict(populate_by_name=True)  # Accept both snake_case and camelCase
 
@@ -148,16 +148,16 @@ class ProjectCreationProgressResponse(BaseProgressResponse):
     ]
 
     # Project creation specific
-    project_title: str | None = Field(None, alias="projectTitle")
+    project_title: Optional[str] = Field(None, alias="projectTitle")
     tasks_created: int = Field(0, alias="tasksCreated")
-    total_tasks_planned: int | None = Field(None, alias="totalTasksPlanned")
+    total_tasks_planned: Optional[int] = Field(None, alias="totalTasksPlanned")
 
     model_config = ConfigDict(populate_by_name=True)  # Accept both snake_case and camelCase
 
 
 def create_progress_response(
     operation_type: str,
-    progress_data: dict[str, Any]
+    progress_data: Dict[str, Any]
 ) -> BaseProgressResponse:
     """
     Factory function to create the appropriate progress response based on operation type.

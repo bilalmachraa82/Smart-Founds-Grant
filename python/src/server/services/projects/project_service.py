@@ -8,7 +8,7 @@ separating business logic from transport-specific code.
 
 # Removed direct logging import - using unified config
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict
 
 from src.server.utils import get_supabase_client
 
@@ -24,7 +24,7 @@ class ProjectService:
         """Initialize with optional supabase client"""
         self.supabase_client = supabase_client or get_supabase_client()
 
-    def create_project(self, title: str, github_repo: str = None) -> tuple[bool, dict[str, Any]]:
+    def create_project(self, title: str, github_repo: str = None) -> Tuple[bool, Dict[str, Any]]:
         """
         Create a new project with optional PRD and GitHub repo.
 
@@ -73,7 +73,7 @@ class ProjectService:
             logger.error(f"Error creating project: {e}")
             return False, {"error": f"Database error: {str(e)}"}
 
-    def list_projects(self, include_content: bool = True) -> tuple[bool, dict[str, Any]]:
+    def list_projects(self, include_content: bool = True) -> Tuple[bool, Dict[str, Any]]:
         """
         List all projects.
 
@@ -147,7 +147,7 @@ class ProjectService:
             logger.error(f"Error listing projects: {e}")
             return False, {"error": f"Error listing projects: {str(e)}"}
 
-    def get_project(self, project_id: str) -> tuple[bool, dict[str, Any]]:
+    def get_project(self, project_id: str) -> Tuple[bool, Dict[str, Any]]:
         """
         Get a specific project by ID.
 
@@ -224,7 +224,7 @@ class ProjectService:
             logger.error(f"Error getting project: {e}")
             return False, {"error": f"Error getting project: {str(e)}"}
 
-    def delete_project(self, project_id: str) -> tuple[bool, dict[str, Any]]:
+    def delete_project(self, project_id: str) -> Tuple[bool, Dict[str, Any]]:
         """
         Delete a project and all its associated tasks.
 
@@ -271,7 +271,7 @@ class ProjectService:
             logger.error(f"Error deleting project: {e}")
             return False, {"error": f"Error deleting project: {str(e)}"}
 
-    def get_project_features(self, project_id: str) -> tuple[bool, dict[str, Any]]:
+    def get_project_features(self, project_id: str) -> Tuple[bool, Dict[str, Any]]:
         """
         Get features from a project's features JSONB field.
 
@@ -315,8 +315,8 @@ class ProjectService:
             return False, {"error": f"Error getting project features: {str(e)}"}
 
     def update_project(
-        self, project_id: str, update_fields: dict[str, Any]
-    ) -> tuple[bool, dict[str, Any]]:
+        self, project_id: str, update_fields: Dict[str, Any]
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Update a project with specified fields.
 

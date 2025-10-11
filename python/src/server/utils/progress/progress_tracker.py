@@ -6,7 +6,7 @@ Tracks operation progress in memory for HTTP polling access.
 
 import asyncio
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict
 
 from ...config.logfire_config import safe_logfire_error, safe_logfire_info
 
@@ -18,7 +18,7 @@ class ProgressTracker:
     """
 
     # Class-level storage for all progress states
-    _progress_states: dict[str, dict[str, Any]] = {}
+    _progress_states: Dict[str, Dict[str, Any]] = {}
 
     def __init__(self, progress_id: str, operation_type: str = "crawl"):
         """
@@ -42,7 +42,7 @@ class ProgressTracker:
         ProgressTracker._progress_states[progress_id] = self.state
 
     @classmethod
-    def get_progress(cls, progress_id: str) -> dict[str, Any] | None:
+    def get_progress(cls, progress_id: str) -> Dict[str, Any] | None:
         """Get progress state by ID."""
         return cls._progress_states.get(progress_id)
 
@@ -53,7 +53,7 @@ class ProgressTracker:
             del cls._progress_states[progress_id]
 
     @classmethod
-    def list_active(cls) -> dict[str, dict[str, Any]]:
+    def list_active(cls) -> Dict[str, Dict[str, Any]]:
         """Get all active progress states."""
         return cls._progress_states.copy()
 
@@ -72,7 +72,7 @@ class ProgressTracker:
                 del cls._progress_states[progress_id]
                 safe_logfire_info(f"Progress state cleaned up after delay | progress_id={progress_id} | status={status}")
 
-    async def start(self, initial_data: dict[str, Any] | None = None):
+    async def start(self, initial_data: Dict[str, Any] | None = None):
         """
         Start progress tracking with initial data.
 
@@ -163,7 +163,7 @@ class ProgressTracker:
         if status in ["cancelled", "failed"]:
             asyncio.create_task(self._delayed_cleanup(self.progress_id))
 
-    async def complete(self, completion_data: dict[str, Any] | None = None):
+    async def complete(self, completion_data: Dict[str, Any] | None = None):
         """
         Mark progress as completed with optional completion data.
 
@@ -193,7 +193,7 @@ class ProgressTracker:
         # Schedule cleanup after delay to allow clients to see final state
         asyncio.create_task(self._delayed_cleanup(self.progress_id))
 
-    async def error(self, error_message: str, error_details: dict[str, Any] | None = None):
+    async def error(self, error_message: str, error_details: Dict[str, Any] | None = None):
         """
         Mark progress as failed with error information.
 
@@ -244,8 +244,8 @@ class ProgressTracker:
         self, 
         processed_pages: int, 
         total_pages: int, 
-        current_url: str | None = None,
-        pages_found: int | None = None
+        current_url: Optional[str] = None,
+        pages_found: Optional[int] = None
     ):
         """
         Update crawling statistics with detailed metrics.
@@ -280,8 +280,8 @@ class ProgressTracker:
         chunks_stored: int, 
         total_chunks: int, 
         operation: str = "storing",
-        word_count: int | None = None,
-        embeddings_created: int | None = None
+        word_count: Optional[int] = None,
+        embeddings_created: Optional[int] = None
     ):
         """
         Update document storage progress with detailed metrics.
@@ -315,7 +315,7 @@ class ProgressTracker:
         completed_summaries: int,
         total_summaries: int,
         code_blocks_found: int,
-        current_file: str | None = None
+        current_file: Optional[str] = None
     ):
         """
         Update code extraction progress with detailed metrics.
@@ -363,6 +363,6 @@ class ProgressTracker:
             hours = seconds / 3600
             return f"{hours:.1f} hours"
 
-    def get_state(self) -> dict[str, Any]:
+    def get_state(self) -> Dict[str, Any]:
         """Get current progress state."""
         return self.state.copy()

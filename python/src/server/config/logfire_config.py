@@ -18,7 +18,7 @@ Usage:
 import logging
 import os
 from contextlib import contextmanager
-from typing import Any
+from typing import Any, Optional
 
 # Try to import logfire (optional dependency)
 LOGFIRE_AVAILABLE = False
@@ -51,7 +51,7 @@ def is_logfire_enabled() -> bool:
 
 
 def setup_logfire(
-    token: str | None = None, environment: str = "development", service_name: str = "archon-server"
+    token: Optional[str] = None, environment: str = "development", service_name: str = "archon-server"
 ) -> None:
     """
     Configure logging with optional Logfire integration.

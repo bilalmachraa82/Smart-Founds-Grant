@@ -11,6 +11,8 @@ from datetime import datetime
 
 from ..config.logfire_config import get_logger
 from ..utils import get_supabase_client
+from typing import Optional, Dict, List
+
 
 logger = get_logger(__name__)
 
@@ -19,7 +21,7 @@ class PromptService:
     """Singleton service for managing AI agent prompts."""
 
     _instance = None
-    _prompts: dict[str, str] = {}
+    _prompts: Dict[str, str] = {}
     _last_loaded: datetime | None = None
 
     def __new__(cls):
@@ -53,7 +55,7 @@ class PromptService:
             # Continue with empty prompts rather than crash
             self._prompts = {}
 
-    def get_prompt(self, prompt_name: str, default: str | None = None) -> str:
+    def get_prompt(self, prompt_name: str, default: Optional[str] = None) -> str:
         """
         Get a prompt by name.
 
@@ -82,7 +84,7 @@ class PromptService:
         logger.info("Reloading prompts...")
         await self.load_prompts()
 
-    def get_all_prompt_names(self) -> list[str]:
+    def get_all_prompt_names(self) -> List[str]:
         """Get a list of all available prompt names."""
         return list(self._prompts.keys())
 

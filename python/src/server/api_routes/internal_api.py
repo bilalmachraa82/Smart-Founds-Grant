@@ -7,7 +7,7 @@ not by external clients. They provide internal functionality like credential sha
 
 import logging
 import os
-from typing import Any
+from typing import Any, Dict
 
 from fastapi import APIRouter, HTTPException, Request
 
@@ -58,7 +58,7 @@ async def internal_health():
 
 
 @router.get("/credentials/agents")
-async def get_agent_credentials(request: Request) -> dict[str, Any]:
+async def get_agent_credentials(request: Request) -> Dict[str, Any]:
     """
     Get credentials needed by the agents service.
 
@@ -115,7 +115,7 @@ async def get_agent_credentials(request: Request) -> dict[str, Any]:
 
 
 @router.get("/credentials/mcp")
-async def get_mcp_credentials(request: Request) -> dict[str, Any]:
+async def get_mcp_credentials(request: Request) -> Dict[str, Any]:
     """
     Get credentials needed by the MCP service.
 

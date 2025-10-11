@@ -17,7 +17,7 @@ logger = get_logger(__name__)
 class SitemapCrawlStrategy:
     """Strategy for parsing and crawling sitemaps."""
 
-    def parse_sitemap(self, sitemap_url: str, cancellation_check: Callable[[], None] | None = None) -> list[str]:
+    def parse_sitemap(self, sitemap_url: str, cancellation_check: Callable[[], None] | None = None) -> List[str]:
         """
         Parse a sitemap and extract URLs with comprehensive error handling.
         

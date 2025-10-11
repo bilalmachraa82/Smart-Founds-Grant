@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 
 # Removed direct logging import - using unified config
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, List
 
 import psutil
 
@@ -176,7 +176,7 @@ class RateLimiter:
 
         return 0
 
-    def _get_current_usage(self) -> dict[str, int]:
+    def _get_current_usage(self) -> Dict[str, int]:
         """Get current usage statistics"""
         current_tokens = sum(tokens for _, tokens in self.token_usage)
         return {
@@ -256,12 +256,12 @@ class MemoryAdaptiveDispatcher:
 
     async def process_with_adaptive_concurrency(
         self,
-        items: list[Any],
+        items: List[Any],
         process_func: Callable,
         mode: ProcessingMode = ProcessingMode.CPU_INTENSIVE,
         progress_callback: Callable | None = None,
         enable_worker_tracking: bool = False,
-    ) -> list[Any]:
+    ) -> List[Any]:
         """Process items with adaptive concurrency control"""
 
         if not items:
@@ -490,12 +490,12 @@ class ThreadingService:
 
     async def batch_process(
         self,
-        items: list[Any],
+        items: List[Any],
         process_func: Callable,
         mode: ProcessingMode = ProcessingMode.CPU_INTENSIVE,
         progress_callback: Callable | None = None,
         enable_worker_tracking: bool = False,
-    ) -> list[Any]:
+    ) -> List[Any]:
         """Process items in batches with optimal threading"""
         return await self.memory_dispatcher.process_with_adaptive_concurrency(
             items=items,

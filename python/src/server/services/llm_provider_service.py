@@ -7,7 +7,7 @@ Supports OpenAI, Ollama, and Google Gemini.
 
 import time
 from contextlib import asynccontextmanager
-from typing import Any
+from typing import Any, Optional, Dict, Tuple
 
 import openai
 
@@ -18,11 +18,11 @@ from .anthropic_adapter import AnthropicAdapter
 logger = get_logger(__name__)
 
 # Settings cache with TTL
-_settings_cache: dict[str, tuple[Any, float]] = {}
+_settings_cache: Dict[str, Tuple[Any, float]] = {}
 _CACHE_TTL_SECONDS = 300  # 5 minutes
 
 
-def _get_cached_settings(key: str) -> Any | None:
+def _get_cached_settings(key: str) -> Optional[Any]:
     """Get cached settings if not expired."""
     if key in _settings_cache:
         value, timestamp = _settings_cache[key]
@@ -40,7 +40,7 @@ def _set_cached_settings(key: str, value: Any) -> None:
 
 
 @asynccontextmanager
-async def get_llm_client(provider: str | None = None, use_embedding_provider: bool = False):
+async def get_llm_client(provider: Optional[str] = None, use_embedding_provider: bool = False):
     """
     Create an async OpenAI-compatible client based on the configured provider.
 
@@ -142,7 +142,7 @@ async def get_llm_client(provider: str | None = None, use_embedding_provider: bo
         pass
 
 
-async def get_embedding_model(provider: str | None = None) -> str:
+async def get_embedding_model(provider: Optional[str] = None) -> str:
     """
     Get the configured embedding model based on the provider.
 

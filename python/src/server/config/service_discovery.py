@@ -10,6 +10,8 @@ from enum import Enum
 from urllib.parse import urlparse
 
 import httpx
+from typing import Dict, Tuple
+
 
 
 class Environment(Enum):
@@ -59,7 +61,7 @@ class ServiceDiscovery:
         }
 
         self.environment = self._detect_environment()
-        self._cache: dict[str, str] = {}
+        self._cache: Dict[str, str] = {}
 
     # Service name mappings
     SERVICE_NAMES = {
@@ -117,7 +119,7 @@ class ServiceDiscovery:
         self._cache[cache_key] = url
         return url
 
-    def get_service_host_port(self, service: str) -> tuple[str, int]:
+    def get_service_host_port(self, service: str) -> Tuple[str, int]:
         """Get host and port separately for a service"""
         url = self.get_service_url(service)
         parsed = urlparse(url)
@@ -169,7 +171,7 @@ class ServiceDiscovery:
 
         return False
 
-    def get_all_services(self) -> dict[str, str]:
+    def get_all_services(self) -> Dict[str, str]:
         """Get URLs for all known services"""
         return {
             service: self.get_service_url(service)

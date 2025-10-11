@@ -11,7 +11,7 @@ Strategy combines:
 3. Returns union of both result sets for maximum coverage
 """
 
-from typing import Any
+from typing import Any, Dict
 
 from supabase import Client
 
@@ -31,10 +31,10 @@ class HybridSearchStrategy:
     async def search_documents_hybrid(
         self,
         query: str,
-        query_embedding: list[float],
+        query_embedding: List[float],
         match_count: int,
         filter_metadata: dict | None = None,
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """
         Perform hybrid search on archon_crawled_pages table using the PostgreSQL 
         hybrid search function that combines vector and full-text search.
@@ -110,8 +110,8 @@ class HybridSearchStrategy:
         query: str,
         match_count: int,
         filter_metadata: dict | None = None,
-        source_id: str | None = None,
-    ) -> list[dict[str, Any]]:
+        source_id: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
         """
         Perform hybrid search on archon_code_examples table using the PostgreSQL 
         hybrid search function that combines vector and full-text search.

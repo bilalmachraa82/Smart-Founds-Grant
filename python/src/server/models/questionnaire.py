@@ -58,7 +58,7 @@ class IntensityLevel(str, Enum):
     MISSION_CRITICAL = "mission_critical"  # Core business dependency
 
 
-class IndustrySectostr, Enum):
+class IndustrySector(str, Enum):
     """Industry sectors for CAE mapping"""
     TECHNOLOGY = "technology"
     CONSULTING = "consulting"
@@ -67,6 +67,20 @@ class IndustrySectostr, Enum):
     HEALTHCARE = "healthcare"
     EDUCATION = "education"
     FINANCE = "finance"
+    OTHER = "other"
+
+
+class UseCase(str, Enum):
+    """AI/Automation use cases"""
+    CUSTOMER_SERVICE = "customer_service"
+    AUTOMATION = "automation"
+    ANALYTICS = "analytics"
+    CONTENT_CREATION = "content_creation"
+    CODE_ASSISTANCE = "code_assistance"
+    RESEARCH = "research"
+    MARKETING = "marketing"
+    SALES = "sales"
+    HR = "hr"
     OTHER = "other"
 
 
@@ -123,7 +137,7 @@ class DiagnosticQuestionnaire(BaseModel):
         ...,
         min_length=9,
         max_length=9,
-        regex=r"^\d{9}$",
+        pattern=r"^\d{9}$",
         description="Q6: NIF (9 dígitos) - trigger auto-fill via eInforma API"
     )
 

@@ -10,7 +10,7 @@ Handles:
 
 import json
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional, Dict
 
 from fastapi import APIRouter, Header, HTTPException, Request, Response
 from fastapi import status as http_status
@@ -41,43 +41,43 @@ router = APIRouter(prefix="/api", tags=["projects"])
 
 class CreateProjectRequest(BaseModel):
     title: str
-    description: str | None = None
-    github_repo: str | None = None
-    docs: list[Any] | None = None
-    features: list[Any] | None = None
-    data: list[Any] | None = None
-    technical_sources: list[str] | None = None  # List of knowledge source IDs
-    business_sources: list[str] | None = None  # List of knowledge source IDs
-    pinned: bool | None = None  # Whether this project should be pinned to top
+    description: Optional[str] = None
+    github_repo: Optional[str] = None
+    docs: List[Any] | None = None
+    features: List[Any] | None = None
+    data: List[Any] | None = None
+    technical_sources: List[str] | None = None  # List of knowledge source IDs
+    business_sources: List[str] | None = None  # List of knowledge source IDs
+    pinned: Optional[bool] = None  # Whether this project should be pinned to top
 
 
 class UpdateProjectRequest(BaseModel):
-    title: str | None = None
-    description: str | None = None  # Add description field
-    github_repo: str | None = None
-    docs: list[Any] | None = None
-    features: list[Any] | None = None
-    data: list[Any] | None = None
-    technical_sources: list[str] | None = None  # List of knowledge source IDs
-    business_sources: list[str] | None = None  # List of knowledge source IDs
-    pinned: bool | None = None  # Whether this project is pinned to top
+    title: Optional[str] = None
+    description: Optional[str] = None  # Add description field
+    github_repo: Optional[str] = None
+    docs: List[Any] | None = None
+    features: List[Any] | None = None
+    data: List[Any] | None = None
+    technical_sources: List[str] | None = None  # List of knowledge source IDs
+    business_sources: List[str] | None = None  # List of knowledge source IDs
+    pinned: Optional[bool] = None  # Whether this project is pinned to top
 
 
 class CreateTaskRequest(BaseModel):
     project_id: str
     title: str
-    description: str | None = None
-    status: str | None = "todo"
-    assignee: str | None = "User"
-    task_order: int | None = 0
-    feature: str | None = None
+    description: Optional[str] = None
+    status: Optional[str] = "todo"
+    assignee: Optional[str] = "User"
+    task_order: Optional[int] = 0
+    feature: Optional[str] = None
 
 
 @router.get("/projects")
 async def list_projects(
     response: Response,
     include_content: bool = True,
-    if_none_match: str | None = Header(None)
+    if_none_match: Optional[str] = Header(None)
 ):
     """
     List all projects.
@@ -657,13 +657,13 @@ async def create_task(request: CreateTaskRequest):
 
 @router.get("/tasks")
 async def list_tasks(
-    status: str | None = None,
-    project_id: str | None = None,
+    status: Optional[str] = None,
+    project_id: Optional[str] = None,
     include_closed: bool = True,
     page: int = 1,
     per_page: int = 10,
     exclude_large_fields: bool = False,
-    q: str | None = None,  # Search query parameter
+    q: Optional[str] = None,  # Search query parameter
 ):
     """List tasks with optional filters including status, project, and keyword search."""
     try:
@@ -766,40 +766,40 @@ async def get_task(task_id: str):
 
 
 class UpdateTaskRequest(BaseModel):
-    title: str | None = None
-    description: str | None = None
-    status: str | None = None
-    assignee: str | None = None
-    task_order: int | None = None
-    feature: str | None = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[str] = None
+    assignee: Optional[str] = None
+    task_order: Optional[int] = None
+    feature: Optional[str] = None
 
 
 class CreateDocumentRequest(BaseModel):
     document_type: str
     title: str
-    content: dict[str, Any] | None = None
-    tags: list[str] | None = None
-    author: str | None = None
+    content: Dict[str, Any] | None = None
+    tags: List[str] | None = None
+    author: Optional[str] = None
 
 
 class UpdateDocumentRequest(BaseModel):
-    title: str | None = None
-    content: dict[str, Any] | None = None
-    tags: list[str] | None = None
-    author: str | None = None
+    title: Optional[str] = None
+    content: Dict[str, Any] | None = None
+    tags: List[str] | None = None
+    author: Optional[str] = None
 
 
 class CreateVersionRequest(BaseModel):
     field_name: str
-    content: dict[str, Any]
-    change_summary: str | None = None
-    change_type: str | None = "update"
-    document_id: str | None = None
-    created_by: str | None = "system"
+    content: Dict[str, Any]
+    change_summary: Optional[str] = None
+    change_type: Optional[str] = "update"
+    document_id: Optional[str] = None
+    created_by: Optional[str] = "system"
 
 
 class RestoreVersionRequest(BaseModel):
-    restored_by: str | None = "system"
+    restored_by: Optional[str] = "system"
 
 
 @router.put("/tasks/{task_id}")

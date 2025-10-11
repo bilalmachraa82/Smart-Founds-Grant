@@ -9,7 +9,7 @@ batch crawling, recursive crawling, and overall orchestration with progress trac
 import asyncio
 import uuid
 from collections.abc import Awaitable, Callable
-from typing import Any, Optional
+from typing import Any, Optional, List
 
 from ...config.logfire_config import get_logger, safe_logfire_error, safe_logfire_info
 from ...utils import get_supabase_client
@@ -31,7 +31,7 @@ from .strategies.sitemap import SitemapCrawlStrategy
 logger = get_logger(__name__)
 
 # Global registry to track active orchestration services for cancellation support
-_active_orchestrations: dict[str, "CrawlingService"] = {}
+_active_orchestrations: Dict[str, "CrawlingService"] = {}
 
 
 def get_active_orchestration(progress_id: str) -> Optional["CrawlingService"]:
@@ -151,7 +151,7 @@ class CrawlingService:
 
         return callback
 
-    async def _handle_progress_update(self, task_id: str, update: dict[str, Any]) -> None:
+    async def _handle_progress_update(self, task_id: str, update: Dict[str, Any]) -> None:
         """
         Handle progress updates from background task.
 
@@ -169,7 +169,7 @@ class CrawlingService:
             )
 
     # Simple delegation methods for backward compatibility
-    async def crawl_single_page(self, url: str, retry_count: int = 3) -> dict[str, Any]:
+    async def crawl_single_page(self, url: str, retry_count: int = 3) -> Dict[str, Any]:
         """Crawl a single web page."""
         return await self.single_page_strategy.crawl_single_page(
             url,
@@ -180,7 +180,7 @@ class CrawlingService:
 
     async def crawl_markdown_file(
         self, url: str, progress_callback: Callable[[str, int, str], Awaitable[None]] | None = None
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """Crawl a .txt or markdown file."""
         return await self.single_page_strategy.crawl_markdown_file(
             url,
@@ -188,16 +188,16 @@ class CrawlingService:
             progress_callback,
         )
 
-    def parse_sitemap(self, sitemap_url: str) -> list[str]:
+    def parse_sitemap(self, sitemap_url: str) -> List[str]:
         """Parse a sitemap and extract URLs."""
         return self.sitemap_strategy.parse_sitemap(sitemap_url, self._check_cancellation)
 
     async def crawl_batch_with_progress(
         self,
-        urls: list[str],
-        max_concurrent: int | None = None,
+        urls: List[str],
+        max_concurrent: Optional[int] = None,
         progress_callback: Callable[[str, int, str], Awaitable[None]] | None = None,
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """Batch crawl multiple URLs in parallel."""
         return await self.batch_strategy.crawl_batch_with_progress(
             urls,
@@ -210,11 +210,11 @@ class CrawlingService:
 
     async def crawl_recursive_with_progress(
         self,
-        start_urls: list[str],
+        start_urls: List[str],
         max_depth: int = 3,
-        max_concurrent: int | None = None,
+        max_concurrent: Optional[int] = None,
         progress_callback: Callable[[str, int, str], Awaitable[None]] | None = None,
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """Recursively crawl internal links from start URLs."""
         return await self.recursive_strategy.crawl_recursive_with_progress(
             start_urls,
@@ -227,7 +227,7 @@ class CrawlingService:
         )
 
     # Orchestration methods
-    async def orchestrate_crawl(self, request: dict[str, Any]) -> dict[str, Any]:
+    async def orchestrate_crawl(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Main orchestration method - non-blocking using asyncio.create_task.
 
@@ -264,7 +264,7 @@ class CrawlingService:
             "task": crawl_task,  # Return the actual task for proper cancellation
         }
 
-    async def _async_orchestrate_crawl(self, request: dict[str, Any], task_id: str):
+    async def _async_orchestrate_crawl(self, request: Dict[str, Any], task_id: str):
         """
         Async orchestration that runs in the main event loop.
         """
@@ -617,7 +617,7 @@ class CrawlingService:
             # Fallback to simple string comparison
             return link.rstrip('/') == base_url.rstrip('/')
 
-    async def _crawl_by_url_type(self, url: str, request: dict[str, Any]) -> tuple:
+    async def _crawl_by_url_type(self, url: str, request: Dict[str, Any]) -> tuple:
         """
         Detect URL type and perform appropriate crawling.
 

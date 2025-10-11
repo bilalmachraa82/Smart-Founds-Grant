@@ -5,7 +5,7 @@ This module contains all storage service classes that handle document and data s
 These services extend the base storage functionality with specific implementations.
 """
 
-from typing import Any
+from typing import Any, Dict
 
 from ...config.logfire_config import get_logger, safe_span
 from .base_storage_service import BaseStorageService
@@ -23,10 +23,10 @@ class DocumentStorageService(BaseStorageService):
         filename: str,
         source_id: str,
         knowledge_type: str = "documentation",
-        tags: list[str] | None = None,
-        progress_callback: Any | None = None,
-        cancellation_check: Any | None = None,
-    ) -> tuple[bool, dict[str, Any]]:
+        tags: Optional[List[str]] = None,
+        progress_callback: Optional[Any] = None,
+        cancellation_check: Optional[Any] = None,
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Upload and process a document file with progress reporting.
 
@@ -173,7 +173,7 @@ class DocumentStorageService(BaseStorageService):
 
                 return False, {"error": f"Error uploading document: {str(e)}"}
 
-    async def store_documents(self, documents: list[dict[str, Any]], **kwargs) -> dict[str, Any]:
+    async def store_documents(self, documents: List[Dict[str, Any]], **kwargs) -> Dict[str, Any]:
         """
         Store multiple documents. Implementation of abstract method.
 
@@ -203,7 +203,7 @@ class DocumentStorageService(BaseStorageService):
             "results": results,
         }
 
-    async def process_document(self, document: dict[str, Any], **kwargs) -> dict[str, Any]:
+    async def process_document(self, document: Dict[str, Any], **kwargs) -> Dict[str, Any]:
         """
         Process a single document. Implementation of abstract method.
 
@@ -235,8 +235,8 @@ class DocumentStorageService(BaseStorageService):
         }
 
     def store_code_examples(
-        self, code_examples: list[dict[str, Any]]
-    ) -> tuple[bool, dict[str, Any]]:
+        self, code_examples: List[Dict[str, Any]]
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Store code examples. This is kept for backward compatibility.
         The actual implementation should use add_code_examples_to_supabase directly.

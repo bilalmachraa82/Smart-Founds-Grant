@@ -6,7 +6,7 @@ Handles recursive crawling of websites by following internal links.
 
 import asyncio
 from collections.abc import Awaitable, Callable
-from typing import Any
+from typing import Any, Dict
 from urllib.parse import urldefrag
 
 from crawl4ai import CacheMode, CrawlerRunConfig, MemoryAdaptiveDispatcher
@@ -35,14 +35,14 @@ class RecursiveCrawlStrategy:
 
     async def crawl_recursive_with_progress(
         self,
-        start_urls: list[str],
+        start_urls: List[str],
         transform_url_func: Callable[[str], str],
         is_documentation_site_func: Callable[[str], bool],
         max_depth: int = 3,
-        max_concurrent: int | None = None,
+        max_concurrent: Optional[int] = None,
         progress_callback: Callable[..., Awaitable[None]] | None = None,
         cancellation_check: Callable[[], None] | None = None,
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """
         Recursively crawl internal links from start URLs up to a maximum depth with progress reporting.
 

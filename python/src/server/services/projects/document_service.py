@@ -9,7 +9,7 @@ import uuid
 
 # Removed direct logging import - using unified config
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict
 
 from src.server.utils import get_supabase_client
 
@@ -30,10 +30,10 @@ class DocumentService:
         project_id: str,
         document_type: str,
         title: str,
-        content: dict[str, Any] = None,
-        tags: list[str] = None,
+        content: Dict[str, Any] = None,
+        tags: List[str] = None,
         author: str = None,
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Add a new document to a project's docs JSONB field.
 
@@ -96,7 +96,7 @@ class DocumentService:
             logger.error(f"Error adding document: {e}")
             return False, {"error": f"Error adding document: {str(e)}"}
 
-    def list_documents(self, project_id: str, include_content: bool = False) -> tuple[bool, dict[str, Any]]:
+    def list_documents(self, project_id: str, include_content: bool = False) -> Tuple[bool, Dict[str, Any]]:
         """
         List all documents in a project's docs JSONB field.
 
@@ -154,7 +154,7 @@ class DocumentService:
             logger.error(f"Error listing documents: {e}")
             return False, {"error": f"Error listing documents: {str(e)}"}
 
-    def get_document(self, project_id: str, doc_id: str) -> tuple[bool, dict[str, Any]]:
+    def get_document(self, project_id: str, doc_id: str) -> Tuple[bool, Dict[str, Any]]:
         """
         Get a specific document from a project's docs JSONB field.
 
@@ -196,9 +196,9 @@ class DocumentService:
         self,
         project_id: str,
         doc_id: str,
-        update_fields: dict[str, Any],
+        update_fields: Dict[str, Any],
         create_version: bool = True,
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Update a document in a project's docs JSONB field.
 
@@ -294,7 +294,7 @@ class DocumentService:
             logger.error(f"Error updating document: {e}")
             return False, {"error": f"Error updating document: {str(e)}"}
 
-    def delete_document(self, project_id: str, doc_id: str) -> tuple[bool, dict[str, Any]]:
+    def delete_document(self, project_id: str, doc_id: str) -> Tuple[bool, Dict[str, Any]]:
         """
         Delete a document from a project's docs JSONB field.
 
@@ -340,7 +340,7 @@ class DocumentService:
             logger.error(f"Error deleting document: {e}")
             return False, {"error": f"Error deleting document: {str(e)}"}
 
-    def _build_change_summary(self, doc_id: str, update_fields: dict[str, Any]) -> str:
+    def _build_change_summary(self, doc_id: str, update_fields: Dict[str, Any]) -> str:
         """Build a human-readable change summary"""
         changes = []
         if "title" in update_fields:

@@ -27,6 +27,8 @@ from .api_routes.knowledge_api import router as knowledge_router
 from .api_routes.mcp_api import router as mcp_router
 from .api_routes.progress_api import router as progress_router
 from .api_routes.projects_api import router as projects_router
+from .api_routes.questionnaire_api import router as questionnaire_router
+from .api_routes.reports_api_v7 import router as reports_v7_router
 
 # Import modular API routers
 from .api_routes.settings_api import router as settings_router
@@ -187,6 +189,8 @@ app.include_router(progress_router)
 app.include_router(agent_chat_router)
 app.include_router(internal_router)
 app.include_router(bug_report_router)
+app.include_router(questionnaire_router)  # v7.0 IFIC questionnaire system
+app.include_router(reports_v7_router)  # v7.0 McKinsey-level reports
 
 # Mount static files for frontend (if directory exists)
 import os
@@ -194,6 +198,11 @@ static_dir = "/var/www/html"
 if os.path.exists(static_dir):
     # Mount under /app to avoid shadowing API endpoints like /health
     app.mount("/app", StaticFiles(directory=static_dir, html=True), name="static")
+
+# Mount v7.0 static assets (CSS, JS, fonts)
+templates_dir = os.path.join(os.path.dirname(__file__), "templates")
+if os.path.exists(templates_dir):
+    app.mount("/static/v7", StaticFiles(directory=templates_dir), name="v7_static")
 
 # Root endpoint
 @app.get("/")

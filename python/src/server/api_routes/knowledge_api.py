@@ -17,6 +17,8 @@ from urllib.parse import urlparse
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel
+from typing import Dict, List
+
 
 # Import unified logging
 from ..config.logfire_config import get_logger, safe_logfire_error, safe_logfire_info
@@ -50,14 +52,14 @@ CONCURRENT_CRAWL_LIMIT = 3  # Max simultaneous crawl operations (protects server
 crawl_semaphore = asyncio.Semaphore(CONCURRENT_CRAWL_LIMIT)
 
 # Track active async crawl tasks for cancellation support
-active_crawl_tasks: dict[str, asyncio.Task] = {}
+active_crawl_tasks: Dict[str, asyncio.Task] = {}
 
 
 # Request Models
 class KnowledgeItemRequest(BaseModel):
     url: str
     knowledge_type: str = "technical"
-    tags: list[str] = []
+    tags: List[str] = []
     update_frequency: int = 7
     max_depth: int = 2  # Maximum crawl depth (1-5)
     extract_code_examples: bool = True  # Whether to extract code examples
@@ -78,14 +80,14 @@ class KnowledgeItemRequest(BaseModel):
 class CrawlRequest(BaseModel):
     url: str
     knowledge_type: str = "general"
-    tags: list[str] = []
+    tags: List[str] = []
     update_frequency: int = 7
     max_depth: int = 2  # Maximum crawl depth (1-5)
 
 
 class RagQueryRequest(BaseModel):
     query: str
-    source: str | None = None
+    source: Optional[str] = None
     match_count: int = 5
 
 
@@ -104,7 +106,7 @@ async def get_knowledge_sources():
 
 @router.get("/knowledge-items")
 async def get_knowledge_items(
-    page: int = 1, per_page: int = 20, knowledge_type: str | None = None, search: str | None = None
+    page: int = 1, per_page: int = 20, knowledge_type: Optional[str] = None, search: Optional[str] = None
 ):
     """Get knowledge items with pagination and filtering."""
     try:
@@ -124,7 +126,7 @@ async def get_knowledge_items(
 
 @router.get("/knowledge-items/summary")
 async def get_knowledge_items_summary(
-    page: int = 1, per_page: int = 20, knowledge_type: str | None = None, search: str | None = None
+    page: int = 1, per_page: int = 20, knowledge_type: Optional[str] = None, search: Optional[str] = None
 ):
     """
     Get lightweight summaries of knowledge items.
@@ -230,7 +232,7 @@ async def delete_knowledge_item(source_id: str):
 @router.get("/knowledge-items/{source_id}/chunks")
 async def get_knowledge_item_chunks(
     source_id: str,
-    domain_filter: str | None = None,
+    domain_filter: Optional[str] = None,
     limit: int = 20,
     offset: int = 0
 ):
@@ -746,7 +748,7 @@ async def _perform_crawl_with_progress(
 @router.post("/documents/upload")
 async def upload_document(
     file: UploadFile = File(...),
-    tags: str | None = Form(None),
+    tags: Optional[str] = Form(None),
     knowledge_type: str = Form("technical"),
 ):
     """Upload and process a document with progress tracking."""
@@ -819,7 +821,7 @@ async def _perform_upload_with_progress(
     progress_id: str,
     file_content: bytes,
     file_metadata: dict,
-    tag_list: list[str],
+    tag_list: List[str],
     knowledge_type: str,
     tracker,
 ):

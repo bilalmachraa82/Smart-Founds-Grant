@@ -7,7 +7,7 @@ AI-assisted documentation generation and progress tracking.
 
 # Removed direct logging import - using unified config
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, Optional, Dict
 
 from src.server.utils import get_supabase_client
 
@@ -27,10 +27,10 @@ class ProjectCreationService:
         self,
         progress_id: str,
         title: str,
-        description: str | None = None,
-        github_repo: str | None = None,
+        description: Optional[str] = None,
+        github_repo: Optional[str] = None,
         **kwargs,
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Create a project with AI-assisted documentation generation.
 
@@ -133,8 +133,8 @@ class ProjectCreationService:
         progress_id: str,
         project_id: str,
         title: str,
-        description: str | None,
-        github_repo: str | None,
+        description: Optional[str],
+        github_repo: Optional[str],
     ) -> bool:
         """
         Generate AI documentation for the project.

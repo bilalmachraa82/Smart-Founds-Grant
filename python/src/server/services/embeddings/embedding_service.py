@@ -7,7 +7,7 @@ Handles all OpenAI embedding operations with proper rate limiting and error hand
 import asyncio
 import os
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Dict
 
 import openai
 
@@ -27,19 +27,19 @@ from .embedding_exceptions import (
 class EmbeddingBatchResult:
     """Result of batch embedding creation with success/failure tracking."""
 
-    embeddings: list[list[float]] = field(default_factory=list)
-    failed_items: list[dict[str, Any]] = field(default_factory=list)
+    embeddings: List[List[float]] = field(default_factory=list)
+    failed_items: List[Dict[str, Any]] = field(default_factory=list)
     success_count: int = 0
     failure_count: int = 0
-    texts_processed: list[str] = field(default_factory=list)  # Successfully processed texts
+    texts_processed: List[str] = field(default_factory=list)  # Successfully processed texts
 
-    def add_success(self, embedding: list[float], text: str):
+    def add_success(self, embedding: List[float], text: str):
         """Add a successful embedding."""
         self.embeddings.append(embedding)
         self.texts_processed.append(text)
         self.success_count += 1
 
-    def add_failure(self, text: str, error: Exception, batch_index: int | None = None):
+    def add_failure(self, text: str, error: Exception, batch_index: Optional[int] = None):
         """Add a failed item with error details."""
         error_dict = {
             "text": text[:200] if text else None,
@@ -68,7 +68,7 @@ class EmbeddingBatchResult:
 get_openai_client = get_llm_client
 
 
-async def create_embedding(text: str, provider: str | None = None) -> list[float]:
+async def create_embedding(text: str, provider: Optional[str] = None) -> List[float]:
     """
     Create an embedding for a single text using the configured provider.
 
@@ -129,9 +129,9 @@ async def create_embedding(text: str, provider: str | None = None) -> list[float
 
 
 async def create_embeddings_batch(
-    texts: list[str],
-    progress_callback: Any | None = None,
-    provider: str | None = None,
+    texts: List[str],
+    progress_callback: Optional[Any] = None,
+    provider: Optional[str] = None,
 ) -> EmbeddingBatchResult:
     """
     Create embeddings for multiple texts with graceful failure handling.
@@ -328,7 +328,7 @@ async def create_embeddings_batch(
 
 
 # Deprecated functions - kept for backward compatibility
-async def get_openai_api_key() -> str | None:
+async def get_openai_api_key() -> Optional[str]:
     """
     DEPRECATED: Use os.getenv("OPENAI_API_KEY") directly.
     API key is loaded into environment at startup.

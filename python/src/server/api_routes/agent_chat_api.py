@@ -8,6 +8,8 @@ from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from typing import Optional, Dict
+
 
 logger = logging.getLogger(__name__)
 
@@ -15,12 +17,12 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/agent-chat", tags=["agent-chat"])
 
 # Simple in-memory session storage
-sessions: dict[str, dict] = {}
+sessions: Dict[str, dict] = {}
 
 
 # Request/Response models
 class CreateSessionRequest(BaseModel):
-    project_id: str | None = None
+    project_id: Optional[str] = None
     agent_type: str = "rag"
 
 
@@ -29,7 +31,7 @@ class ChatMessage(BaseModel):
     content: str
     sender: str
     timestamp: datetime
-    agent_type: str | None = None
+    agent_type: Optional[str] = None
 
 
 # REST Endpoints (minimal for frontend compatibility)

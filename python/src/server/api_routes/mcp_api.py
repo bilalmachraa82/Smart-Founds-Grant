@@ -6,7 +6,7 @@ The MCP container is managed by docker-compose, not by this API.
 """
 
 import os
-from typing import Any
+from typing import Any, Dict
 
 import docker
 from docker.errors import NotFound
@@ -18,7 +18,7 @@ from ..config.logfire_config import api_logger, safe_set_attribute, safe_span
 router = APIRouter(prefix="/api/mcp", tags=["mcp"])
 
 
-def get_container_status() -> dict[str, Any]:
+def get_container_status() -> Dict[str, Any]:
     """Get simple MCP container status without Docker management."""
     docker_client = None
     try:

@@ -6,7 +6,7 @@ handling both technical and business source associations.
 """
 
 # Removed direct logging import - using unified config
-from typing import Any
+from typing import Any, Optional, Dict
 
 from src.server.utils import get_supabase_client
 
@@ -22,7 +22,7 @@ class SourceLinkingService:
         """Initialize with optional supabase client"""
         self.supabase_client = supabase_client or get_supabase_client()
 
-    def get_project_sources(self, project_id: str) -> tuple[bool, dict[str, list[str]]]:
+    def get_project_sources(self, project_id: str) -> Tuple[bool, Dict[str, List[str]]]:
         """
         Get all linked sources for a project, separated by type.
 
@@ -61,9 +61,9 @@ class SourceLinkingService:
     def update_project_sources(
         self,
         project_id: str,
-        technical_sources: list[str] | None = None,
-        business_sources: list[str] | None = None,
-    ) -> tuple[bool, dict[str, Any]]:
+        technical_sources: Optional[List[str]] = None,
+        business_sources: Optional[List[str]] = None,
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Update project sources, replacing existing ones if provided.
 
@@ -127,7 +127,7 @@ class SourceLinkingService:
             logger.error(f"Error updating project sources: {e}")
             return False, {"error": str(e), **result}
 
-    def format_project_with_sources(self, project: dict[str, Any]) -> dict[str, Any]:
+    def format_project_with_sources(self, project: Dict[str, Any]) -> Dict[str, Any]:
         """
         Format a project dict with its linked sources included.
         Also handles datetime conversion for JSON compatibility.
@@ -164,7 +164,7 @@ class SourceLinkingService:
             "pinned": project.get("pinned", False),
         }
 
-    def format_projects_with_sources(self, projects: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    def format_projects_with_sources(self, projects: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
         Format a list of projects with their linked sources.
 

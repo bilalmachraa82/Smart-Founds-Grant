@@ -5,7 +5,7 @@ These exceptions follow the principle: "fail fast and loud" for data integrity i
 while allowing batch processes to continue by skipping failed items.
 """
 
-from typing import Any
+from typing import Any, Optional, Dict
 
 
 class EmbeddingError(Exception):
@@ -14,8 +14,8 @@ class EmbeddingError(Exception):
     def __init__(
         self,
         message: str,
-        text_preview: str | None = None,
-        batch_index: int | None = None,
+        text_preview: Optional[str] = None,
+        batch_index: Optional[int] = None,
         **kwargs,
     ):
         """
@@ -32,7 +32,7 @@ class EmbeddingError(Exception):
         self.metadata = kwargs
         super().__init__(message)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Convert exception to dictionary for JSON serialization."""
         return {
             "error_type": self.__class__.__name__,
@@ -51,7 +51,7 @@ class EmbeddingQuotaExhaustedError(EmbeddingError):
     as continuing would be pointless without ability to create embeddings.
     """
 
-    def __init__(self, message: str, tokens_used: int | None = None, **kwargs):
+    def __init__(self, message: str, tokens_used: Optional[int] = None, **kwargs):
         super().__init__(message, **kwargs)
         self.tokens_used = tokens_used
         if tokens_used:

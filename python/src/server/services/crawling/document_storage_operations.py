@@ -36,15 +36,15 @@ class DocumentStorageOperations:
 
     async def process_and_store_documents(
         self,
-        crawl_results: list[dict],
-        request: dict[str, Any],
+        crawl_results: List[dict],
+        request: Dict[str, Any],
         crawl_type: str,
         original_source_id: str,
         progress_callback: Callable | None = None,
         cancellation_check: Callable | None = None,
-        source_url: str | None = None,
-        source_display_name: str | None = None,
-    ) -> dict[str, Any]:
+        source_url: Optional[str] = None,
+        source_display_name: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """
         Process crawled documents and store them in the database.
 
@@ -199,12 +199,12 @@ class DocumentStorageOperations:
 
     async def _create_source_records(
         self,
-        all_metadatas: list[dict],
-        all_contents: list[str],
-        source_word_counts: dict[str, int],
-        request: dict[str, Any],
-        source_url: str | None = None,
-        source_display_name: str | None = None,
+        all_metadatas: List[dict],
+        all_contents: List[str],
+        source_word_counts: Dict[str, int],
+        request: Dict[str, Any],
+        source_url: Optional[str] = None,
+        source_display_name: Optional[str] = None,
     ):
         """
         Create or update source records in the database.
@@ -346,8 +346,8 @@ class DocumentStorageOperations:
 
     async def extract_and_store_code_examples(
         self,
-        crawl_results: list[dict],
-        url_to_full_document: dict[str, str],
+        crawl_results: List[dict],
+        url_to_full_document: Dict[str, str],
         source_id: str,
         progress_callback: Callable | None = None,
         cancellation_check: Callable[[], None] | None = None,

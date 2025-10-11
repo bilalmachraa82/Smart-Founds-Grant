@@ -13,7 +13,7 @@ Multiple strategies can be enabled simultaneously and work together.
 """
 
 import os
-from typing import Any
+from typing import Any, Dict
 
 from ...config.logfire_config import get_logger, safe_span
 from ...utils import get_supabase_client
@@ -90,8 +90,8 @@ class RAGService:
         match_count: int = 5,
         filter_metadata: dict | None = None,
         use_hybrid_search: bool = False,
-        cached_api_key: str | None = None,
-    ) -> list[dict[str, Any]]:
+        cached_api_key: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
         """
         Document search with hybrid search capability.
 
@@ -149,9 +149,9 @@ class RAGService:
         self,
         query: str,
         match_count: int = 10,
-        filter_metadata: dict[str, Any] | None = None,
-        source_id: str | None = None,
-    ) -> list[dict[str, Any]]:
+        filter_metadata: Optional[Dict[str, Any]] = None,
+        source_id: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
         """
         Search for code examples - delegates to agentic strategy.
 
@@ -174,7 +174,7 @@ class RAGService:
 
     async def perform_rag_query(
         self, query: str, source: str = None, match_count: int = 5
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Perform a comprehensive RAG query that combines all enabled strategies.
 
@@ -289,8 +289,8 @@ class RAGService:
                 }
 
     async def search_code_examples_service(
-        self, query: str, source_id: str | None = None, match_count: int = 5
-    ) -> tuple[bool, dict[str, Any]]:
+        self, query: str, source_id: Optional[str] = None, match_count: int = 5
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Search for code examples using agentic strategy with hybrid search and reranking.
 

@@ -4,7 +4,7 @@ Knowledge Item Service
 Handles all knowledge item CRUD operations and data transformations.
 """
 
-from typing import Any
+from typing import Any, Optional
 
 from ...config.logfire_config import safe_logfire_error, safe_logfire_info
 
@@ -27,9 +27,9 @@ class KnowledgeItemService:
         self,
         page: int = 1,
         per_page: int = 20,
-        knowledge_type: str | None = None,
-        search: str | None = None,
-    ) -> dict[str, Any]:
+        knowledge_type: Optional[str] = None,
+        search: Optional[str] = None,
+    ) -> Dict[str, Any]:
         """
         List knowledge items with pagination and filtering.
 
@@ -199,7 +199,7 @@ class KnowledgeItemService:
             safe_logfire_error(f"Failed to list knowledge items | error={str(e)}")
             raise
 
-    async def get_item(self, source_id: str) -> dict[str, Any] | None:
+    async def get_item(self, source_id: str) -> Optional[Dict[str, Any]]:
         """
         Get a single knowledge item by source ID.
 
@@ -235,8 +235,8 @@ class KnowledgeItemService:
             return None
 
     async def update_item(
-        self, source_id: str, updates: dict[str, Any]
-    ) -> tuple[bool, dict[str, Any]]:
+        self, source_id: str, updates: Dict[str, Any]
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Update a knowledge item's metadata.
 
@@ -310,7 +310,7 @@ class KnowledgeItemService:
             )
             return False, {"error": str(e)}
 
-    async def get_available_sources(self) -> dict[str, Any]:
+    async def get_available_sources(self) -> Dict[str, Any]:
         """
         Get all available sources with their details.
 
@@ -342,12 +342,12 @@ class KnowledgeItemService:
             safe_logfire_error(f"Failed to get available sources | error={str(e)}")
             return {"success": False, "error": str(e), "sources": [], "count": 0}
 
-    async def _get_all_sources(self) -> list[dict[str, Any]]:
+    async def _get_all_sources(self) -> List[Dict[str, Any]]:
         """Get all sources from the database."""
         result = await self.get_available_sources()
         return result.get("sources", [])
 
-    async def _transform_source_to_item(self, source: dict[str, Any]) -> dict[str, Any]:
+    async def _transform_source_to_item(self, source: Dict[str, Any]) -> Dict[str, Any]:
         """
         Transform a source record into a knowledge item with enriched data.
 
@@ -418,7 +418,7 @@ class KnowledgeItemService:
 
         return f"source://{source_id}"
 
-    async def _get_code_examples(self, source_id: str) -> list[dict[str, Any]]:
+    async def _get_code_examples(self, source_id: str) -> List[Dict[str, Any]]:
         """Get code examples for a source."""
         try:
             code_examples_response = (
@@ -433,7 +433,7 @@ class KnowledgeItemService:
         except Exception:
             return []
 
-    def _determine_source_type(self, metadata: dict[str, Any], url: str) -> str:
+    def _determine_source_type(self, metadata: Dict[str, Any], url: str) -> str:
         """Determine the source type from metadata or URL pattern."""
         stored_source_type = metadata.get("source_type")
         if stored_source_type:
@@ -442,7 +442,7 @@ class KnowledgeItemService:
         # Legacy fallback - check URL pattern
         return "file" if url.startswith("file://") else "url"
 
-    def _filter_by_search(self, items: list[dict[str, Any]], search: str) -> list[dict[str, Any]]:
+    def _filter_by_search(self, items: List[Dict[str, Any]], search: str) -> List[Dict[str, Any]]:
         """Filter items by search term."""
         search_lower = search.lower()
         return [
@@ -454,8 +454,8 @@ class KnowledgeItemService:
         ]
 
     def _filter_by_knowledge_type(
-        self, items: list[dict[str, Any]], knowledge_type: str
-    ) -> list[dict[str, Any]]:
+        self, items: List[Dict[str, Any]], knowledge_type: str
+    ) -> List[Dict[str, Any]]:
         """Filter items by knowledge type."""
         return [item for item in items if item["metadata"].get("knowledge_type") == knowledge_type]
 

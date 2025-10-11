@@ -6,7 +6,7 @@ Handles batch crawling of multiple URLs in parallel.
 
 import asyncio
 from collections.abc import Awaitable, Callable
-from typing import Any
+from typing import Any, Dict
 
 from crawl4ai import CacheMode, CrawlerRunConfig, MemoryAdaptiveDispatcher
 
@@ -32,13 +32,13 @@ class BatchCrawlStrategy:
 
     async def crawl_batch_with_progress(
         self,
-        urls: list[str],
+        urls: List[str],
         transform_url_func: Callable[[str], str],
         is_documentation_site_func: Callable[[str], bool],
-        max_concurrent: int | None = None,
+        max_concurrent: Optional[int] = None,
         progress_callback: Callable[..., Awaitable[None]] | None = None,
         cancellation_check: Callable[[], None] | None = None,
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """
         Batch crawl multiple URLs in parallel with progress reporting.
 

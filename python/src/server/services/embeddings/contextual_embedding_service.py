@@ -16,7 +16,7 @@ from ..threading_service import get_threading_service
 
 async def generate_contextual_embedding(
     full_document: str, chunk: str, provider: str = None
-) -> tuple[str, bool]:
+) -> Tuple[str, bool]:
     """
     Generate contextual information for a chunk with proper rate limiting.
 
@@ -93,7 +93,7 @@ Please give a short succinct context to situate this chunk within the overall do
 
 async def process_chunk_with_context(
     url: str, content: str, full_document: str
-) -> tuple[str, bool]:
+) -> Tuple[str, bool]:
     """
     Process a single chunk with contextual embedding using async/await.
 
@@ -110,7 +110,7 @@ async def process_chunk_with_context(
     return await generate_contextual_embedding(full_document, content)
 
 
-async def _get_model_choice(provider: str | None = None) -> str:
+async def _get_model_choice(provider: Optional[str] = None) -> str:
     """Get model choice from credential service."""
     from ..credential_service import credential_service
 
@@ -124,8 +124,8 @@ async def _get_model_choice(provider: str | None = None) -> str:
 
 
 async def generate_contextual_embeddings_batch(
-    full_documents: list[str], chunks: list[str], provider: str = None
-) -> list[tuple[str, bool]]:
+    full_documents: List[str], chunks: List[str], provider: str = None
+) -> List[Tuple[str, bool]]:
     """
     Generate contextual information for multiple chunks in a single API call to avoid rate limiting.
 

@@ -5,7 +5,7 @@ Implements the foundational vector similarity search that all other strategies b
 This is the core semantic search functionality.
 """
 
-from typing import Any
+from typing import Any, Dict
 
 from supabase import Client
 
@@ -26,11 +26,11 @@ class BaseSearchStrategy:
 
     async def vector_search(
         self,
-        query_embedding: list[float],
+        query_embedding: List[float],
         match_count: int,
         filter_metadata: dict | None = None,
         table_rpc: str = "match_archon_crawled_pages",
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """
         Perform basic vector similarity search.
 

@@ -69,9 +69,9 @@ class AgenticRAGStrategy:
         self,
         query: str,
         match_count: int = 10,
-        filter_metadata: dict[str, Any] | None = None,
-        source_id: str | None = None,
-    ) -> list[dict[str, Any]]:
+        filter_metadata: Optional[Dict[str, Any]] = None,
+        source_id: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
         """
         Search for code examples using vector similarity.
 
@@ -124,10 +124,10 @@ class AgenticRAGStrategy:
     async def perform_agentic_search(
         self,
         query: str,
-        source_id: str | None = None,
+        source_id: Optional[str] = None,
         match_count: int = 5,
         include_context: bool = True,
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Perform a comprehensive agentic RAG search for code examples with enhanced formatting.
 
@@ -219,7 +219,7 @@ class AgenticRAGStrategy:
                     "search_mode": "agentic_rag",
                 }
 
-    def _extract_code_context(self, result: dict[str, Any]) -> dict[str, Any]:
+    def _extract_code_context(self, result: Dict[str, Any]) -> Dict[str, Any]:
         """
         Extract additional context information from a code example result.
 
@@ -257,7 +257,7 @@ class AgenticRAGStrategy:
 
         return context
 
-    def analyze_code_query(self, query: str) -> dict[str, Any]:
+    def analyze_code_query(self, query: str) -> Dict[str, Any]:
         """
         Analyze a query to determine if it's code-related and extract relevant information.
 
@@ -374,9 +374,9 @@ async def search_code_examples_agentic(
     client: Client,
     query: str,
     match_count: int = 10,
-    filter_metadata: dict[str, Any] | None = None,
-    source_id: str | None = None,
-) -> list[dict[str, Any]]:
+    filter_metadata: Optional[Dict[str, Any]] = None,
+    source_id: Optional[str] = None,
+) -> List[Dict[str, Any]]:
     """
     Standalone function for agentic code example search.
 
@@ -394,7 +394,7 @@ async def search_code_examples_agentic(
     return await strategy.search_code_examples_async(query, match_count, filter_metadata, source_id)
 
 
-def analyze_query_for_code_search(query: str) -> dict[str, Any]:
+def analyze_query_for_code_search(query: str) -> Dict[str, Any]:
     """
     Standalone function to analyze if a query is code-related.
 

@@ -12,7 +12,7 @@ import time
 from dataclasses import dataclass
 
 # Removed direct logging import - using unified config
-from typing import Any
+from typing import Any, List
 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
@@ -29,11 +29,11 @@ class CredentialItem:
     """Represents a credential/setting item."""
 
     key: str
-    value: str | None = None
-    encrypted_value: str | None = None
+    value: Optional[str] = None
+    encrypted_value: Optional[str] = None
     is_encrypted: bool = False
-    category: str | None = None
-    description: str | None = None
+    category: Optional[str] = None
+    description: Optional[str] = None
 
 
 class CredentialService:
@@ -41,10 +41,10 @@ class CredentialService:
 
     def __init__(self):
         self._supabase: Client | None = None
-        self._cache: dict[str, Any] = {}
+        self._cache: Dict[str, Any] = {}
         self._cache_initialized = False
-        self._rag_settings_cache: dict[str, Any] | None = None
-        self._rag_cache_timestamp: float | None = None
+        self._rag_settings_cache: Optional[Dict[str, Any]] = None
+        self._rag_cache_timestamp: Optional[float] = None
         self._rag_cache_ttl = 300  # 5 minutes TTL for RAG settings cache
 
     def _get_supabase_client(self) -> Client:
@@ -121,7 +121,7 @@ class CredentialService:
             logger.error(f"Error decrypting value: {e}")
             raise
 
-    async def load_all_credentials(self) -> dict[str, Any]:
+    async def load_all_credentials(self) -> Dict[str, Any]:
         """Load all credentials from database and cache them."""
         try:
             supabase = self._get_supabase_client()
@@ -174,7 +174,7 @@ class CredentialService:
 
         return value
 
-    async def get_encrypted_credential_raw(self, key: str) -> str | None:
+    async def get_encrypted_credential_raw(self, key: str) -> Optional[str]:
         """Get the raw encrypted value for a credential (without decryption)."""
         if not self._cache_initialized:
             await self.load_all_credentials()
@@ -274,7 +274,7 @@ class CredentialService:
             logger.error(f"Error deleting credential {key}: {e}")
             return False
 
-    async def get_credentials_by_category(self, category: str) -> dict[str, Any]:
+    async def get_credentials_by_category(self, category: str) -> Dict[str, Any]:
         """Get all credentials for a specific category."""
         if not self._cache_initialized:
             await self.load_all_credentials()
@@ -322,7 +322,7 @@ class CredentialService:
             logger.error(f"Error getting credentials for category {category}: {e}")
             return {}
 
-    async def list_all_credentials(self) -> list[CredentialItem]:
+    async def list_all_credentials(self) -> List[CredentialItem]:
         """Get all credentials as a list of CredentialItem objects (for Settings UI)."""
         try:
             supabase = self._get_supabase_client()
@@ -356,7 +356,7 @@ class CredentialService:
             logger.error(f"Error listing credentials: {e}")
             return []
 
-    def get_config_as_env_dict(self) -> dict[str, str]:
+    def get_config_as_env_dict(self) -> Dict[str, str]:
         """
         Get configuration as environment variable style dict.
         Note: This returns plain text values only, encrypted values need special handling.
@@ -377,7 +377,7 @@ class CredentialService:
         return env_dict
 
     # Provider Management Methods
-    async def get_active_provider(self, service_type: str = "llm") -> dict[str, Any]:
+    async def get_active_provider(self, service_type: str = "llm") -> Dict[str, Any]:
         """
         Get the currently active provider configuration.
 
@@ -432,7 +432,7 @@ class CredentialService:
                 "llm_model": "",
             }
 
-    async def _get_provider_api_key(self, provider: str) -> str | None:
+    async def _get_provider_api_key(self, provider: str) -> Optional[str]:
         """Get API key for a specific provider."""
         key_mapping = {
             "openai": "OPENAI_API_KEY",
@@ -446,7 +446,7 @@ class CredentialService:
             return await self.get_credential(key_name)
         return "ollama" if provider == "ollama" else None
 
-    def _get_provider_base_url(self, provider: str, rag_settings: dict) -> str | None:
+    def _get_provider_base_url(self, provider: str, rag_settings: dict) -> Optional[str]:
         """Get base URL for provider."""
         if provider == "ollama":
             return rag_settings.get("LLM_BASE_URL", "http://localhost:11434/v1")

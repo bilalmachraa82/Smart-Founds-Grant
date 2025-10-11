@@ -60,7 +60,7 @@ class SinglePageCrawlStrategy:
         transform_url_func: Callable[[str], str],
         is_documentation_site_func: Callable[[str], bool],
         retry_count: int = 3
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Crawl a single web page and return the result with retry logic.
         
@@ -214,7 +214,7 @@ class SinglePageCrawlStrategy:
         progress_callback: Callable[..., Awaitable[None]] | None = None,
         start_progress: int = 10,
         end_progress: int = 20
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """
         Crawl a .txt or markdown file with comprehensive error handling and progress reporting.
         

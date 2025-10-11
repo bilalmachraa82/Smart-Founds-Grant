@@ -24,7 +24,7 @@ class DatabaseMetricsService:
         """
         self.supabase = supabase_client
 
-    async def get_metrics(self) -> dict[str, Any]:
+    async def get_metrics(self) -> Dict[str, Any]:
         """
         Get database metrics and statistics.
 
@@ -80,7 +80,7 @@ class DatabaseMetricsService:
             safe_logfire_error(f"Failed to get database metrics | error={str(e)}")
             raise
 
-    async def get_storage_statistics(self) -> dict[str, Any]:
+    async def get_storage_statistics(self) -> Dict[str, Any]:
         """
         Get storage statistics including sizes and counts by type.
 

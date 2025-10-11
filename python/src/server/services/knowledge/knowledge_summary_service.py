@@ -31,7 +31,7 @@ class KnowledgeSummaryService:
         per_page: int = 20,
         knowledge_type: Optional[str] = None,
         search: Optional[str] = None,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Get lightweight summaries of knowledge items.
         
@@ -165,7 +165,7 @@ class KnowledgeSummaryService:
             safe_logfire_error(f"Failed to get knowledge summaries | error={str(e)}")
             raise
     
-    async def _get_document_counts_batch(self, source_ids: list[str]) -> dict[str, int]:
+    async def _get_document_counts_batch(self, source_ids: List[str]) -> Dict[str, int]:
         """
         Get document counts for multiple sources in a single query.
         
@@ -196,7 +196,7 @@ class KnowledgeSummaryService:
             safe_logfire_error(f"Failed to get document counts | error={str(e)}")
             return {sid: 0 for sid in source_ids}
     
-    async def _get_code_example_counts_batch(self, source_ids: list[str]) -> dict[str, int]:
+    async def _get_code_example_counts_batch(self, source_ids: List[str]) -> Dict[str, int]:
         """
         Get code example counts for multiple sources efficiently.
         
@@ -225,7 +225,7 @@ class KnowledgeSummaryService:
             safe_logfire_error(f"Failed to get code example counts | error={str(e)}")
             return {sid: 0 for sid in source_ids}
     
-    async def _get_first_urls_batch(self, source_ids: list[str]) -> dict[str, str]:
+    async def _get_first_urls_batch(self, source_ids: List[str]) -> Dict[str, str]:
         """
         Get first URL for each source in a batch.
         

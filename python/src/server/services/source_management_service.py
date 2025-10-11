@@ -5,7 +5,7 @@ Handles source metadata, summaries, and management.
 Consolidates both utility functions and class-based service.
 """
 
-from typing import Any
+from typing import Any, Dict
 
 from supabase import Client
 
@@ -100,12 +100,12 @@ async def generate_source_title_and_metadata(
     source_id: str,
     content: str,
     knowledge_type: str = "technical",
-    tags: list[str] | None = None,
+    tags: Optional[List[str]] = None,
     provider: str = None,
-    original_url: str | None = None,
-    source_display_name: str | None = None,
-    source_type: str | None = None,
-) -> tuple[str, dict[str, Any]]:
+    original_url: Optional[str] = None,
+    source_display_name: Optional[str] = None,
+    source_type: Optional[str] = None,
+) -> Tuple[str, Dict[str, Any]]:
     """
     Generate a user-friendly title and metadata for a source based on its content.
 
@@ -215,12 +215,12 @@ async def update_source_info(
     word_count: int,
     content: str = "",
     knowledge_type: str = "technical",
-    tags: list[str] | None = None,
+    tags: Optional[List[str]] = None,
     update_frequency: int = 7,
-    original_url: str | None = None,
-    source_url: str | None = None,
-    source_display_name: str | None = None,
-    source_type: str | None = None,
+    original_url: Optional[str] = None,
+    source_url: Optional[str] = None,
+    source_display_name: Optional[str] = None,
+    source_type: Optional[str] = None,
 ):
     """
     Update or insert source information in the sources table.
@@ -367,7 +367,7 @@ class SourceManagementService:
         """Initialize with optional supabase client"""
         self.supabase_client = supabase_client or get_supabase_client()
 
-    def get_available_sources(self) -> tuple[bool, dict[str, Any]]:
+    def get_available_sources(self) -> Tuple[bool, Dict[str, Any]]:
         """
         Get all available sources from the sources table.
 
@@ -395,7 +395,7 @@ class SourceManagementService:
             logger.error(f"Error retrieving sources: {e}")
             return False, {"error": f"Error retrieving sources: {str(e)}"}
 
-    def delete_source(self, source_id: str) -> tuple[bool, dict[str, Any]]:
+    def delete_source(self, source_id: str) -> Tuple[bool, Dict[str, Any]]:
         """
         Delete a source and all associated crawled pages and code examples from the database.
 
@@ -472,8 +472,8 @@ class SourceManagementService:
         summary: str = None,
         word_count: int = None,
         knowledge_type: str = None,
-        tags: list[str] = None,
-    ) -> tuple[bool, dict[str, Any]]:
+        tags: List[str] = None,
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Update source metadata.
 
@@ -542,9 +542,9 @@ class SourceManagementService:
         content_sample: str,
         word_count: int = 0,
         knowledge_type: str = "technical",
-        tags: list[str] = None,
+        tags: List[str] = None,
         update_frequency: int = 7,
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Create source information entry.
 
@@ -590,7 +590,7 @@ class SourceManagementService:
             logger.error(f"Error creating source info: {e}")
             return False, {"error": f"Error creating source info: {str(e)}"}
 
-    def get_source_details(self, source_id: str) -> tuple[bool, dict[str, Any]]:
+    def get_source_details(self, source_id: str) -> Tuple[bool, Dict[str, Any]]:
         """
         Get detailed information about a specific source.
 
@@ -642,7 +642,7 @@ class SourceManagementService:
             logger.error(f"Error getting source details: {e}")
             return False, {"error": f"Error getting source details: {str(e)}"}
 
-    def list_sources_by_type(self, knowledge_type: str = None) -> tuple[bool, dict[str, Any]]:
+    def list_sources_by_type(self, knowledge_type: str = None) -> Tuple[bool, Dict[str, Any]]:
         """
         List sources filtered by knowledge type.
 

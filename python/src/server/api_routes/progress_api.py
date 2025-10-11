@@ -10,6 +10,8 @@ from ..config.logfire_config import get_logger, logfire
 from ..models.progress_models import create_progress_response
 from ..utils.etag_utils import check_etag, generate_etag
 from ..utils.progress import ProgressTracker
+from typing import Optional
+
 
 logger = get_logger(__name__)
 
@@ -23,7 +25,7 @@ TERMINAL_STATES = {"completed", "failed", "error", "cancelled"}
 async def get_progress(
     operation_id: str,
     response: Response,
-    if_none_match: str | None = Header(None)
+    if_none_match: Optional[str] = Header(None)
 ):
     """
     Get progress for an operation with ETag support.

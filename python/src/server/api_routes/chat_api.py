@@ -29,7 +29,7 @@ router = APIRouter(prefix="/api", tags=["chat"])
 # Authentication Middleware (Best Practice 2025)
 # ===================================================================
 
-async def verify_api_key(authorization: str | None = Header(None, alias="Authorization")):
+async def verify_api_key(authorization: Optional[str] = Header(None, alias="Authorization")):
     """
     Verify API key from Authorization header.
 
@@ -97,7 +97,7 @@ class ChatRequest(BaseModel):
     query: str = Field(..., description="User query or question")
     stream: bool = Field(default=False, description="Whether to stream response (not yet implemented)")
     rag: bool = Field(default=True, description="Whether to use RAG for context")
-    source: str | None = Field(default=None, description="Optional source filter")
+    source: Optional[str] = Field(default=None, description="Optional source filter")
     match_count: int = Field(default=5, ge=1, le=20, description="Number of relevant chunks to retrieve")
 
     class Config:
@@ -114,9 +114,9 @@ class ChatRequest(BaseModel):
 class CitationModel(BaseModel):
     """Citation from source document."""
     source: str = Field(..., description="Source document name")
-    page: int | None = Field(None, description="Page number if available")
+    page: Optional[int] = Field(None, description="Page number if available")
     text: str = Field(..., description="Relevant excerpt from source")
-    score: float | None = Field(None, description="Similarity/relevance score")
+    score: Optional[float] = Field(None, description="Similarity/relevance score")
 
 
 class ChatResponse(BaseModel):
@@ -126,7 +126,7 @@ class ChatResponse(BaseModel):
     Provides both direct answer and supporting citations.
     """
     answer: str = Field(..., description="Generated answer from RAG pipeline")
-    sources: list[CitationModel] = Field(default_factory=list, description="Citations from knowledge base")
+    sources: List[CitationModel] = Field(default_factory=list, description="Citations from knowledge base")
     stream: bool = Field(default=False, description="Whether response was streamed")
     query: str = Field(..., description="Original query")
     total_found: int = Field(default=0, description="Total relevant chunks found")

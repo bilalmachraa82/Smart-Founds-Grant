@@ -248,7 +248,7 @@ class KeywordExtractor:
 
     def extract_keywords(
         self, query: str, min_length: int = 2, max_keywords: int = 10
-    ) -> list[str]:
+    ) -> List[str]:
         """
         Extract meaningful keywords from a search query.
 
@@ -317,7 +317,7 @@ class KeywordExtractor:
         # Return top N keywords
         return prioritized[:max_keywords]
 
-    def _prioritize_keywords(self, keywords: list[str], original_query: str) -> list[str]:
+    def _prioritize_keywords(self, keywords: List[str], original_query: str) -> List[str]:
         """
         Prioritize keywords based on various factors.
 
@@ -361,7 +361,7 @@ class KeywordExtractor:
 
         return [kw for kw, _ in keyword_scores]
 
-    def build_search_terms(self, keywords: list[str]) -> list[str]:
+    def build_search_terms(self, keywords: List[str]) -> List[str]:
         """
         Build search terms from keywords, including variations.
 
@@ -421,7 +421,7 @@ class KeywordExtractor:
 keyword_extractor = KeywordExtractor()
 
 
-def extract_keywords(query: str, min_length: int = 2, max_keywords: int = 10) -> list[str]:
+def extract_keywords(query: str, min_length: int = 2, max_keywords: int = 10) -> List[str]:
     """
     Convenience function to extract keywords from a query.
 
@@ -436,7 +436,7 @@ def extract_keywords(query: str, min_length: int = 2, max_keywords: int = 10) ->
     return keyword_extractor.extract_keywords(query, min_length, max_keywords)
 
 
-def build_search_terms(keywords: list[str]) -> list[str]:
+def build_search_terms(keywords: List[str]) -> List[str]:
     """
     Convenience function to build search terms from keywords.
 

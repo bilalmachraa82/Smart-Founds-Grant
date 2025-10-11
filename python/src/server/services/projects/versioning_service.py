@@ -7,7 +7,7 @@ that can be shared between MCP tools and FastAPI endpoints.
 
 # Removed direct logging import - using unified config
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict
 
 from src.server.utils import get_supabase_client
 
@@ -27,12 +27,12 @@ class VersioningService:
         self,
         project_id: str,
         field_name: str,
-        content: dict[str, Any],
+        content: Dict[str, Any],
         change_summary: str = None,
         change_type: str = "update",
         document_id: str = None,
         created_by: str = "system",
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Create a version snapshot for a project JSONB field.
 
@@ -88,7 +88,7 @@ class VersioningService:
             logger.error(f"Error creating version: {e}")
             return False, {"error": f"Error creating version: {str(e)}"}
 
-    def list_versions(self, project_id: str, field_name: str = None) -> tuple[bool, dict[str, Any]]:
+    def list_versions(self, project_id: str, field_name: str = None) -> Tuple[bool, Dict[str, Any]]:
         """
         Get version history for project JSONB fields.
 
@@ -125,7 +125,7 @@ class VersioningService:
 
     def get_version_content(
         self, project_id: str, field_name: str, version_number: int
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Get the content of a specific version.
 
@@ -160,7 +160,7 @@ class VersioningService:
 
     def restore_version(
         self, project_id: str, field_name: str, version_number: int, restored_by: str = "system"
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Restore a project JSONB field to a specific version.
 

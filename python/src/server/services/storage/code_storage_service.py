@@ -11,7 +11,7 @@ import re
 from collections import defaultdict, deque
 from collections.abc import Callable
 from difflib import SequenceMatcher
-from typing import Any
+from typing import Any, Dict
 from urllib.parse import urlparse
 
 from supabase import Client
@@ -97,7 +97,7 @@ def _calculate_code_similarity(code1: str, code2: str) -> float:
     return similarity
 
 
-def _select_best_code_variant(similar_blocks: list[dict[str, Any]]) -> dict[str, Any]:
+def _select_best_code_variant(similar_blocks: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Select the best variant from a list of similar code blocks.
 
@@ -155,7 +155,7 @@ def _select_best_code_variant(similar_blocks: list[dict[str, Any]]) -> dict[str,
     return best_block
 
 
-def extract_code_blocks(markdown_content: str, min_length: int = None) -> list[dict[str, Any]]:
+def extract_code_blocks(markdown_content: str, min_length: int = None) -> List[Dict[str, Any]]:
     """
     Extract code blocks from markdown content along with context.
 
@@ -492,7 +492,7 @@ def extract_code_blocks(markdown_content: str, min_length: int = None) -> list[d
 
 def generate_code_example_summary(
     code: str, context_before: str, context_after: str, language: str = "", provider: str = None
-) -> dict[str, str]:
+) -> Dict[str, str]:
     """
     Generate a summary and name for a code example using its surrounding context.
 
@@ -626,8 +626,8 @@ Format your response as JSON:
 
 
 async def generate_code_summaries_batch(
-    code_blocks: list[dict[str, Any]], max_workers: int = None, progress_callback=None
-) -> list[dict[str, str]]:
+    code_blocks: List[Dict[str, Any]], max_workers: int = None, progress_callback=None
+) -> List[Dict[str, str]]:
     """
     Generate summaries for multiple code blocks with rate limiting and proper worker management.
 
@@ -666,7 +666,7 @@ async def generate_code_summaries_batch(
     completed_count = 0
     lock = asyncio.Lock()
 
-    async def generate_single_summary_with_limit(block: dict[str, Any]) -> dict[str, str]:
+    async def generate_single_summary_with_limit(block: Dict[str, Any]) -> Dict[str, str]:
         nonlocal completed_count
         async with semaphore:
             # Add delay between requests to avoid rate limiting
@@ -740,15 +740,15 @@ async def generate_code_summaries_batch(
 
 async def add_code_examples_to_supabase(
     client: Client,
-    urls: list[str],
-    chunk_numbers: list[int],
-    code_examples: list[str],
-    summaries: list[str],
-    metadatas: list[dict[str, Any]],
+    urls: List[str],
+    chunk_numbers: List[int],
+    code_examples: List[str],
+    summaries: List[str],
+    metadatas: List[Dict[str, Any]],
     batch_size: int = 20,
-    url_to_full_document: dict[str, str] | None = None,
+    url_to_full_document: Optional[Dict[str, str]] = None,
     progress_callback: Callable | None = None,
-    provider: str | None = None,
+    provider: Optional[str] = None,
 ):
     """
     Add code examples to the Supabase code_examples table in batches.
@@ -816,7 +816,7 @@ async def add_code_examples_to_supabase(
 
         # Create combined texts for embedding (code + summary)
         combined_texts = []
-        original_indices: list[int] = []
+        original_indices: List[int] = []
         for j in range(i, batch_end):
             # Validate inputs
             code = code_examples[j] if isinstance(code_examples[j], str) else str(code_examples[j])

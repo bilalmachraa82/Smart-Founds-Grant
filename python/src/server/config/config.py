@@ -8,6 +8,8 @@ from dataclasses import dataclass
 from urllib.parse import urlparse
 
 from jose import jwt
+from typing import Tuple
+
 
 
 class ConfigurationError(Exception):
@@ -23,7 +25,7 @@ class EnvironmentConfig:
     supabase_url: str
     supabase_service_key: str
     port: int  # Required - no default
-    openai_api_key: str | None = None
+    openai_api_key: Optional[str] = None
     host: str = "0.0.0.0"
     transport: str = "sse"
 
@@ -49,11 +51,11 @@ def validate_openai_api_key(api_key: str) -> bool:
     return True
 
 
-def validate_supabase_key(supabase_key: str) -> tuple[bool, str]:
+def validate_supabase_key(supabase_key: str) -> Tuple[bool, str]:
     """Validate Supabase key type and return validation result.
 
     Returns:
-        tuple[bool, str]: (is_valid, message)
+        Tuple[bool, str]: (is_valid, message)
         - (False, "ANON_KEY_DETECTED") if anon key detected
         - (True, "VALID_SERVICE_KEY") if service key detected
         - (False, "UNKNOWN_KEY_TYPE:{role}") for unknown roles
@@ -220,7 +222,7 @@ def get_config() -> EnvironmentConfig:
 def get_rag_strategy_config() -> RAGStrategyConfig:
     """Load RAG strategy configuration from environment variables."""
 
-    def str_to_bool(value: str | None) -> bool:
+    def str_to_bool(value: Optional[str]) -> bool:
         """Convert string environment variable to boolean."""
         if value is None:
             return False

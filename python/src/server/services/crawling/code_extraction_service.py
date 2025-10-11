@@ -134,8 +134,8 @@ class CodeExtractionService:
 
     async def extract_and_store_code_examples(
         self,
-        crawl_results: list[dict[str, Any]],
-        url_to_full_document: dict[str, str],
+        crawl_results: List[Dict[str, Any]],
+        url_to_full_document: Dict[str, str],
         source_id: str,
         progress_callback: Callable | None = None,
         cancellation_check: Callable[[], None] | None = None,
@@ -228,11 +228,11 @@ class CodeExtractionService:
 
     async def _extract_code_blocks_from_documents(
         self,
-        crawl_results: list[dict[str, Any]],
+        crawl_results: List[Dict[str, Any]],
         source_id: str,
         progress_callback: Callable | None = None,
         cancellation_check: Callable[[], None] | None = None,
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """
         Extract code blocks from all documents.
 
@@ -378,7 +378,7 @@ class CodeExtractionService:
 
         return all_code_blocks
 
-    async def _extract_html_code_blocks(self, content: str) -> list[dict[str, Any]]:
+    async def _extract_html_code_blocks(self, content: str) -> List[Dict[str, Any]]:
         """
         Extract code blocks from HTML patterns in content.
         This is a fallback when markdown conversion didn't preserve code blocks.
@@ -712,8 +712,8 @@ class CodeExtractionService:
         return code_blocks
 
     async def _extract_text_file_code_blocks(
-        self, content: str, url: str, min_length: int | None = None
-    ) -> list[dict[str, Any]]:
+        self, content: str, url: str, min_length: Optional[int] = None
+    ) -> List[Dict[str, Any]]:
         """
         Extract code blocks from plain text files (like .txt files).
         Handles formats like llms.txt where code blocks may be indicated by:
@@ -971,7 +971,7 @@ class CodeExtractionService:
         min_length: int = 250,
         language: str = "",
         max_length: int = None,
-    ) -> tuple[str, int]:
+    ) -> Tuple[str, int]:
         """
         Find a complete code block starting from a position, extending until we find a natural boundary.
 
@@ -1375,10 +1375,10 @@ class CodeExtractionService:
 
     async def _generate_code_summaries(
         self,
-        all_code_blocks: list[dict[str, Any]],
+        all_code_blocks: List[Dict[str, Any]],
         progress_callback: Callable | None = None,
         cancellation_check: Callable[[], None] | None = None,
-    ) -> list[dict[str, str]]:
+    ) -> List[Dict[str, str]]:
         """
         Generate summaries for all code blocks.
 
@@ -1463,8 +1463,8 @@ class CodeExtractionService:
             raise
 
     def _prepare_code_examples_for_storage(
-        self, all_code_blocks: list[dict[str, Any]], summary_results: list[dict[str, str]]
-    ) -> dict[str, list[Any]]:
+        self, all_code_blocks: List[Dict[str, Any]], summary_results: List[Dict[str, str]]
+    ) -> Dict[str, List[Any]]:
         """
         Prepare code examples for storage by organizing data into arrays.
 
@@ -1519,8 +1519,8 @@ class CodeExtractionService:
 
     async def _store_code_examples(
         self,
-        storage_data: dict[str, list[Any]],
-        url_to_full_document: dict[str, str],
+        storage_data: Dict[str, List[Any]],
+        url_to_full_document: Dict[str, str],
         progress_callback: Callable | None = None,
     ) -> int:
         """

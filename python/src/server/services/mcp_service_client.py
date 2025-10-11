@@ -6,7 +6,7 @@ other services (API and Agents) instead of importing their modules directly.
 """
 
 import uuid
-from typing import Any
+from typing import Any, Dict
 from urllib.parse import urljoin
 
 import httpx
@@ -32,7 +32,7 @@ class MCPServiceClient:
             pool=5.0,
         )
 
-    def _get_headers(self, request_id: str | None = None) -> dict[str, str]:
+    def _get_headers(self, request_id: Optional[str] = None) -> Dict[str, str]:
         """Get common headers for internal requests"""
         headers = {"X-Service-Auth": self.service_auth, "Content-Type": "application/json"}
         if request_id:
@@ -41,7 +41,7 @@ class MCPServiceClient:
             headers["X-Request-ID"] = str(uuid.uuid4())
         return headers
 
-    async def crawl_url(self, url: str, options: dict[str, Any] | None = None) -> dict[str, Any]:
+    async def crawl_url(self, url: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
         Crawl a URL by calling the API service's knowledge-items/crawl endpoint.
         Transforms MCP's simple format to the API's KnowledgeItemRequest format.
@@ -97,10 +97,10 @@ class MCPServiceClient:
     async def search(
         self,
         query: str,
-        source_filter: str | None = None,
+        source_filter: Optional[str] = None,
         match_count: int = 5,
         use_reranking: bool = False,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Perform a search by calling the API service's rag/query endpoint.
         Transforms MCP's simple format to the API's RagQueryRequest format.
@@ -147,8 +147,8 @@ class MCPServiceClient:
     # Removed _rerank_results method - reranking should be handled by Server's service layer
 
     async def store_documents(
-        self, documents: list[dict[str, Any]], generate_embeddings: bool = True
-    ) -> dict[str, Any]:
+        self, documents: List[Dict[str, Any]], generate_embeddings: bool = True
+    ) -> Dict[str, Any]:
         """
         Store documents by transforming them into the format expected by the API.
         Note: The regular API expects file uploads, so this is a simplified version.
@@ -171,8 +171,8 @@ class MCPServiceClient:
         }
 
     async def generate_embeddings(
-        self, texts: list[str], model: str = "text-embedding-3-small"
-    ) -> dict[str, Any]:
+        self, texts: List[str], model: str = "text-embedding-3-small"
+    ) -> Dict[str, Any]:
         """
         Generate embeddings - this should be handled by Server's service layer.
         MCP tools shouldn't need to directly generate embeddings.
@@ -189,7 +189,7 @@ class MCPServiceClient:
 
     # Removed analyze_document - document analysis should be handled by Agents via MCP tools
 
-    async def health_check(self) -> dict[str, Any]:
+    async def health_check(self) -> Dict[str, Any]:
         """
         Check health of all dependent services.
 

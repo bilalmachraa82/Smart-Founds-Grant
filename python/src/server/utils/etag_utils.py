@@ -2,7 +2,7 @@
 
 import hashlib
 import json
-from typing import Any
+from typing import Any, Optional
 
 
 def generate_etag(data: Any) -> str:
@@ -24,7 +24,7 @@ def generate_etag(data: Any) -> str:
     return f'"{hash_obj.hexdigest()}"'
 
 
-def check_etag(request_etag: str | None, current_etag: str) -> bool:
+def check_etag(request_etag: Optional[str], current_etag: str) -> bool:
     """Check if request ETag matches current ETag.
     
     Args:

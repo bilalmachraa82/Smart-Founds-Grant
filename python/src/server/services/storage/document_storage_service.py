@@ -16,17 +16,17 @@ from ..embeddings.embedding_service import create_embeddings_batch
 
 async def add_documents_to_supabase(
     client,
-    urls: list[str],
-    chunk_numbers: list[int],
-    contents: list[str],
-    metadatas: list[dict[str, Any]],
-    url_to_full_document: dict[str, str],
+    urls: List[str],
+    chunk_numbers: List[int],
+    contents: List[str],
+    metadatas: List[Dict[str, Any]],
+    url_to_full_document: Dict[str, str],
     batch_size: int = None,  # Will load from settings
-    progress_callback: Any | None = None,
+    progress_callback: Optional[Any] = None,
     enable_parallel_batches: bool = True,
-    provider: str | None = None,
-    cancellation_check: Any | None = None,
-) -> dict[str, int]:
+    provider: Optional[str] = None,
+    cancellation_check: Optional[Any] = None,
+) -> Dict[str, int]:
     """
     Add documents to Supabase with threading optimizations.
 

@@ -36,7 +36,7 @@ class BaseStorageService(ABC):
 
         self.threading_service = get_utils_threading_service()
 
-    def smart_chunk_text(self, text: str, chunk_size: int = 5000) -> list[str]:
+    def smart_chunk_text(self, text: str, chunk_size: int = 5000) -> List[str]:
         """
         Split text into chunks intelligently, preserving context.
 
@@ -104,7 +104,7 @@ class BaseStorageService(ABC):
 
     async def smart_chunk_text_async(
         self, text: str, chunk_size: int = 5000, progress_callback: Callable | None = None
-    ) -> list[str]:
+    ) -> List[str]:
         """
         Async version of smart_chunk_text with optional progress reporting.
 
@@ -147,8 +147,8 @@ class BaseStorageService(ABC):
                 raise
 
     def extract_metadata(
-        self, chunk: str, base_metadata: dict[str, Any] | None = None
-    ) -> dict[str, Any]:
+        self, chunk: str, base_metadata: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         Extract metadata from a text chunk.
 
@@ -198,12 +198,12 @@ class BaseStorageService(ABC):
 
     async def batch_process_with_progress(
         self,
-        items: list[Any],
+        items: List[Any],
         process_func: Callable,
         batch_size: int = 20,
         progress_callback: Callable | None = None,
         description: str = "Processing",
-    ) -> list[Any]:
+    ) -> List[Any]:
         """
         Process items in batches with progress reporting.
 
@@ -238,7 +238,7 @@ class BaseStorageService(ABC):
         return results
 
     @abstractmethod
-    async def store_documents(self, documents: list[dict[str, Any]], **kwargs) -> dict[str, Any]:
+    async def store_documents(self, documents: List[Dict[str, Any]], **kwargs) -> Dict[str, Any]:
         """
         Store documents in the database. Must be implemented by subclasses.
 
@@ -252,7 +252,7 @@ class BaseStorageService(ABC):
         pass
 
     @abstractmethod
-    async def process_document(self, document: dict[str, Any], **kwargs) -> dict[str, Any]:
+    async def process_document(self, document: Dict[str, Any], **kwargs) -> Dict[str, Any]:
         """
         Process a single document. Must be implemented by subclasses.
 

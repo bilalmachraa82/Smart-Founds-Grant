@@ -7,7 +7,7 @@ shared between MCP tools and FastAPI endpoints.
 
 # Removed direct logging import - using unified config
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional, Dict
 
 from src.server.utils import get_supabase_client
 
@@ -27,7 +27,7 @@ class TaskService:
         """Initialize with optional supabase client"""
         self.supabase_client = supabase_client or get_supabase_client()
 
-    def validate_status(self, status: str) -> tuple[bool, str]:
+    def validate_status(self, status: str) -> Tuple[bool, str]:
         """Validate task status"""
         if status not in self.VALID_STATUSES:
             return (
@@ -36,7 +36,7 @@ class TaskService:
             )
         return True, ""
 
-    def validate_assignee(self, assignee: str) -> tuple[bool, str]:
+    def validate_assignee(self, assignee: str) -> Tuple[bool, str]:
         """Validate task assignee"""
         if not assignee or not isinstance(assignee, str) or len(assignee.strip()) == 0:
             return False, "Assignee must be a non-empty string"
@@ -49,10 +49,10 @@ class TaskService:
         description: str = "",
         assignee: str = "User",
         task_order: int = 0,
-        feature: str | None = None,
-        sources: list[dict[str, Any]] = None,
-        code_examples: list[dict[str, Any]] = None,
-    ) -> tuple[bool, dict[str, Any]]:
+        feature: Optional[str] = None,
+        sources: List[Dict[str, Any]] = None,
+        code_examples: List[Dict[str, Any]] = None,
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Create a new task under a project with automatic reordering.
 
@@ -146,7 +146,7 @@ class TaskService:
         exclude_large_fields: bool = False,
         include_archived: bool = False,
         search_query: str = None
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         List tasks with various filters.
 
@@ -317,7 +317,7 @@ class TaskService:
             logger.error(f"Error listing tasks: {e}")
             return False, {"error": f"Error listing tasks: {str(e)}"}
 
-    def get_task(self, task_id: str) -> tuple[bool, dict[str, Any]]:
+    def get_task(self, task_id: str) -> Tuple[bool, Dict[str, Any]]:
         """
         Get a specific task by ID.
 
@@ -340,8 +340,8 @@ class TaskService:
             return False, {"error": f"Error getting task: {str(e)}"}
 
     async def update_task(
-        self, task_id: str, update_fields: dict[str, Any]
-    ) -> tuple[bool, dict[str, Any]]:
+        self, task_id: str, update_fields: Dict[str, Any]
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Update task with specified fields.
 
@@ -399,7 +399,7 @@ class TaskService:
 
     async def archive_task(
         self, task_id: str, archived_by: str = "mcp"
-    ) -> tuple[bool, dict[str, Any]]:
+    ) -> Tuple[bool, Dict[str, Any]]:
         """
         Archive a task and all its subtasks (soft delete).
 
@@ -444,7 +444,7 @@ class TaskService:
             logger.error(f"Error archiving task: {e}")
             return False, {"error": f"Error archiving task: {str(e)}"}
 
-    def get_all_project_task_counts(self) -> tuple[bool, dict[str, dict[str, int]]]:
+    def get_all_project_task_counts(self) -> Tuple[bool, Dict[str, Dict[str, int]]]:
         """
         Get task counts for all projects in a single optimized query.
         

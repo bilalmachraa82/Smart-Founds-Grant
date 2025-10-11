@@ -7,6 +7,8 @@ enabling clients to reconnect after server restarts.
 
 import uuid
 from datetime import datetime, timedelta
+from typing import Optional, Dict
+
 
 # Removed direct logging import - using unified config
 from ..config.logfire_config import get_logger
@@ -24,7 +26,7 @@ class SimplifiedSessionManager:
         Args:
             timeout: Session expiration time in seconds (default: 1 hour)
         """
-        self.sessions: dict[str, datetime] = {}  # session_id -> last_seen
+        self.sessions: Dict[str, datetime] = {}  # session_id -> last_seen
         self.timeout = timeout
 
     def create_session(self) -> str:
@@ -73,7 +75,7 @@ class SimplifiedSessionManager:
 
 
 # Global session manager instance
-_session_manager: SimplifiedSessionManager | None = None
+_session_manager: Optional[SimplifiedSessionManager] = None
 
 
 def get_session_manager() -> SimplifiedSessionManager:
