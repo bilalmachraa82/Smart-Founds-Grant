@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="pt-PT" data-version="7.0">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Transformation Strategy - Vale Inovação Report">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{{company_name}} - AI Transformation Strategy | Archon Report</title>
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+    <!-- Design System v7.0 -->
+    <link rel="stylesheet" href="design-system-v7.css">
+
+    <!-- ApexCharts for visualizations -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.45.0/dist/apexcharts.css">
+
+    <!-- Print styles -->
+    <style media="print">
+        @page {
+            size: A4 portrait;
+            margin: 2cm;
+        }
+        .no-print, archon-floating-toc { display: none !important; }
+        .page-break-before { page-break-before: always; }
+    </style>
+
+    <!-- Critical CSS inline for fastest render -->
+    <style>
+        /* Skeleton loader */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+
+<body data-company="{{company_name}}" data-report-date="{{report_date}}">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         COVER PAGE - Executive Entrance
+         ═══════════════════════════════════════════════════════════ -->
+
+    <archon-cover-page
+        logo="{{company_logo}}"
+        title="{{report_title}}"
+        subtitle="{{report_subtitle}}"
+        date="{{report_date}}"
+        classification="CONFIDENTIAL">
+    </archon-cover-page>
+
+    <archon-page-break></archon-page-break>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         MAIN CONTENT CONTAINER
+         ═══════════════════════════════════════════════════════════ -->
+
+    <main class="report-container">
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 01: EXECUTIVE SUMMARY (SCQA Framework)
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="executive-summary" data-read-time="5 min">
+            <header class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">Executive Summary</h2>
+                <span class="section-meta">McKinsey SCQA Framework</span>
+            </header>
+
+            <archon-scqa
+                situation="{{scqa_situation}}"
+                complication="{{scqa_complication}}"
+                question="{{scqa_question}}"
+                answer="{{scqa_answer}}">
+            </archon-scqa>
+
+            <archon-callout type="insight" title="Key Insight">
+                {{scqa_key_insight}}
+            </archon-callout>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 02: DIAGNOSTIC OVERVIEW
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="diagnostic" data-read-time="4 min">
+            <header class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">Diagnostic Overview</h2>
+                <span class="section-meta">Company Profile & Readiness</span>
+            </header>
+
+            <div class="diagnostic-grid">
+                <div class="diagnostic-card">
+                    <h3>Company Profile</h3>
+                    <dl class="data-list">
+                        <dt>Company Size</dt>
+                        <dd>{{company_size}} ({{num_employees}} employees)</dd>
+
+                        <dt>Annual Revenue</dt>
+                        <dd>€{{annual_revenue|format_number}}</dd>
+
+                        <dt>Industry Sector</dt>
+                        <dd>{{industry_sector}}</dd>
+
+                        <dt>Tech Stack</dt>
+                        <dd>{{tech_stack_summary}}</dd>
+                    </dl>
+                </div>
+
+                <div class="diagnostic-card">
+                    <h3>AI Readiness Score</h3>
+                    <div class="readiness-gauge" data-score="{{ai_readiness_score}}">
+                        <canvas id="readinessGauge"></canvas>
+                    </div>
+                    <p class="gauge-label">{{ai_readiness_level}}</p>
+                </div>
+
+                <div class="diagnostic-card">
+                    <h3>Use Cases Identified</h3>
+                    <ul class="use-case-list">
+                        {% for use_case in use_cases %}
+                        <li>{{use_case}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            {% if compliance_warnings %}
+            <archon-callout type="warning" title="Compliance Alerts">
+                {{compliance_warnings}}
+            </archon-callout>
+            {% endif %}
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 03: SAAS RECOMMENDATIONS
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="saas-recommendations" data-read-time="6 min">
+            <header class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">SaaS Tool Recommendations</h2>
+                <span class="section-meta">Decision Tree Analysis</span>
+            </header>
+
+            <p class="section-intro">
+                Based on your tech stack ({{primary_ecosystem}}) and use cases, we recommend the following AI tools:
+            </p>
+
+            <div class="saas-recommendations-grid">
+                {% for tool in saas_recommendations %}
+                <div class="saas-card" data-tool="{{tool.tool_id}}">
+                    <div class="saas-header">
+                        <h4>{{tool.tool_name}}</h4>
+                        {% if tool.native_integration %}
+                        <span class="badge badge-success">Native Integration</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="saas-pricing">
+                        <span class="price-value">€{{tool.price_per_user_month}}</span>
+                        <span class="price-unit">/user/month</span>
+                    </div>
+
+                    <div class="saas-users">
+                        <strong>Recommended:</strong> {{tool.recommended_users}} users
+                    </div>
+
+                    <div class="saas-costs">
+                        <div class="cost-item">
+                            <span class="cost-label">Monthly Cost</span>
+                            <span class="cost-value">€{{tool.monthly_cost|format_number}}</span>
+                        </div>
+                        <div class="cost-item">
+                            <span class="cost-label">Annual Cost</span>
+                            <span class="cost-value">€{{tool.annual_cost|format_number}}</span>
+                        </div>
+                    </div>
+
+                    <div class="saas-roi">
+                        <h5>ROI Calculation</h5>
+                        <p>{{tool.roi_calculation}}</p>
+                    </div>
+
+                    <div class="saas-justification">
+                        <p>{{tool.justification}}</p>
+                    </div>
+
+                    {% if tool.use_cases %}
+                    <div class="saas-use-cases">
+                        <strong>Use Cases:</strong>
+                        <ul>
+                            {% for uc in tool.use_cases %}
+                            <li>{{uc}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <archon-callout type="success" title="Total SaaS Investment">
+                <strong>Total Annual Cost:</strong> €{{total_saas_cost|format_number}}<br>
+                <strong>Expected Annual Savings:</strong> €{{saas_savings|format_number}}<br>
+                <strong>Payback Period:</strong> {{saas_payback_months}} months
+            </archon-callout>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 04: TRAINING RECOMMENDATIONS
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="training" data-read-time="5 min">
+            <header class="section-header">
+                <span class="section-number">04</span>
+                <h2 class="section-title">Training & Upskilling</h2>
+                <span class="section-meta">AiParaTi Priority Partner</span>
+            </header>
+
+            <p class="section-intro">
+                {{num_employees_training}} employees will receive comprehensive AI training (64h program).
+            </p>
+
+            <div class="training-recommendations">
+                {% for training in training_recommendations %}
+                <div class="training-card {% if training.provider == 'aiparati' %}priority-partner{% endif %}">
+                    {% if training.provider == 'aiparati' %}
+                    <div class="priority-badge">⭐ Strategic Partner - 15% Commission</div>
+                    {% endif %}
+
+                    <h4>{{training.provider|upper}} - {{training.course_name}}</h4>
+
+                    <div class="training-details">
+                        <div class="detail-item">
+                            <span class="label">Duration</span>
+                            <span class="value">{{training.duration_hours}}h</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Trainees</span>
+                            <span class="value">{{training.num_trainees}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Total Cost</span>
+                            <span class="value">€{{training.cost_total|format_number}}</span>
+                        </div>
+                        {% if training.commission_eur %}
+                        <div class="detail-item">
+                            <span class="label">Commission (15%)</span>
+                            <span class="value">€{{training.commission_eur|format_number}}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if training.modules %}
+                    <div class="training-modules">
+                        <h5>Training Modules</h5>
+                        <ul>
+                            {% for module in training.modules %}
+                            <li>{{module}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <archon-callout type="info" title="Training ROI">
+                Investment: €{{training_total_cost|format_number}}<br>
+                Expected productivity gain: {{training_productivity_gain}}%<br>
+                Annual value: €{{training_annual_value|format_number}}
+            </archon-callout>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 05: INVESTMENT MATRIX
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="investment-matrix" data-read-time="8 min">
+            <header class="section-header">
+                <span class="section-number">05</span>
+                <h2 class="section-title">Investment Matrix</h2>
+                <span class="section-meta">ROI Justification by Category</span>
+            </header>
+
+            {{investment_matrix_html|safe}}
+
+            <div class="investment-summary">
+                <div class="summary-card">
+                    <h3>Total Investment</h3>
+                    <div class="summary-value">€{{total_investment|format_number}}</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Subsidy (75%)</h3>
+                    <div class="summary-value">€{{subsidy_75|format_number}}</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Net Investment</h3>
+                    <div class="summary-value">€{{net_investment_25|format_number}}</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Expected Savings (Annual)</h3>
+                    <div class="summary-value">€{{expected_annual_savings|format_number}}</div>
+                </div>
+            </div>
+
+            <!-- Investment by Category Chart -->
+            <div class="chart-container">
+                <h3>Investment by Category</h3>
+                <div id="investmentByCategoryChart"></div>
+            </div>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 06: SCENARIO ANALYSIS
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="scenarios" data-read-time="7 min">
+            <header class="section-header">
+                <span class="section-number">06</span>
+                <h2 class="section-title">Scenario Analysis</h2>
+                <span class="section-meta">Conservative / Moderate / Aggressive</span>
+            </header>
+
+            <p class="section-intro">
+                We've modeled 3 scenarios based on adoption rates and productivity gains:
+            </p>
+
+            <archon-scenario-cards scenarios-data='{{scenarios_json|safe}}'></archon-scenario-cards>
+
+            {{scenario_analysis_html|safe}}
+
+            <archon-callout type="success" title="Expected Value (Probability-Weighted)">
+                <strong>Expected NPV:</strong> €{{expected_npv|format_number}}<br>
+                <strong>Risk-Adjusted ROI:</strong> {{risk_adjusted_roi}}%<br>
+                <strong>Recommendation:</strong> Pursue MODERATE scenario with contingency plans
+            </archon-callout>
+
+            <!-- Scenario Comparison Chart -->
+            <div class="chart-container">
+                <h3>NPV Comparison Across Scenarios</h3>
+                <div id="scenarioComparisonChart"></div>
+            </div>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 07: RISK REGISTER
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="risk-register" data-read-time="10 min">
+            <header class="section-header">
+                <span class="section-number">07</span>
+                <h2 class="section-title">Risk Register</h2>
+                <span class="section-meta">Probability × Impact Matrix</span>
+            </header>
+
+            {{risk_register_html|safe}}
+
+            <div class="risk-summary">
+                <div class="risk-stat">
+                    <span class="stat-label">Total Risks Identified</span>
+                    <span class="stat-value">{{total_risks}}</span>
+                </div>
+                <div class="risk-stat">
+                    <span class="stat-label">HIGH Probability</span>
+                    <span class="stat-value red">{{high_risks}}</span>
+                </div>
+                <div class="risk-stat">
+                    <span class="stat-label">Total Exposure</span>
+                    <span class="stat-value">€{{total_risk_exposure|format_number}}</span>
+                </div>
+            </div>
+
+            <archon-callout type="warning" title="Critical Risks Requiring Immediate Attention">
+                {{critical_risks_summary}}
+            </archon-callout>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 08: BUDGET OPTIMIZATION
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="budget-optimization" data-read-time="6 min">
+            <header class="section-header">
+                <span class="section-number">08</span>
+                <h2 class="section-title">Budget Optimization</h2>
+                <span class="section-meta">Gap Analysis & Expansion Paths</span>
+            </header>
+
+            <p class="section-intro">
+                Current budget: €{{current_budget|format_number}}. Analysis of gaps vs IAPMEI limits:
+            </p>
+
+            {{budget_gaps_html|safe}}
+
+            <h3>Expansion Paths</h3>
+
+            <div class="expansion-paths">
+                {% for path in budget_expansion_paths %}
+                <div class="expansion-card {% if path.recommended %}recommended{% endif %}">
+                    {% if path.recommended %}
+                    <div class="recommended-badge">✓ RECOMMENDED</div>
+                    {% endif %}
+
+                    <h4>{{path.path_name}}</h4>
+                    <p class="path-description">{{path.description}}</p>
+
+                    <div class="path-metrics">
+                        <div class="metric">
+                            <span class="metric-label">New Budget</span>
+                            <span class="metric-value">€{{path.new_budget|format_number}}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Increase</span>
+                            <span class="metric-value">+€{{path.increase|format_number}}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Subsidy Increase</span>
+                            <span class="metric-value">+€{{path.subsidy_increase|format_number}}</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Implementation</span>
+                            <span class="metric-value">{{path.implementation_effort}}</span>
+                        </div>
+                    </div>
+
+                    <div class="path-changes">
+                        <strong>Key Changes:</strong>
+                        <ul>
+                            {% for change in path.changes %}
+                            <li>{{change}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 09: MERIT SCORING
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="merit-scoring" data-read-time="5 min">
+            <header class="section-header">
+                <span class="section-number">09</span>
+                <h2 class="section-title">Merit Score Analysis</h2>
+                <span class="section-meta">MP = 0.50 × A + 0.50 × B</span>
+            </header>
+
+            <div class="scoring-breakdown">
+                <div class="score-card">
+                    <h3>Current Score</h3>
+                    <div class="score-display">
+                        <span class="score-value">{{current_mp_score}}</span>
+                        <span class="score-max">/10</span>
+                    </div>
+                    <div class="score-classification {{score_class}}">
+                        {{score_classification}}
+                    </div>
+                </div>
+
+                <div class="score-card">
+                    <h3>A Score (Coerência)</h3>
+                    <div class="score-value-small">{{a_score}}/5</div>
+                    <ul class="score-checklist">
+                        <li class="{% if has_investment_matrix %}checked{% endif %}">Investment Matrix</li>
+                        <li class="{% if has_gantt %}checked{% endif %}">Gantt Chart</li>
+                        <li class="{% if has_risk_register %}checked{% endif %}">Risk Register</li>
+                        <li class="{% if has_tech_specs %}checked{% endif %}">Technical Specifications</li>
+                        <li class="{% if has_3_quotes %}checked{% endif %}">3 Quotes per Item</li>
+                    </ul>
+                </div>
+
+                <div class="score-card">
+                    <h3>B Score (Impacto)</h3>
+                    <div class="score-value-small">{{b_score}}/5</div>
+                    <div class="score-components">
+                        <div class="component">
+                            <span class="component-label">B1 (Employment)</span>
+                            <span class="component-value">{{b1_score}}/5</span>
+                            <span class="component-detail">{{jobs_created}} jobs</span>
+                        </div>
+                        <div class="component">
+                            <span class="component-label">B2 (VAB Growth)</span>
+                            <span class="component-value">{{b2_score}}/5</span>
+                            <span class="component-detail">{{vab_growth}}% growth</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Quick Wins to Improve Score</h3>
+
+            <div class="quick-wins">
+                {% for win in quick_wins %}
+                <div class="win-card">
+                    <div class="win-header">
+                        <h4>{{win.title}}</h4>
+                        <span class="win-impact">+{{win.mp_increase}} MP</span>
+                    </div>
+                    <p>{{win.description}}</p>
+                    <div class="win-meta">
+                        <span class="effort">Effort: {{win.effort}}</span>
+                        <span class="timeline">Timeline: {{win.timeline}}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <archon-callout type="success" title="Target Score">
+                With recommended optimizations, projected score: <strong>{{target_mp_score}}/10</strong> ({{target_classification}})
+            </archon-callout>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 10: COMPLIANCE VALIDATION
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="compliance" data-read-time="4 min">
+            <header class="section-header">
+                <span class="section-number">10</span>
+                <h2 class="section-title">Compliance Validation</h2>
+                <span class="section-meta">Aviso 03/C05 - 8 Rule Validation</span>
+            </header>
+
+            <div class="compliance-status {{compliance_status_class}}">
+                <div class="status-icon">{{compliance_icon}}</div>
+                <div class="status-text">
+                    <h3>{{compliance_status}}</h3>
+                    <p>{{compliance_summary}}</p>
+                </div>
+            </div>
+
+            {% if compliance_blockers %}
+            <div class="compliance-blockers">
+                <h3>🚫 Blockers (Must Fix)</h3>
+                {% for blocker in compliance_blockers %}
+                <div class="compliance-issue blocker">
+                    <div class="issue-header">
+                        <strong>{{blocker.rule_id}}</strong>
+                        <span class="article">{{blocker.article}}</span>
+                    </div>
+                    <p class="issue-description">{{blocker.issue}}</p>
+                    <p class="issue-fix"><strong>Fix:</strong> {{blocker.fix}}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if compliance_warnings %}
+            <div class="compliance-warnings">
+                <h3>⚠️ Warnings (Recommended Fixes)</h3>
+                {% for warning in compliance_warnings %}
+                <div class="compliance-issue warning">
+                    <div class="issue-header">
+                        <strong>{{warning.rule_id}}</strong>
+                        <span class="article">{{warning.article}}</span>
+                    </div>
+                    <p class="issue-description">{{warning.issue}}</p>
+                    <p class="issue-fix"><strong>Recommendation:</strong> {{warning.fix}}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="compliance-checklist">
+                <h3>8-Rule Checklist</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Rule</th>
+                            <th>Requirement</th>
+                            <th>Status</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rule in compliance_rules %}
+                        <tr>
+                            <td>{{rule.rule_id}}</td>
+                            <td>{{rule.requirement}}</td>
+                            <td><span class="badge badge-{{rule.status_class}}">{{rule.status}}</span></td>
+                            <td>{{rule.current_value}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 11: KPI DASHBOARD
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="kpi-dashboard" data-read-time="6 min">
+            <header class="section-header">
+                <span class="section-number">11</span>
+                <h2 class="section-title">KPI Dashboard</h2>
+                <span class="section-meta">15 Key Performance Indicators</span>
+            </header>
+
+            <div class="kpi-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Overall Health</span>
+                    <span class="summary-value {{overall_health_class}}">{{overall_health_percent}}%</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Status</span>
+                    <span class="summary-value">{{total_green}} 🟢 | {{total_yellow}} 🟡 | {{total_red}} 🔴</span>
+                </div>
+            </div>
+
+            <archon-kpi-dashboard metrics-data='{{kpi_metrics_json|safe}}'></archon-kpi-dashboard>
+
+            <div class="kpi-insights">
+                <div class="insight-column">
+                    <h4>🏆 Top Performers</h4>
+                    <ul>
+                        {% for performer in top_performers %}
+                        <li>{{performer}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="insight-column">
+                    <h4>⚠️ Areas of Concern</h4>
+                    <ul>
+                        {% for concern in areas_of_concern %}
+                        <li>{{concern}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 12: IMPLEMENTATION TIMELINE (GANTT)
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="timeline" data-read-time="8 min">
+            <header class="section-header">
+                <span class="section-number">12</span>
+                <h2 class="section-title">Implementation Timeline</h2>
+                <span class="section-meta">Gantt Chart - 5 Workstreams, 22 Milestones</span>
+            </header>
+
+            {{gantt_html|safe}}
+
+            <div class="timeline-summary">
+                <div class="timeline-stat">
+                    <span class="stat-label">Project Duration</span>
+                    <span class="stat-value">{{project_duration_months}} months</span>
+                </div>
+                <div class="timeline-stat">
+                    <span class="stat-label">Total Milestones</span>
+                    <span class="stat-value">{{total_milestones}}</span>
+                </div>
+                <div class="timeline-stat">
+                    <span class="stat-label">Critical Path Items</span>
+                    <span class="stat-value">{{critical_path_count}}</span>
+                </div>
+                <div class="timeline-stat">
+                    <span class="stat-label">Start Date</span>
+                    <span class="stat-value">{{project_start_date}}</span>
+                </div>
+            </div>
+
+            <!-- Gantt Chart (ApexCharts Timeline) -->
+            <div class="chart-container">
+                <div id="ganttChart" style="min-height: 700px;"></div>
+            </div>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 13: NEXT STEPS & RECOMMENDATIONS
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="next-steps" data-read-time="3 min">
+            <header class="section-header">
+                <span class="section-number">13</span>
+                <h2 class="section-title">Next Steps</h2>
+                <span class="section-meta">Immediate Actions</span>
+            </header>
+
+            <div class="next-steps-timeline">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Week 1: Prepare Application</h4>
+                        <ul>
+                            <li>Engage ROC (€2,500 budget)</li>
+                            <li>Collect 3 quotes per investment item</li>
+                            <li>Prepare technical specifications</li>
+                            <li>Review and optimize Merit Score</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Week 2-3: Compliance & Documentation</h4>
+                        <ul>
+                            <li>Address all BLOCKER compliance issues</li>
+                            <li>Complete investment matrix with ROI calculations</li>
+                            <li>Finalize Gantt chart with milestones</li>
+                            <li>Risk register with mitigation strategies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Week 4: Submit Application</h4>
+                        <ul>
+                            <li>ROC validation completed</li>
+                            <li>Submit to IAPMEI portal</li>
+                            <li>Target Merit Score: >{{target_mp_score}}/10</li>
+                            <li>Expected approval: Q2 2025</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Post-Approval: Execution</h4>
+                        <ul>
+                            <li>Contract SaaS vendors ({{primary_ecosystem}} priority)</li>
+                            <li>Schedule AiParaTi training ({{num_employees_training}} employees)</li>
+                            <li>Begin RH Dedicados hiring process</li>
+                            <li>Quarterly reporting to IAPMEI</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <archon-callout type="success" title="Success Probability">
+                Based on our analysis:<br>
+                <strong>Approval Probability:</strong> {{approval_probability}}%<br>
+                <strong>Merit Score:</strong> {{current_mp_score}}/10 → {{target_mp_score}}/10 (target)<br>
+                <strong>Expected Subsidy:</strong> €{{subsidy_75|format_number}}
+            </archon-callout>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
+             SECTION 14: APPENDIX
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="appendix" data-read-time="5 min">
+            <header class="section-header">
+                <span class="section-number">14</span>
+                <h2 class="section-title">Appendix</h2>
+                <span class="section-meta">Supporting Documentation</span>
+            </header>
+
+            <h3>A. Methodology</h3>
+            <p>
+                This report was generated by Archon AI using a comprehensive diagnostic questionnaire,
+                decision tree analysis, and integration with Portuguese regulatory frameworks (Aviso 03/C05).
+                All calculations follow IAPMEI guidelines for Merit Score (MP) evaluation.
+            </p>
+
+            <h3>B. Data Sources</h3>
+            <ul>
+                <li>Company Profile: Diagnostic Questionnaire ({{questionnaire_date}})</li>
+                <li>SaaS Pricing: Vendor websites (January 2025)</li>
+                <li>Training Costs: AiParaTi catalog (2025)</li>
+                <li>Industry Benchmarks: McKinsey AI Reports, Gartner Research</li>
+                <li>Regulatory Framework: Aviso n.º 03/C05-i02/2022</li>
+            </ul>
+
+            <h3>C. Assumptions</h3>
+            <ul>
+                <li>Discount rate for NPV calculations: 8% (IAPMEI standard)</li>
+                <li>Productivity gains: 30% average (McKinsey benchmark)</li>
+                <li>Training effectiveness: 85% completion rate</li>
+                <li>User adoption: 70% (moderate scenario)</li>
+                <li>EUR/USD exchange rate: 1.10 (for USD-priced tools)</li>
+            </ul>
+
+            <h3>D. Glossary</h3>
+            <dl class="glossary">
+                <dt>IAPMEI</dt>
+                <dd>Agência para a Competitividade e Inovação (Portuguese innovation agency)</dd>
+
+                <dt>Vale Inovação</dt>
+                <dd>Innovation voucher program (75% subsidy for SME AI projects)</dd>
+
+                <dt>Merit Score (MP)</dt>
+                <dd>Evaluation metric: MP = 0.50 × A (Coherence) + 0.50 × B (Impact), scale 0-10</dd>
+
+                <dt>ROC</dt>
+                <dd>Revisor Oficial de Contas (Certified Public Accountant), mandatory for applications</dd>
+
+                <dt>SCQA Framework</dt>
+                <dd>Situation-Complication-Question-Answer (McKinsey storytelling method)</dd>
+
+                <dt>NPV</dt>
+                <dd>Net Present Value (discounted cash flow over 3 years)</dd>
+
+                <dt>VAB</dt>
+                <dd>Valor Acrescentado Bruto (Gross Value Added), economic impact metric</dd>
+            </dl>
+
+            <h3>E. Contact Information</h3>
+            <div class="contact-info">
+                <p>
+                    <strong>Report prepared by:</strong> Archon AI<br>
+                    <strong>Date:</strong> {{report_date}}<br>
+                    <strong>Version:</strong> 7.0 (McKinsey Edition)<br>
+                    <strong>For questions:</strong> Contact your Archon representative
+                </p>
+            </div>
+
+            <div class="confidentiality-notice">
+                <h4>⚠️ Confidentiality Notice</h4>
+                <p>
+                    This report contains confidential and proprietary information. It is intended solely for
+                    {{company_name}} and must not be shared without explicit written consent. Unauthorized
+                    distribution may violate data protection regulations (RGPD/GDPR).
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FLOATING TABLE OF CONTENTS
+         ═══════════════════════════════════════════════════════════ -->
+
+    <archon-floating-toc class="no-print"></archon-floating-toc>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         FOOTER
+         ═══════════════════════════════════════════════════════════ -->
+
+    <footer class="report-footer no-print">
+        <div class="footer-content">
+            <p>© 2025 {{company_name}}. Prepared with Archon AI v7.0</p>
+            <p>🤖 Generated with <a href="https://claude.com/claude-code">Claude Code</a></p>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SCRIPTS
+         ═══════════════════════════════════════════════════════════ -->
+
+    <!-- ApexCharts Library -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.0/dist/apexcharts.min.js"></script>
+
+    <!-- Premium Components v7 -->
+    <script src="premium_components_v7.js"></script>
+
+    <!-- Chart Initializations -->
+    <script>
+        // Wait for DOM ready
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // ═══════════════════════════════════════════════════════
+            // INVESTMENT BY CATEGORY CHART (Donut)
+            // ═══════════════════════════════════════════════════════
+
+            if (document.getElementById('investmentByCategoryChart')) {
+                const investmentChart = new ApexCharts(
+                    document.getElementById('investmentByCategoryChart'),
+                    {
+                        series: {{investment_by_category_series|safe}},
+                        chart: {
+                            type: 'donut',
+                            height: 400,
+                            fontFamily: 'Graphik, sans-serif'
+                        },
+                        labels: {{investment_by_category_labels|safe}},
+                        colors: ['#0066CC', '#10B981', '#F59E0B', '#8B5CF6', '#64748B'],
+                        legend: {
+                            position: 'bottom'
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function(val, opts) {
+                                return '€' + opts.w.globals.series[opts.seriesIndex].toLocaleString('pt-PT');
+                            }
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function(val) {
+                                    return '€' + val.toLocaleString('pt-PT');
+                                }
+                            }
+                        }
+                    }
+                );
+                investmentChart.render();
+            }
+
+            // ═══════════════════════════════════════════════════════
+            // SCENARIO COMPARISON CHART (Bar)
+            // ═══════════════════════════════════════════════════════
+
+            if (document.getElementById('scenarioComparisonChart')) {
+                const scenarioChart = new ApexCharts(
+                    document.getElementById('scenarioComparisonChart'),
+                    {
+                        series: [{
+                            name: 'NPV (3 years)',
+                            data: {{scenario_npv_data|safe}}
+                        }],
+                        chart: {
+                            type: 'bar',
+                            height: 350,
+                            fontFamily: 'Graphik, sans-serif'
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: false,
+                                columnWidth: '55%',
+                                colors: {
+                                    ranges: [{
+                                        from: 0,
+                                        to: 999999,
+                                        color: '#10B981'
+                                    }]
+                                }
+                            }
+                        },
+                        xaxis: {
+                            categories: ['Conservative', 'Moderate', 'Aggressive']
+                        },
+                        yaxis: {
+                            labels: {
+                                formatter: function(val) {
+                                    return '€' + (val / 1000).toFixed(0) + 'k';
+                                }
+                            }
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function(val) {
+                                    return '€' + val.toLocaleString('pt-PT');
+                                }
+                            }
+                        }
+                    }
+                );
+                scenarioChart.render();
+            }
+
+            // ═══════════════════════════════════════════════════════
+            // GANTT CHART (Timeline)
+            // ═══════════════════════════════════════════════════════
+
+            if (document.getElementById('ganttChart')) {
+                const ganttChart = new ApexCharts(
+                    document.getElementById('ganttChart'),
+                    {
+                        series: {{gantt_series_data|safe}},
+                        chart: {
+                            height: 700,
+                            type: 'rangeBar',
+                            fontFamily: 'Graphik, sans-serif'
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: true,
+                                barHeight: '80%',
+                                rangeBarGroupRows: true
+                            }
+                        },
+                        colors: ['#0066CC', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444'],
+                        xaxis: {
+                            type: 'datetime'
+                        },
+                        stroke: {
+                            width: 1
+                        },
+                        fill: {
+                            type: 'solid',
+                            opacity: 0.6
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                );
+                ganttChart.render();
+            }
+
+            // ═══════════════════════════════════════════════════════
+            // READINESS GAUGE (Radial)
+            // ═══════════════════════════════════════════════════════
+
+            const readinessGaugeEl = document.getElementById('readinessGauge');
+            if (readinessGaugeEl) {
+                const score = parseFloat(readinessGaugeEl.closest('.readiness-gauge').dataset.score);
+                const gaugeChart = new ApexCharts(readinessGaugeEl, {
+                    series: [score],
+                    chart: {
+                        height: 250,
+                        type: 'radialBar'
+                    },
+                    plotOptions: {
+                        radialBar: {
+                            hollow: {
+                                size: '70%'
+                            },
+                            dataLabels: {
+                                name: {
+                                    show: false
+                                },
+                                value: {
+                                    fontSize: '2rem',
+                                    fontWeight: 700,
+                                    formatter: function(val) {
+                                        return val + '%';
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    colors: ['#10B981']
+                });
+                gaugeChart.render();
+            }
+
+            // ═══════════════════════════════════════════════════════
+            // TRIGGER WEB COMPONENT ANIMATIONS
+            // ═══════════════════════════════════════════════════════
+
+            setTimeout(() => {
+                if (window.ArchonUtils) {
+                    window.ArchonUtils.triggerAnimations();
+                }
+            }, 100);
+
+        });
+    </script>
+
+    <!-- Print handler -->
+    <script>
+        window.addEventListener('beforeprint', () => {
+            // Pause animations for print
+            document.body.style.animation = 'none';
+        });
+
+        window.addEventListener('afterprint', () => {
+            // Resume animations
+            document.body.style.animation = '';
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análise Premium - {{COMPANY_NAME}}</title>
+
+  <!-- Google Fonts: Inter only (clean and modern) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============= RESET & BASE ============= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F8FAFC;
+      color: #0F172A;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============= HERO COVER PAGE ============= */
+    .hero-page {
+      min-height: 100vh;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      page-break-after: always;
+    }
+
+    .hero-container {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Status Badge - GIGANTE como no PDF */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 1.5rem 3rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    .status-emoji {
+      font-size: 4rem;
+    }
+
+    .status-text {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.05em;
+    }
+
+    /* Company Name - DESTAQUE */
+    .company-name {
+      font-size: 4rem;
+      font-weight: 800;
+      color: #0F172A;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .company-subtitle {
+      font-size: 1.25rem;
+      color: #64748B;
+      margin-bottom: 4rem;
+    }
+
+    /* Metrics Grid - Limpo e espaçado */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .metric-card {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .metric-card:hover {
+      border-color: #0EA5E9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px -4px rgba(0,0,0,0.1);
+    }
+
+    .metric-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+      font-size: 0.875rem;
+      color: #64748B;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .metric-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    .metric-subvalue {
+      font-size: 0.875rem;
+      color: #94A3B8;
+      margin-top: 0.25rem;
+    }
+
+    /* ============= EXECUTIVE SUMMARY PAGE ============= */
+    .summary-page {
+      background: white;
+      padding: 4rem 2rem;
+      page-break-after: always;
+    }
+
+    .page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid #0EA5E9;
+    }
+
+    .page-header-icon {
+      font-size: 2rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    .page-number {
+      margin-left: auto;
+      font-size: 0.875rem;
+      color: #0EA5E9;
+      font-weight: 600;
+    }
+
+    /* Verdict Box - Como no PDF */
+    .verdict-box {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+      border: 3px solid #F59E0B;
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .verdict-emoji-large {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+    }
+
+    .verdict-status {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #78350F;
+      margin-bottom: 1.5rem;
+    }
+
+    .verdict-scores {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      margin-top: 2rem;
+    }
+
+    .verdict-score-item {
+      text-align: center;
+    }
+
+    .verdict-score-label {
+      font-size: 0.875rem;
+      color: #78350F;
+      margin-bottom: 0.5rem;
+    }
+
+    .verdict-score-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #78350F;
+    }
+
+    /* Two Column Layout */
+    .two-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+
+    /* Section Card */
+    .section-card {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-icon {
+      font-size: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    /* Actions List */
+    .action-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem;
+      background: #F8FAFC;
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+      border: 1px solid #E2E8F0;
+    }
+
+    .action-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #CBD5E1;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 0.25rem;
+    }
+
+    .action-text {
+      flex: 1;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .action-title {
+      font-weight: 600;
+      color: #0F172A;
+      margin-bottom: 0.25rem;
+    }
+
+    .action-meta {
+      color: #64748B;
+      font-size: 0.8rem;
+    }
+
+    /* Timeline */
+    .timeline-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #E2E8F0;
+      border: 3px solid white;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .timeline-dot::after {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 40px;
+      background: #E2E8F0;
+    }
+
+    .timeline-item:last-child .timeline-dot::after {
+      display: none;
+    }
+
+    .timeline-dot.active {
+      background: #0EA5E9;
+      color: white;
+      font-weight: 700;
+    }
+
+    .timeline-content {
+      flex: 1;
+      padding-top: 0.25rem;
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      color: #0F172A;
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-date {
+      font-size: 0.8rem;
+      color: #64748B;
+    }
+
+    /* Score Gauge Visual */
+    .score-gauge-container {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .score-gauge-visual {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 1rem;
+      position: relative;
+    }
+
+    .gauge-svg {
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: #E2E8F0;
+      stroke-width: 12;
+    }
+
+    .gauge-fill {
+      fill: none;
+      stroke: url(#gaugeGradient);
+      stroke-width: 12;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    .gauge-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .gauge-score {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #0F172A;
+    }
+
+    .gauge-max {
+      font-size: 1.5rem;
+      color: #64748B;
+    }
+
+    .gauge-label {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      color: #64748B;
+    }
+
+    .gauge-caption {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: #94A3B8;
+      font-style: italic;
+    }
+
+    /* ============= CHARTS PAGE ============= */
+    .charts-page {
+      background: white;
+      padding: 4rem 2rem;
+      page-break-after: always;
+    }
+
+    .chart-card {
+      background: white;
+      border: 2px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    .chart-badge {
+      background: #0EA5E9;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .chart-container {
+      min-height: 350px;
+      position: relative;
+    }
+
+    /* ============= FOOTER ============= */
+    .report-footer {
+      background: #0F172A;
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .footer-meta {
+      color: #94A3B8;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ============= PRINT STYLES ============= */
+    @media print {
+      .hero-page, .summary-page, .charts-page {
+        page-break-after: always;
+      }
+
+      * {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+
+    /* ============= RESPONSIVE ============= */
+    @media (max-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .two-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .company-name {
+        font-size: 2.5rem;
+      }
+
+      .status-text {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============= HERO COVER PAGE ============= -->
+  <div class="hero-page">
+    <div class="hero-container">
+
+      <!-- Status Badge -->
+      <div class="status-badge">
+        <div class="status-emoji">{{STATUS_EMOJI}}</div>
+        <div class="status-text">{{STATUS_TEXT}}</div>
+      </div>
+
+      <!-- Company Name -->
+      <h1 class="company-name">{{COMPANY_NAME}}</h1>
+      <p class="company-subtitle">{{CAE_DESCRIPTION}}</p>
+
+      <!-- Key Metrics -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon">📈</div>
+          <div class="metric-label">Score Mérito</div>
+          <div class="metric-value">{{SCORE}}/10</div>
+          <div class="metric-subvalue">Classe {{CLASS}}</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon">📋</div>
+          <div class="metric-label">Aviso</div>
+          <div class="metric-value">03/C05-i14.01/2025</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon">🏭</div>
+          <div class="metric-label">CAE</div>
+          <div class="metric-value">{{CAE_CODE}}</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon">💰</div>
+          <div class="metric-label">Investimento</div>
+          <div class="metric-value">{{INVESTMENT}}</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon">💶</div>
+          <div class="metric-label">Incentivo</div>
+          <div class="metric-value">{{INCENTIVE}}</div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon">⏰</div>
+          <div class="metric-label">Prazo</div>
+          <div class="metric-value">12 meses</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============= EXECUTIVE SUMMARY PAGE ============= -->
+  <div class="summary-page">
+    <div class="page-container">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <span class="page-header-icon">🎯</span>
+        <h2 class="page-title">Sumário Executivo</h2>
+        <span class="page-number">1 Página</span>
+      </div>
+
+      <!-- Verdict Box -->
+      <div class="verdict-box">
+        <div class="verdict-emoji-large">{{STATUS_EMOJI}}</div>
+        <div class="verdict-status">{{STATUS_TEXT}}</div>
+        <div class="verdict-scores">
+          <div class="verdict-score-item">
+            <div class="verdict-score-label">Score</div>
+            <div class="verdict-score-value">{{SCORE}}/10</div>
+          </div>
+          <div class="verdict-score-item">
+            <div class="verdict-score-label">Probabilidade</div>
+            <div class="verdict-score-value">{{PROBABILITY}}%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="two-columns">
+
+        <!-- Left: Actions -->
+        <div class="section-card">
+          <div class="section-header">
+            <span class="section-icon">⚡</span>
+            <h3 class="section-title">Top 3 Ações Críticas</h3>
+          </div>
+
+          {{ACTIONS_HTML}}
+
+        </div>
+
+        <!-- Right: Timeline + Score -->
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+
+          <!-- Timeline -->
+          <div class="section-card">
+            <div class="section-header">
+              <span class="section-icon">⏰</span>
+              <h3 class="section-title">Timeline Decisão</h3>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot active">📝</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Submissão</div>
+                <div class="timeline-date">Candidaturas contínuas</div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot">⏳</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Decisão Estimada</div>
+                <div class="timeline-date">50 dias úteis (~10 semanas)</div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-dot">🚀</div>
+              <div class="timeline-content">
+                <div class="timeline-title">Início Projeto</div>
+                <div class="timeline-date">30 dias após decisão</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Score Visual -->
+          <div class="section-card">
+            <div class="section-header">
+              <span class="section-icon">📊</span>
+              <h3 class="section-title">Score Mérito Visual</h3>
+            </div>
+
+            <div class="score-gauge-container">
+              <div class="score-gauge-visual">
+                <svg class="gauge-svg" viewBox="0 0 200 200">
+                  <defs>
+                    <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:#0EA5E9;stop-opacity:1" />
+                    </linearGradient>
+                  </defs>
+                  <circle class="gauge-bg" cx="100" cy="100" r="90"/>
+                  <circle class="gauge-fill" cx="100" cy="100" r="90"
+                    stroke-dasharray="565.48"
+                    stroke-dashoffset="{{GAUGE_OFFSET}}"/>
+                </svg>
+                <div class="gauge-center-text">
+                  <div class="gauge-score">{{SCORE}}<span class="gauge-max">/10</span></div>
+                </div>
+              </div>
+              <div class="gauge-label">Score Mérito</div>
+              <div class="gauge-caption">Visualização interativa do score de mérito do projeto (0-10 escala).</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============= CHARTS PAGE ============= -->
+  <div class="charts-page">
+    <div class="page-container">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <span class="page-header-icon">💰</span>
+        <h2 class="page-title">Breakdown Orçamento</h2>
+        <span class="page-number">2 Página</span>
+      </div>
+
+      <!-- Budget Chart -->
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3 class="chart-title">Distribuição percentual do investimento por categoria de despesa.</h3>
+          <div class="chart-badge">Total Investimento: €{{INVESTMENT}}</div>
+        </div>
+        <div id="budget-chart" class="chart-container"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============= FOOTER ============= -->
+  <div class="report-footer">
+    <div class="footer-logo">⚡ Archon Knowledge Engine</div>
+    <div class="footer-meta">Powered by Claude Sonnet 4.5 | Ultra-Premium Analysis</div>
+    <div class="footer-meta">Generated: {{GENERATED_DATE}} {{GENERATED_TIME}} UTC | Session ID: ARCHON-20251010-202914</div>
+    <div class="footer-meta">© 2025 Archon Intelligence Systems | All Rights Reserved</div>
+  </div>
+
+  <!-- ApexCharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <script>
+    // Budget Donut Chart
+    const budgetOptions = {
+      series: [{{BUDGET_SAAS_PERCENT}}, {{BUDGET_CONSULTING_PERCENT}}, {{BUDGET_TRAINING_PERCENT}}, {{BUDGET_HR_PERCENT}}, {{BUDGET_ROC_PERCENT}}],
+      chart: {
+        type: 'donut',
+        height: 350,
+        fontFamily: 'Inter, sans-serif'
+      },
+      labels: ['SaaS/Software', 'Consultoria', 'Formação', 'RH Dedicados', 'Outros'],
+      colors: ['#10B981', '#0EA5E9', '#F59E0B', '#8B5CF6', '#64748B'],
+      legend: {
+        position: 'bottom',
+        fontSize: '14px'
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '65%',
+            labels: {
+              show: true,
+              total: {
+                show: true,
+                label: 'Total Investimento',
+                formatter: () => '€{{INVESTMENT}}'
+              }
+            }
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val) => val.toFixed(0) + '%'
+      }
+    };
+
+    const budgetChart = new ApexCharts(document.querySelector("#budget-chart"), budgetOptions);
+    budgetChart.render();
+  </script>
+
+</body>
+</html>

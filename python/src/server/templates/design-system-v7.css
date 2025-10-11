@@ -1,0 +1,1312 @@
+/**
+ * ═══════════════════════════════════════════════════════════════
+ * ARCHON DESIGN SYSTEM v7.0 - MCKINSEY ULTRA-PREMIUM
+ * ═══════════════════════════════════════════════════════════════
+ *
+ * Inspirado em: McKinsey, BCG, Vercel, Linear, Stripe
+ * Standards: W3C Design Tokens, CSS Variables Level 2
+ * Performance: Critical CSS inline, <3s load target
+ * Accessibility: WCAG 2.2 AAA, ARIA 1.2
+ * Print: @page optimized for A4 executive reports
+ *
+ * @author Claude Code (Anthropic)
+ * @version 7.0.0 - McKinsey Edition
+ * @license MIT
+ */
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYER DEFINITIONS - CSS Cascade Layers
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer reset, tokens, base, components, utilities, print;
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS - McKinsey Premium Variables
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer tokens {
+  :root {
+    /* ─────────────────────────────────────────────────────────────
+       COLOR SYSTEM - McKinsey Palette
+       ───────────────────────────────────────────────────────────── */
+
+    /* Primary Brand Colors - Archon x McKinsey */
+    --color-midnight-950: 222 84% 4%;      /* #020A17 - Executive midnight */
+    --color-midnight-900: 222 80% 8%;      /* #0A1929 - McKinsey blue */
+    --color-midnight-800: 222 76% 12%;     /* #0F2544 - Deep professional */
+    --color-midnight-700: 222 72% 16%;     /* #163659 */
+    --color-midnight-600: 222 68% 22%;     /* #1D486E */
+
+    --color-executive-blue: 211 100% 40%;  /* #0066CC - Primary action */
+    --color-trust-blue: 211 100% 50%;      /* #0080FF - Interactive */
+    --color-sky-blue: 211 100% 70%;        /* #66B3FF - Accent */
+
+    /* McKinsey Gold - Premium Accent */
+    --color-executive-gold: 45 72% 51%;    /* #D4AF37 - McKinsey gold */
+    --color-premium-gold: 45 88% 48%;      /* #E5B323 - Highlight */
+    --color-subtle-gold: 45 44% 88%;       /* #F5F0E1 - Background */
+
+    /* PRR Green - Portuguese Excellence */
+    --color-prr-green-900: 158 61% 15%;
+    --color-prr-green-700: 158 64% 24%;
+    --color-prr-green-500: 158 64% 52%;    /* #10B981 - Success */
+    --color-prr-green-100: 158 64% 93%;
+
+    /* Status Colors - Corporate Semantic */
+    --color-success: var(--color-prr-green-500);
+    --color-warning: var(--color-executive-gold);
+    --color-danger: 0 72% 48%;             /* #D32F2F - Alert red */
+    --color-info: var(--color-trust-blue);
+
+    /* Neutral Scale - Executive Gray */
+    --color-slate-950: 222 47% 2%;         /* #020617 - Near black */
+    --color-slate-900: 222 47% 11%;        /* #0F172A - Body text */
+    --color-slate-800: 215 28% 17%;
+    --color-slate-700: 215 20% 27%;
+    --color-slate-600: 215 16% 47%;        /* #475569 - Secondary text */
+    --color-slate-500: 215 14% 59%;        /* #64748B - Muted text */
+    --color-slate-400: 215 20% 65%;
+    --color-slate-300: 215 25% 77%;        /* #CBD5E1 - Borders */
+    --color-slate-200: 214 32% 91%;        /* #E2E8F0 - Dividers */
+    --color-slate-100: 210 40% 96%;        /* #F1F5F9 - Backgrounds */
+    --color-slate-50: 210 40% 98%;         /* #F8FAFC - Subtle bg */
+
+    /* ─────────────────────────────────────────────────────────────
+       TYPOGRAPHY SYSTEM - McKinsey Professional
+       ───────────────────────────────────────────────────────────── */
+
+    /* Font Families - Tiered System */
+    --font-display: 'Graphik Display', 'SF Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-heading: 'Graphik', 'SF Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'Graphik', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+
+    /* Font Sizes - Fluid Scale (clamp for responsiveness) */
+    --font-size-hero: clamp(2.5rem, 8vw, 4.5rem);      /* 40-72px */
+    --font-size-display: clamp(2rem, 6vw, 3.5rem);     /* 32-56px */
+    --font-size-h1: clamp(1.75rem, 4vw, 2.5rem);       /* 28-40px */
+    --font-size-h2: clamp(1.5rem, 3vw, 2rem);          /* 24-32px */
+    --font-size-h3: clamp(1.25rem, 2.5vw, 1.5rem);     /* 20-24px */
+    --font-size-h4: 1.125rem;                          /* 18px */
+    --font-size-body: 1rem;                            /* 16px */
+    --font-size-small: 0.875rem;                       /* 14px */
+    --font-size-caption: 0.75rem;                      /* 12px */
+    --font-size-micro: 0.625rem;                       /* 10px */
+
+    /* Font Weights - Professional Scale */
+    --font-weight-thin: 100;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-black: 900;
+
+    /* Line Heights - Optimized for readability */
+    --line-height-dense: 1.2;
+    --line-height-heading: 1.3;
+    --line-height-body: 1.6;
+    --line-height-relaxed: 1.8;
+
+    /* Letter Spacing - Professional Tracking */
+    --letter-spacing-tighter: -0.04em;
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.025em;
+    --letter-spacing-wider: 0.05em;
+    --letter-spacing-widest: 0.1em;
+
+    /* ─────────────────────────────────────────────────────────────
+       SPACING SYSTEM - 8pt Grid (McKinsey Standard)
+       ───────────────────────────────────────────────────────────── */
+
+    --space-unit: 8px;
+    --space-xxs: calc(var(--space-unit) * 0.25);  /* 2px */
+    --space-xs: calc(var(--space-unit) * 0.5);    /* 4px */
+    --space-sm: var(--space-unit);                 /* 8px */
+    --space-md: calc(var(--space-unit) * 2);       /* 16px */
+    --space-lg: calc(var(--space-unit) * 3);       /* 24px */
+    --space-xl: calc(var(--space-unit) * 4);       /* 32px */
+    --space-2xl: calc(var(--space-unit) * 6);      /* 48px */
+    --space-3xl: calc(var(--space-unit) * 8);      /* 64px */
+    --space-4xl: calc(var(--space-unit) * 12);     /* 96px */
+
+    /* ─────────────────────────────────────────────────────────────
+       LAYOUT SYSTEM - Container & Grid
+       ───────────────────────────────────────────────────────────── */
+
+    --container-max-width: 1440px;
+    --container-wide: 1920px;
+    --container-narrow: 720px;
+    --container-reading: 65ch;
+
+    --grid-columns: 12;
+    --grid-gap: var(--space-lg);
+
+    /* Sidebar Layout (for reports) */
+    --sidebar-width: 280px;
+    --toc-width: 240px;
+
+    /* ─────────────────────────────────────────────────────────────
+       BORDERS & RADIUS - Corporate Sharp
+       ───────────────────────────────────────────────────────────── */
+
+    --radius-sharp: 0;
+    --radius-xs: 2px;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-2xl: 16px;
+    --radius-full: 9999px;
+
+    --border-width-hairline: 0.5px;
+    --border-width-thin: 1px;
+    --border-width-medium: 2px;
+    --border-width-thick: 3px;
+    --border-width-heavy: 4px;
+
+    /* ─────────────────────────────────────────────────────────────
+       SHADOWS - Executive Depth
+       ───────────────────────────────────────────────────────────── */
+
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 2px 4px 0 rgb(0 0 0 / 0.06);
+    --shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.08);
+    --shadow-lg: 0 10px 24px -3px rgb(0 0 0 / 0.10);
+    --shadow-xl: 0 20px 40px -8px rgb(0 0 0 / 0.15);
+    --shadow-2xl: 0 32px 64px -12px rgb(0 0 0 / 0.20);
+    --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.06);
+
+    /* Executive Paper Shadow (for cards) */
+    --shadow-paper: 0 0 0 1px rgb(0 0 0 / 0.05), var(--shadow-md);
+    --shadow-lifted: 0 0 0 1px rgb(0 0 0 / 0.05), var(--shadow-xl);
+
+    /* ─────────────────────────────────────────────────────────────
+       ANIMATION - Professional Motion
+       ───────────────────────────────────────────────────────────── */
+
+    --duration-instant: 100ms;
+    --duration-fast: 200ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 800ms;
+    --duration-slowest: 1200ms;
+
+    --easing-linear: linear;
+    --easing-ease: ease;
+    --easing-in: cubic-bezier(0.4, 0, 1, 1);
+    --easing-out: cubic-bezier(0, 0, 0.2, 1);
+    --easing-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ─────────────────────────────────────────────────────────────
+       Z-INDEX SCALE - Layer Management
+       ───────────────────────────────────────────────────────────── */
+
+    --z-base: 0;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-overlay: 30;
+    --z-modal: 40;
+    --z-popover: 50;
+    --z-tooltip: 60;
+    --z-notification: 70;
+    --z-maximum: 9999;
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     DARK MODE - Executive Night Theme
+     ───────────────────────────────────────────────────────────── */
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg-primary: hsl(var(--color-midnight-900));
+      --color-bg-secondary: hsl(var(--color-midnight-800));
+      --color-text-primary: hsl(var(--color-slate-100));
+      --color-text-secondary: hsl(var(--color-slate-400));
+      --color-border: hsl(var(--color-slate-700));
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE STYLES - Global Reset & Typography
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer base {
+  /* Modern CSS Reset */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    height: 100%;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    color: hsl(var(--color-slate-900));
+    background: hsl(var(--color-slate-50));
+    min-height: 100vh;
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     TYPOGRAPHY - McKinsey Hierarchy
+     ───────────────────────────────────────────────────────────── */
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-heading);
+    letter-spacing: var(--letter-spacing-tight);
+    color: hsl(var(--color-midnight-900));
+  }
+
+  h1 {
+    font-size: var(--font-size-h1);
+    font-weight: var(--font-weight-bold);
+  }
+
+  h2 {
+    font-size: var(--font-size-h2);
+    margin-top: var(--space-2xl);
+  }
+
+  h3 {
+    font-size: var(--font-size-h3);
+    margin-top: var(--space-xl);
+  }
+
+  h4 {
+    font-size: var(--font-size-h4);
+    margin-top: var(--space-lg);
+  }
+
+  p {
+    margin-top: var(--space-md);
+    max-width: var(--container-reading);
+  }
+
+  /* Executive Summary - 3 Column Layout (McKinsey Classic) */
+  .executive-summary {
+    column-count: 3;
+    column-gap: var(--space-xl);
+    column-rule: var(--border-width-thin) solid hsl(var(--color-slate-200));
+  }
+
+  @media (max-width: 1024px) {
+    .executive-summary { column-count: 2; }
+  }
+
+  @media (max-width: 640px) {
+    .executive-summary { column-count: 1; }
+  }
+
+  /* Links - Professional Style */
+  a {
+    color: hsl(var(--color-executive-blue));
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all var(--duration-fast) var(--easing-out);
+  }
+
+  a:hover {
+    border-bottom-color: hsl(var(--color-executive-blue));
+  }
+
+  /* Code - Technical Elements */
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    padding: 0.125em 0.25em;
+    background: hsl(var(--color-slate-100));
+    border-radius: var(--radius-sm);
+  }
+
+  pre {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-relaxed);
+    padding: var(--space-lg);
+    background: hsl(var(--color-midnight-900));
+    color: hsl(var(--color-slate-100));
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    margin-top: var(--space-lg);
+  }
+
+  /* Tables - Data Presentation */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--space-lg);
+    font-size: var(--font-size-small);
+  }
+
+  thead {
+    background: hsl(var(--color-slate-100));
+    border-bottom: 2px solid hsl(var(--color-slate-300));
+  }
+
+  th {
+    font-weight: var(--font-weight-semibold);
+    text-align: left;
+    padding: var(--space-md);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    font-size: var(--font-size-caption);
+    color: hsl(var(--color-slate-600));
+  }
+
+  td {
+    padding: var(--space-md);
+    border-bottom: 1px solid hsl(var(--color-slate-200));
+  }
+
+  /* Blockquotes - Executive Citations */
+  blockquote {
+    margin: var(--space-xl) 0;
+    padding-left: var(--space-lg);
+    border-left: 3px solid hsl(var(--color-executive-gold));
+    font-style: italic;
+    color: hsl(var(--color-slate-700));
+  }
+
+  /* Lists - Structured Information */
+  ul, ol {
+    margin-top: var(--space-md);
+    padding-left: var(--space-xl);
+  }
+
+  li {
+    margin-top: var(--space-sm);
+  }
+
+  /* Selection - Brand Highlight */
+  ::selection {
+    background: hsl(var(--color-executive-gold) / 0.2);
+    color: hsl(var(--color-midnight-900));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPONENTS - McKinsey Report Elements
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* ─────────────────────────────────────────────────────────────
+     COVER PAGE - Executive Entrance
+     ───────────────────────────────────────────────────────────── */
+
+  .cover-page {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,
+      hsl(var(--color-midnight-900)) 0%,
+      hsl(var(--color-midnight-800)) 100%);
+    color: hsl(var(--color-slate-50));
+    overflow: hidden;
+  }
+
+  .cover-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, hsl(var(--color-executive-blue) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, hsl(var(--color-executive-gold) / 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .cover-page .company-logo {
+    width: 180px;
+    height: 180px;
+    margin-bottom: var(--space-2xl);
+    filter: drop-shadow(0 10px 30px rgb(0 0 0 / 0.3));
+    animation: logo-entrance var(--duration-slower) var(--easing-out);
+  }
+
+  @keyframes logo-entrance {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .cover-page .report-title {
+    font-family: var(--font-display);
+    font-size: var(--font-size-hero);
+    font-weight: var(--font-weight-thin);
+    letter-spacing: var(--letter-spacing-tight);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    animation: title-entrance var(--duration-slowest) var(--easing-out) 0.2s both;
+  }
+
+  @keyframes title-entrance {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .cover-page .report-subtitle {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-light);
+    opacity: 0.9;
+    margin-bottom: var(--space-3xl);
+    animation: title-entrance var(--duration-slowest) var(--easing-out) 0.4s both;
+  }
+
+  .cover-page .report-meta {
+    display: flex;
+    gap: var(--space-xl);
+    font-size: var(--font-size-small);
+    opacity: 0.7;
+    animation: title-entrance var(--duration-slowest) var(--easing-out) 0.6s both;
+  }
+
+  .cover-page .classification-stamp {
+    position: absolute;
+    top: var(--space-xl);
+    right: var(--space-xl);
+    padding: var(--space-sm) var(--space-lg);
+    border: 2px solid hsl(var(--color-danger) / 0.5);
+    color: hsl(var(--color-danger));
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-widest);
+    text-transform: uppercase;
+    transform: rotate(3deg);
+    animation: stamp var(--duration-slow) var(--easing-spring) 1s both;
+  }
+
+  @keyframes stamp {
+    from {
+      opacity: 0;
+      transform: rotate(3deg) scale(1.5);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(3deg) scale(1);
+    }
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     SECTION HEADERS - Professional Dividers
+     ───────────────────────────────────────────────────────────── */
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 2px solid hsl(var(--color-slate-200));
+    margin-bottom: var(--space-xl);
+    page-break-after: avoid;
+  }
+
+  .section-number {
+    font-family: var(--font-display);
+    font-size: var(--font-size-display);
+    font-weight: var(--font-weight-thin);
+    color: hsl(var(--color-executive-gold));
+    min-width: 60px;
+  }
+
+  .section-title {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-semibold);
+    color: hsl(var(--color-midnight-900));
+    flex: 1;
+  }
+
+  .section-meta {
+    font-size: var(--font-size-caption);
+    color: hsl(var(--color-slate-500));
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wider);
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     SCQA FRAMEWORK - McKinsey Storytelling
+     ───────────────────────────────────────────────────────────── */
+
+  .scqa-framework {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xl);
+    margin: var(--space-2xl) 0;
+  }
+
+  .scqa-block {
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scqa-block::before {
+    content: attr(data-letter);
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    font-size: 4rem;
+    font-weight: var(--font-weight-black);
+    opacity: 0.05;
+    line-height: 1;
+  }
+
+  .scqa-block.situation {
+    background: linear-gradient(135deg,
+      hsl(var(--color-trust-blue) / 0.05) 0%,
+      hsl(var(--color-trust-blue) / 0.02) 100%);
+    border: 1px solid hsl(var(--color-trust-blue) / 0.2);
+  }
+
+  .scqa-block.complication {
+    background: linear-gradient(135deg,
+      hsl(var(--color-danger) / 0.05) 0%,
+      hsl(var(--color-danger) / 0.02) 100%);
+    border: 1px solid hsl(var(--color-danger) / 0.2);
+  }
+
+  .scqa-block.question {
+    background: linear-gradient(135deg,
+      hsl(var(--color-warning) / 0.05) 0%,
+      hsl(var(--color-warning) / 0.02) 100%);
+    border: 1px solid hsl(var(--color-warning) / 0.2);
+  }
+
+  .scqa-block.answer {
+    background: linear-gradient(135deg,
+      hsl(var(--color-success) / 0.05) 0%,
+      hsl(var(--color-success) / 0.02) 100%);
+    border: 1px solid hsl(var(--color-success) / 0.2);
+  }
+
+  .scqa-block h3 {
+    font-size: var(--font-size-h4);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wide);
+  }
+
+  .scqa-block p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-relaxed);
+    max-width: none;
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     DATA TABLES - Investment Matrix Style
+     ───────────────────────────────────────────────────────────── */
+
+  .data-table {
+    width: 100%;
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-paper);
+    margin: var(--space-xl) 0;
+  }
+
+  .data-table thead {
+    background: hsl(var(--color-midnight-900));
+    color: white;
+  }
+
+  .data-table th {
+    color: white;
+    font-weight: var(--font-weight-medium);
+    border-bottom: none;
+  }
+
+  .data-table tbody tr:hover {
+    background: hsl(var(--color-slate-50));
+  }
+
+  .data-table .priority-critical {
+    color: hsl(var(--color-danger));
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .data-table .priority-high {
+    color: hsl(var(--color-warning));
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .data-table .priority-medium {
+    color: hsl(var(--color-info));
+  }
+
+  .data-table .priority-low {
+    color: hsl(var(--color-slate-500));
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     SCENARIO CARDS - Financial Projections
+     ───────────────────────────────────────────────────────────── */
+
+  .scenario-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+    margin: var(--space-xl) 0;
+  }
+
+  .scenario-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    position: relative;
+    transition: all var(--duration-normal) var(--easing-out);
+  }
+
+  .scenario-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lifted);
+  }
+
+  .scenario-card.conservative {
+    border-top: 4px solid hsl(var(--color-slate-500));
+  }
+
+  .scenario-card.moderate {
+    border-top: 4px solid hsl(var(--color-prr-green-500));
+  }
+
+  .scenario-card.moderate::after {
+    content: 'RECOMMENDED';
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    background: hsl(var(--color-prr-green-500));
+    color: white;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-micro);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-wider);
+  }
+
+  .scenario-card.aggressive {
+    border-top: 4px solid hsl(var(--color-trust-blue));
+  }
+
+  .scenario-card h4 {
+    margin-top: 0;
+    margin-bottom: var(--space-lg);
+  }
+
+  .scenario-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .metric-label {
+    font-size: var(--font-size-caption);
+    color: hsl(var(--color-slate-500));
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wider);
+    margin-bottom: var(--space-xs);
+  }
+
+  .metric-value {
+    font-size: var(--font-size-h4);
+    font-weight: var(--font-weight-semibold);
+    color: hsl(var(--color-midnight-900));
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     KPI DASHBOARD - Traffic Lights
+     ───────────────────────────────────────────────────────────── */
+
+  .kpi-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    margin: var(--space-xl) 0;
+  }
+
+  .kpi-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    position: relative;
+    border: 1px solid hsl(var(--color-slate-200));
+  }
+
+  .kpi-card .traffic-light {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    animation: pulse 2s infinite;
+  }
+
+  .traffic-light.green {
+    background: hsl(var(--color-prr-green-500));
+    box-shadow: 0 0 0 4px hsl(var(--color-prr-green-500) / 0.1);
+  }
+
+  .traffic-light.yellow {
+    background: hsl(var(--color-warning));
+    box-shadow: 0 0 0 4px hsl(var(--color-warning) / 0.1);
+  }
+
+  .traffic-light.red {
+    background: hsl(var(--color-danger));
+    box-shadow: 0 0 0 4px hsl(var(--color-danger) / 0.1);
+    animation: pulse-urgent 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  @keyframes pulse-urgent {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .kpi-card h5 {
+    font-size: var(--font-size-body);
+    margin-bottom: var(--space-sm);
+    color: hsl(var(--color-slate-700));
+  }
+
+  .kpi-value {
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    color: hsl(var(--color-midnight-900));
+    margin-bottom: var(--space-sm);
+  }
+
+  .kpi-target {
+    font-size: var(--font-size-small);
+    color: hsl(var(--color-slate-500));
+  }
+
+  .kpi-progress {
+    width: 100%;
+    height: 4px;
+    background: hsl(var(--color-slate-200));
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-top: var(--space-md);
+  }
+
+  .kpi-progress-bar {
+    height: 100%;
+    background: currentColor;
+    transition: width var(--duration-slow) var(--easing-out);
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     CALLOUTS - Insight Boxes
+     ───────────────────────────────────────────────────────────── */
+
+  .callout {
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    margin: var(--space-xl) 0;
+    position: relative;
+    padding-left: calc(var(--space-lg) + 40px);
+  }
+
+  .callout::before {
+    content: '';
+    position: absolute;
+    left: var(--space-lg);
+    top: var(--space-lg);
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .callout-info {
+    background: hsl(var(--color-trust-blue) / 0.05);
+    border: 1px solid hsl(var(--color-trust-blue) / 0.2);
+    color: hsl(var(--color-midnight-900));
+  }
+
+  .callout-info::before {
+    content: 'ℹ';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--color-trust-blue));
+    color: white;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .callout-success {
+    background: hsl(var(--color-prr-green-500) / 0.05);
+    border: 1px solid hsl(var(--color-prr-green-500) / 0.2);
+  }
+
+  .callout-success::before {
+    content: '✓';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--color-prr-green-500));
+    color: white;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .callout-warning {
+    background: hsl(var(--color-warning) / 0.05);
+    border: 1px solid hsl(var(--color-warning) / 0.2);
+  }
+
+  .callout-warning::before {
+    content: '!';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--color-warning));
+    color: white;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .callout-danger {
+    background: hsl(var(--color-danger) / 0.05);
+    border: 1px solid hsl(var(--color-danger) / 0.2);
+  }
+
+  .callout-danger::before {
+    content: '✕';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--color-danger));
+    color: white;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .callout h4 {
+    margin-top: 0;
+    margin-bottom: var(--space-sm);
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     FLOATING TOC - Smart Navigation
+     ───────────────────────────────────────────────────────────── */
+
+  .floating-toc {
+    position: fixed;
+    right: var(--space-xl);
+    top: 50%;
+    transform: translateY(-50%);
+    width: var(--toc-width);
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-lifted);
+    z-index: var(--z-sticky);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 1440px) {
+    .floating-toc {
+      display: none;
+    }
+  }
+
+  .toc-progress {
+    width: 100%;
+    height: 4px;
+    background: hsl(var(--color-slate-200));
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-lg);
+    overflow: hidden;
+  }
+
+  .toc-progress-bar {
+    height: 100%;
+    background: hsl(var(--color-executive-gold));
+    transition: width var(--duration-normal) var(--easing-out);
+  }
+
+  .toc-title {
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--letter-spacing-wider);
+    color: hsl(var(--color-slate-500));
+    margin-bottom: var(--space-md);
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .toc-item {
+    margin: 0;
+    border-left: 2px solid transparent;
+    transition: all var(--duration-fast) var(--easing-out);
+  }
+
+  .toc-item.active {
+    border-left-color: hsl(var(--color-executive-gold));
+    background: hsl(var(--color-subtle-gold));
+  }
+
+  .toc-link {
+    display: flex;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    color: hsl(var(--color-slate-600));
+    font-size: var(--font-size-small);
+    border-bottom: none;
+  }
+
+  .toc-link:hover {
+    color: hsl(var(--color-midnight-900));
+    background: hsl(var(--color-slate-50));
+  }
+
+  .toc-number {
+    font-weight: var(--font-weight-bold);
+    margin-right: var(--space-sm);
+    color: hsl(var(--color-executive-gold));
+  }
+
+  .toc-time {
+    margin-left: auto;
+    font-size: var(--font-size-caption);
+    color: hsl(var(--color-slate-400));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITIES - Helper Classes
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer utilities {
+  /* Spacing utilities */
+  .mt-0 { margin-top: 0; }
+  .mt-1 { margin-top: var(--space-sm); }
+  .mt-2 { margin-top: var(--space-md); }
+  .mt-3 { margin-top: var(--space-lg); }
+  .mt-4 { margin-top: var(--space-xl); }
+  .mt-5 { margin-top: var(--space-2xl); }
+  .mt-6 { margin-top: var(--space-3xl); }
+
+  .mb-0 { margin-bottom: 0; }
+  .mb-1 { margin-bottom: var(--space-sm); }
+  .mb-2 { margin-bottom: var(--space-md); }
+  .mb-3 { margin-bottom: var(--space-lg); }
+  .mb-4 { margin-bottom: var(--space-xl); }
+  .mb-5 { margin-bottom: var(--space-2xl); }
+  .mb-6 { margin-bottom: var(--space-3xl); }
+
+  /* Text utilities */
+  .text-center { text-align: center; }
+  .text-left { text-align: left; }
+  .text-right { text-align: right; }
+  .text-justify { text-align: justify; }
+
+  .uppercase { text-transform: uppercase; }
+  .lowercase { text-transform: lowercase; }
+  .capitalize { text-transform: capitalize; }
+
+  /* Display utilities */
+  .hidden { display: none; }
+  .block { display: block; }
+  .inline { display: inline; }
+  .inline-block { display: inline-block; }
+  .flex { display: flex; }
+  .grid { display: grid; }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fade-in var(--duration-normal) var(--easing-out);
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-slide-up {
+    animation: slide-up var(--duration-normal) var(--easing-out);
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Page break utilities for print */
+  .page-break-before { page-break-before: always; }
+  .page-break-after { page-break-after: always; }
+  .avoid-break { page-break-inside: avoid; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRINT STYLES - Executive Report Printing
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer print {
+  @media print {
+    /* Page setup */
+    @page {
+      size: A4 portrait;
+      margin: 2cm 2cm 3cm 2cm;
+
+      @top-center {
+        content: "CONFIDENTIAL & PROPRIETARY";
+        font-family: var(--font-body);
+        font-size: 8pt;
+        color: #666;
+      }
+
+      @bottom-right {
+        content: "Page " counter(page) " of " counter(pages);
+        font-family: var(--font-body);
+        font-size: 8pt;
+        color: #666;
+      }
+
+      @bottom-left {
+        content: "© 2025 " attr(data-company);
+        font-family: var(--font-body);
+        font-size: 8pt;
+        color: #666;
+      }
+    }
+
+    /* Reset colors for print */
+    * {
+      color: black !important;
+      background: white !important;
+    }
+
+    /* Hide non-print elements */
+    .floating-toc,
+    .no-print,
+    video,
+    audio,
+    iframe {
+      display: none !important;
+    }
+
+    /* Ensure sections start on new pages */
+    .section-header {
+      page-break-before: always;
+      page-break-after: avoid;
+    }
+
+    /* Keep elements together */
+    .scenario-card,
+    .kpi-card,
+    .callout,
+    .scqa-block {
+      page-break-inside: avoid;
+    }
+
+    /* Tables */
+    table {
+      page-break-inside: avoid;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+
+    /* Images */
+    img {
+      max-width: 100% !important;
+      page-break-inside: avoid;
+    }
+
+    /* Links */
+    a {
+      text-decoration: none;
+      border-bottom: 1px solid #000;
+    }
+
+    a[href^="http"]:after {
+      content: " (" attr(href) ")";
+      font-size: 80%;
+    }
+
+    /* Cover page always first */
+    .cover-page {
+      page-break-after: always;
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Mobile (0-639px) */
+@media (max-width: 639px) {
+  :root {
+    --space-unit: 6px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .section-number {
+    min-width: auto;
+  }
+
+  .scqa-framework {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-dashboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet (640-1023px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .container {
+    max-width: var(--container-narrow);
+  }
+
+  .scqa-framework {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop (1024-1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .container {
+    max-width: calc(100% - var(--space-4xl));
+  }
+}
+
+/* Wide Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .container {
+    max-width: var(--container-max-width);
+  }
+
+  /* Show floating TOC */
+  body {
+    padding-right: calc(var(--toc-width) + var(--space-4xl));
+  }
+}
+
+/* 4K Display (2560px+) */
+@media (min-width: 2560px) {
+  :root {
+    font-size: 18px;
+  }
+
+  .container {
+    max-width: var(--container-wide);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PERFORMANCE OPTIMIZATIONS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --color-midnight-900: 0 0% 0%;
+    --color-slate-50: 0 0% 100%;
+  }
+
+  * {
+    border-width: 2px !important;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  img {
+    opacity: 0.9;
+  }
+
+  .cover-page {
+    background: linear-gradient(135deg,
+      hsl(var(--color-midnight-950)) 0%,
+      hsl(var(--color-midnight-900)) 100%);
+  }
+
+  .callout-info,
+  .callout-success,
+  .callout-warning,
+  .callout-danger {
+    background: hsl(var(--color-midnight-800));
+  }
+}

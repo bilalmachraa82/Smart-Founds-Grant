@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Análise Premium - Archon Knowledge Engine">
+  <title>Análise Premium - {{COMPANY_NAME}}</title>
+
+  <!-- Preconnect to CDNs for faster loading -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
+  <!-- Google Fonts: Inter (body) + JetBrains Mono (code) -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap">
+
+  <!-- Critical CSS - Inline for instant First Paint -->
+  <style>
+    /* Design System Critical Variables */
+    :root {
+      --color-archon-blue-950: 222 47% 11%;
+      --color-archon-blue-500: 211 100% 40%;
+      --color-archon-blue-50: 211 100% 97%;
+      --color-prr-green-700: 158 64% 24%;
+      --color-prr-green-500: 158 64% 52%;
+      --color-slate-50: 210 40% 98%;
+      --color-slate-900: 222 47% 11%;
+      --font-body: 'Inter', -apple-system, system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+      --gradient-mesh-hero:
+        radial-gradient(at 20% 30%, hsla(211 100% 40% / 0.15) 0px, transparent 50%),
+        radial-gradient(at 80% 70%, hsla(158 64% 52% / 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, hsla(222 47% 11% / 1) 0px, transparent 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: hsl(var(--color-slate-50));
+      color: hsl(var(--color-slate-900));
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Loading skeleton for instant feedback */
+    .skeleton {
+      background: linear-gradient(90deg,
+        hsl(var(--color-slate-200)) 25%,
+        hsl(var(--color-slate-100)) 50%,
+        hsl(var(--color-slate-200)) 75%
+      );
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: 8px;
+    }
+
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Hero gradient fallback (before Three.js loads) */
+    #hero-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      z-index: -1;
+      background: var(--gradient-mesh-hero);
+    }
+  </style>
+
+  <!-- Full Design System (loads immediately but not render-blocking) -->
+  <link rel="stylesheet" href="design-system.css">
+
+  <!-- Web Components (preload for fast parsing) -->
+  <link rel="modulepreload" href="web-components.js">
+  <script type="module" src="web-components.js"></script>
+</head>
+
+<body>
+  <!-- Three.js Animated Background (canvas element, will be lazy loaded) -->
+  <div id="hero-background">
+    <canvas id="three-canvas" style="display: none;"></canvas>
+  </div>
+
+  <!-- Main Container -->
+  <main class="archon-report">
+
+    <!-- ==================== HERO COVER SECTION ==================== -->
+    <section class="hero-section" id="hero-section">
+      <div class="hero-container">
+
+        <!-- Status Badge - Large, Pulsing -->
+        <div class="hero-status">
+          <archon-badge variant="{{STATUS_VARIANT}}" size="xl" pulse glow>
+            {{STATUS_EMOJI}} {{STATUS_TEXT}}
+          </archon-badge>
+        </div>
+
+        <!-- Company Title with Gradient Text -->
+        <h1 class="hero-title">
+          <span class="gradient-text">{{COMPANY_NAME}}</span>
+        </h1>
+
+        <!-- Subtitle with CAE Code -->
+        <p class="hero-subtitle">
+          CAE {{CAE_CODE}} — {{CAE_DESCRIPTION}}
+        </p>
+
+        <!-- Key Metrics Grid (6 cards in 3x2 layout) -->
+        <div class="metrics-grid">
+          <archon-metric
+            label="Score Mérito"
+            value="{{SCORE}}"
+            suffix="/10"
+            icon="⭐"
+            trend="{{SCORE_TREND}}">
+          </archon-metric>
+
+          <archon-metric
+            label="Classe"
+            value="{{CLASS}}"
+            icon="🏆">
+          </archon-metric>
+
+          <archon-metric
+            label="Probabilidade"
+            value="{{PROBABILITY}}"
+            suffix="%"
+            icon="📊"
+            trend="{{PROB_TREND}}">
+          </archon-metric>
+
+          <archon-metric
+            label="Investimento"
+            value="{{INVESTMENT}}"
+            suffix="€"
+            icon="💰">
+          </archon-metric>
+
+          <archon-metric
+            label="Incentivo"
+            value="{{INCENTIVE}}"
+            suffix="€"
+            icon="🎯">
+          </archon-metric>
+
+          <archon-metric
+            label="Taxa"
+            value="{{INCENTIVE_RATE}}"
+            suffix="%"
+            icon="📈">
+          </archon-metric>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+          <span>↓</span>
+          <p>Análise Detalhada</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== EXECUTIVE SUMMARY DASHBOARD ==================== -->
+    <section class="summary-section" id="summary-section">
+      <div class="summary-container">
+
+        <h2 class="section-title">Sumário Executivo</h2>
+
+        <!-- Dashboard Grid (3 columns) -->
+        <div class="dashboard-grid">
+
+          <!-- Column 1: Verdict Card -->
+          <archon-card variant="{{STATUS_VARIANT}}" glass>
+            <div slot="header">
+              <h3>Veredicto Final</h3>
+            </div>
+            <div slot="body">
+              <div class="verdict-content">
+                <div class="verdict-icon">{{STATUS_EMOJI}}</div>
+                <h4 class="verdict-title">{{STATUS_TEXT}}</h4>
+                <p class="verdict-description">{{VERDICT_SUMMARY}}</p>
+
+                <!-- Confidence Score -->
+                <div class="confidence-bar">
+                  <div class="confidence-label">
+                    <span>Confiança da Análise</span>
+                    <span class="confidence-value">{{CONFIDENCE}}%</span>
+                  </div>
+                  <archon-progress
+                    value="{{CONFIDENCE}}"
+                    max="100"
+                    variant="{{STATUS_VARIANT}}"
+                    show-label>
+                  </archon-progress>
+                </div>
+              </div>
+            </div>
+          </archon-card>
+
+          <!-- Column 2: Action Plan Card -->
+          <archon-card variant="default">
+            <div slot="header">
+              <h3>Plano de Ação</h3>
+              <archon-badge variant="info" size="sm">{{ACTION_COUNT}} ações</archon-badge>
+            </div>
+            <div slot="body">
+              <div class="action-list">
+                {{ACTIONS_HTML}}
+              </div>
+
+              <!-- Progress Tracker -->
+              <div class="action-progress">
+                <archon-progress
+                  value="0"
+                  max="{{ACTION_COUNT}}"
+                  variant="success"
+                  type="ring"
+                  show-label>
+                </archon-progress>
+                <p class="progress-hint">Complete as ações para melhorar a candidatura</p>
+              </div>
+            </div>
+          </archon-card>
+
+          <!-- Column 3: Timeline Card -->
+          <archon-card variant="default">
+            <div slot="header">
+              <h3>Timeline</h3>
+            </div>
+            <div slot="body">
+              <div class="timeline-visual">
+                {{TIMELINE_HTML}}
+              </div>
+            </div>
+          </archon-card>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CHARTS SECTION ==================== -->
+    <section class="charts-section" id="charts-section">
+      <div class="charts-container">
+
+        <h2 class="section-title">Análise Visual</h2>
+
+        <div class="charts-grid">
+
+          <!-- Score Gauge (Radial Bar) -->
+          <archon-card>
+            <div slot="header">
+              <h3>Score de Mérito</h3>
+              <archon-badge variant="{{SCORE_BADGE_VARIANT}}" size="sm">{{SCORE}}/10</archon-badge>
+            </div>
+            <div slot="body">
+              <div id="score-gauge-chart" class="chart-container">
+                <!-- ApexCharts will be injected here by archon-loader.js -->
+                <div class="skeleton" style="height: 300px;"></div>
+              </div>
+            </div>
+          </archon-card>
+
+          <!-- Budget Breakdown (Donut Chart) -->
+          <archon-card>
+            <div slot="header">
+              <h3>Distribuição Orçamental</h3>
+              <archon-badge variant="info" size="sm">{{INVESTMENT}}€</archon-badge>
+            </div>
+            <div slot="body">
+              <div id="budget-donut-chart" class="chart-container">
+                <!-- ApexCharts will be injected here -->
+                <div class="skeleton" style="height: 300px;"></div>
+              </div>
+            </div>
+          </archon-card>
+
+          <!-- Eligibility Matrix (Heatmap) -->
+          <archon-card>
+            <div slot="header">
+              <h3>Matriz de Elegibilidade</h3>
+            </div>
+            <div slot="body">
+              <div id="eligibility-heatmap-chart" class="chart-container">
+                <!-- ApexCharts will be injected here -->
+                <div class="skeleton" style="height: 300px;"></div>
+              </div>
+            </div>
+          </archon-card>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== MARKDOWN CONTENT SECTION ==================== -->
+    <section class="content-section" id="content-section">
+      <div class="content-container">
+
+        <!-- Navigation Tabs (will be auto-generated from markdown sections) -->
+        <nav class="content-nav" id="content-nav">
+          <div class="nav-tabs">
+            <!-- Tabs will be injected by archon-loader.js after parsing markdown -->
+          </div>
+        </nav>
+
+        <!-- Markdown Content (will be parsed by Prism.js) -->
+        <article class="markdown-content" id="markdown-content">
+          {{MARKDOWN_CONTENT}}
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="report-footer">
+      <div class="footer-container">
+        <div class="footer-logo">
+          <span class="archon-logo">ARCHON</span>
+          <span class="archon-version">v3.0 Premium</span>
+        </div>
+        <div class="footer-meta">
+          <p>Gerado em {{GENERATED_DATE}} às {{GENERATED_TIME}}</p>
+          <p>Análise baseada em {{SOURCES_COUNT}} fontes documentais</p>
+        </div>
+        <div class="footer-disclaimer">
+          <p>⚠️ Este relatório é gerado automaticamente por IA. Consulte sempre um especialista antes de submeter candidatura.</p>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ==================== LAZY-LOADED SCRIPTS ==================== -->
+
+  <!-- Archon Loader (orchestrates all lazy loading) -->
+  <script type="module" src="archon-loader.js"></script>
+
+  <!-- ApexCharts (lazy loaded when charts section is visible) -->
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/apexcharts@3.45.0/dist/apexcharts.min.js">
+
+  <!-- Three.js (lazy loaded when hero is visible) -->
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js">
+
+  <!-- Prism.js (lazy loaded when content section is visible) -->
+  <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js">
+  <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+
+  <!-- Chart Data (embedded JSON for ApexCharts) -->
+  <script id="chart-data" type="application/json">
+  {
+    "score": {
+      "value": {{SCORE}},
+      "normalized": {{SCORE_NORMALIZED}},
+      "class": "{{CLASS}}",
+      "probability": {{PROBABILITY}}
+    },
+    "budget": {
+      "saas": {{BUDGET_SAAS}},
+      "consulting": {{BUDGET_CONSULTING}},
+      "training": {{BUDGET_TRAINING}},
+      "hr": {{BUDGET_HR}},
+      "roc": {{BUDGET_ROC}},
+      "total": {{INVESTMENT}}
+    },
+    "eligibility": {
+      "pme": "{{ELIGIBILITY_PME}}",
+      "investment": "{{ELIGIBILITY_INVESTMENT}}",
+      "cae": "{{ELIGIBILITY_CAE}}",
+      "location": "{{ELIGIBILITY_LOCATION}}",
+      "innovation": "{{ELIGIBILITY_INNOVATION}}"
+    }
+  }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análise Premium - {{COMPANY_NAME}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============= RESET & BASE ============= */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #F8FAFC;
+      color: #0F172A;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============= TOC SIDEBAR ============= */
+    .toc-sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 280px;
+      height: 100vh;
+      background: white;
+      border-right: 2px solid #E2E8F0;
+      padding: 2rem 0;
+      overflow-y: auto;
+      z-index: 100;
+      display: none; /* Hidden initially, shown after hero */
+    }
+
+    .toc-sidebar.visible {
+      display: block;
+    }
+
+    .toc-header {
+      padding: 0 1.5rem 1rem;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #0F172A;
+      border-bottom: 2px solid #E2E8F0;
+      margin-bottom: 1rem;
+    }
+
+    .toc-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      color: #64748B;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .toc-nav a:hover,
+    .toc-nav a.active {
+      background: #F1F5F9;
+      color: #0EA5E9;
+      border-left: 3px solid #0EA5E9;
+    }
+
+    /* ============= MAIN LAYOUT ============= */
+    .report-wrapper {
+      margin-left: 0;
+      transition: margin-left 0.3s;
+    }
+
+    .report-wrapper.with-toc {
+      margin-left: 280px;
+    }
+
+    /* ============= HERO PAGE (unchanged) ============= */
+    .hero-page {
+      min-height: 100vh;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      page-break-after: always;
+    }
+
+    .hero-container { max-width: 900px; width: 100%; text-align: center; }
+    .status-badge { display: inline-flex; align-items: center; gap: 1rem; background: white; border: 2px solid #E2E8F0; border-radius: 16px; padding: 1.5rem 3rem; margin-bottom: 3rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .status-emoji { font-size: 4rem; }
+    .status-text { font-size: 2.5rem; font-weight: 700; color: #64748B; letter-spacing: 0.05em; }
+    .company-name { font-size: 4rem; font-weight: 800; color: #0F172A; margin-bottom: 1rem; line-height: 1.1; }
+    .company-subtitle { font-size: 1.25rem; color: #64748B; margin-bottom: 4rem; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 4rem; }
+    .metric-card { background: white; border: 2px solid #E2E8F0; border-radius: 12px; padding: 2rem 1.5rem; text-align: center; transition: all 0.2s; }
+    .metric-card:hover { border-color: #0EA5E9; transform: translateY(-2px); box-shadow: 0 8px 16px -4px rgba(0,0,0,0.1); }
+    .metric-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+    .metric-label { font-size: 0.875rem; color: #64748B; margin-bottom: 0.5rem; font-weight: 500; }
+    .metric-value { font-size: 1.75rem; font-weight: 700; color: #0F172A; }
+    .metric-subvalue { font-size: 0.875rem; color: #94A3B8; margin-top: 0.25rem; }
+
+    /* ============= SUMMARY PAGE (unchanged) ============= */
+    .summary-page { background: white; padding: 4rem 2rem; page-break-after: always; }
+    .page-container { max-width: 1200px; margin: 0 auto; }
+    .page-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 3rem; padding-bottom: 1rem; border-bottom: 3px solid #0EA5E9; }
+    .page-header-icon { font-size: 2rem; }
+    .page-title { font-size: 2.5rem; font-weight: 800; color: #0F172A; }
+    .page-number { margin-left: auto; font-size: 0.875rem; color: #0EA5E9; font-weight: 600; }
+    .verdict-box { background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border: 3px solid #F59E0B; border-radius: 20px; padding: 3rem; text-align: center; margin-bottom: 3rem; }
+    .verdict-emoji-large { font-size: 5rem; margin-bottom: 1rem; }
+    .verdict-status { font-size: 3rem; font-weight: 800; color: #78350F; margin-bottom: 1.5rem; }
+    .verdict-scores { display: flex; justify-content: center; gap: 4rem; margin-top: 2rem; }
+    .verdict-score-item { text-align: center; }
+    .verdict-score-label { font-size: 0.875rem; color: #78350F; margin-bottom: 0.5rem; }
+    .verdict-score-value { font-size: 2.5rem; font-weight: 800; color: #78350F; }
+    .two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
+    .section-card { background: white; border: 2px solid #E2E8F0; border-radius: 16px; padding: 2rem; }
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .section-icon { font-size: 1.5rem; }
+    .section-title { font-size: 1.25rem; font-weight: 700; color: #0F172A; }
+    .action-item { display: flex; gap: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px; margin-bottom: 0.75rem; border: 1px solid #E2E8F0; }
+    .action-checkbox { width: 20px; height: 20px; border: 2px solid #CBD5E1; border-radius: 4px; flex-shrink: 0; margin-top: 0.25rem; }
+    .action-text { flex: 1; font-size: 0.875rem; line-height: 1.5; }
+    .action-title { font-weight: 600; color: #0F172A; margin-bottom: 0.25rem; }
+    .action-meta { color: #64748B; font-size: 0.8rem; }
+    .timeline-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+    .timeline-dot { width: 32px; height: 32px; border-radius: 50%; background: #E2E8F0; border: 3px solid white; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; }
+    .timeline-dot::after { content: ''; position: absolute; top: 32px; left: 50%; transform: translateX(-50%); width: 2px; height: 40px; background: #E2E8F0; }
+    .timeline-item:last-child .timeline-dot::after { display: none; }
+    .timeline-dot.active { background: #0EA5E9; color: white; font-weight: 700; }
+    .timeline-content { flex: 1; padding-top: 0.25rem; }
+    .timeline-title { font-weight: 600; color: #0F172A; margin-bottom: 0.25rem; }
+    .timeline-date { font-size: 0.8rem; color: #64748B; }
+    .score-gauge-container { text-align: center; padding: 2rem; }
+    .score-gauge-visual { width: 200px; height: 200px; margin: 0 auto 1rem; position: relative; }
+    .gauge-svg { transform: rotate(-90deg); }
+    .gauge-bg { fill: none; stroke: #E2E8F0; stroke-width: 12; }
+    .gauge-fill { fill: none; stroke: url(#gaugeGradient); stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+    .gauge-center-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .gauge-score { font-size: 3rem; font-weight: 800; color: #0F172A; }
+    .gauge-max { font-size: 1.5rem; color: #64748B; }
+    .gauge-label { margin-top: 0.5rem; font-size: 0.875rem; color: #64748B; }
+    .gauge-caption { margin-top: 1rem; font-size: 0.8rem; color: #94A3B8; font-style: italic; }
+
+    /* ============= CHARTS PAGE (unchanged) ============= */
+    .charts-page { background: white; padding: 4rem 2rem; page-break-after: always; }
+    .chart-card { background: white; border: 2px solid #E2E8F0; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+    .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .chart-title { font-size: 1.25rem; font-weight: 700; color: #0F172A; }
+    .chart-badge { background: #0EA5E9; color: white; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; }
+    .chart-container { min-height: 350px; position: relative; }
+
+    /* ============= CONTENT PAGES (NEW) ============= */
+    .content-page {
+      background: white;
+      padding: 4rem 2rem;
+      page-break-after: always;
+      min-height: 100vh;
+    }
+
+    .content-page h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 1rem;
+    }
+
+    .content-page h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #0F172A;
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .content-page h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #475569;
+      margin-top: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .content-page p {
+      margin-bottom: 1.5rem;
+      color: #64748B;
+      line-height: 1.7;
+    }
+
+    .content-page ul,
+    .content-page ol {
+      margin: 1.5rem 0;
+      padding-left: 2rem;
+      color: #64748B;
+    }
+
+    .content-page li {
+      margin-bottom: 0.75rem;
+      line-height: 1.6;
+    }
+
+    /* ============= CALLOUTS SYSTEM ============= */
+    .callout {
+      border-left: 4px solid;
+      padding: 1rem 1rem 1rem 3rem;
+      margin: 1.5rem 0;
+      border-radius: 0 8px 8px 0;
+      position: relative;
+      font-size: 0.95rem;
+    }
+
+    .callout::before {
+      content: attr(data-icon);
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .callout-warning {
+      border-color: #F59E0B;
+      background: #FFFBEB;
+      color: #78350F;
+    }
+
+    .callout-success {
+      border-color: #10B981;
+      background: #F0FDF4;
+      color: #065F46;
+    }
+
+    .callout-danger {
+      border-color: #EF4444;
+      background: #FEF2F2;
+      color: #991B1B;
+    }
+
+    .callout-info {
+      border-color: #0EA5E9;
+      background: #F0F9FF;
+      color: #075985;
+    }
+
+    /* ============= DATA TABLES ============= */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.9rem;
+    }
+
+    .data-table th {
+      background: #F8FAFC;
+      border-bottom: 2px solid #E2E8F0;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #0F172A;
+    }
+
+    .data-table td {
+      border-bottom: 1px solid #E2E8F0;
+      padding: 1rem;
+      color: #64748B;
+    }
+
+    .data-table tr:hover {
+      background: #F8FAFC;
+    }
+
+    /* ============= CODE BLOCKS ============= */
+    .code-block {
+      background: #0F172A;
+      color: #E2E8F0;
+      padding: 1.5rem;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin: 2rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    /* ============= SECTION COLOR CODING ============= */
+    #section-a .page-header { border-bottom-color: #0EA5E9; }
+    #section-b .page-header { border-bottom-color: #10B981; }
+    #section-c .page-header { border-bottom-color: #8B5CF6; }
+    #section-d .page-header { border-bottom-color: #F59E0B; }
+    #section-e .page-header { border-bottom-color: #EF4444; }
+    #section-f .page-header { border-bottom-color: #6366F1; }
+    #section-g .page-header { border-bottom-color: #14B8A6; }
+
+    /* ============= FOOTER ============= */
+    .report-footer {
+      background: #0F172A;
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .footer-meta {
+      color: #94A3B8;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ============= PRINT STYLES ============= */
+    @media print {
+      .toc-sidebar { display: none !important; }
+      .report-wrapper { margin-left: 0 !important; }
+      .hero-page, .summary-page, .charts-page, .content-page { page-break-after: always; border: none; margin: 0; padding: 2rem; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+
+    /* ============= RESPONSIVE ============= */
+    @media (max-width: 768px) {
+      .toc-sidebar { transform: translateX(-100%); }
+      .toc-sidebar.visible { transform: translateX(0); }
+      .report-wrapper.with-toc { margin-left: 0; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .two-columns { grid-template-columns: 1fr; }
+      .company-name { font-size: 2.5rem; }
+      .status-text { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOC SIDEBAR -->
+  <aside class="toc-sidebar" id="toc">
+    <div class="toc-header">📑 Índice</div>
+    <nav class="toc-nav">
+      <a href="#hero">🏠 Capa</a>
+      <a href="#summary">🎯 Sumário Executivo</a>
+      <a href="#budget">💰 Breakdown Orçamento</a>
+      <a href="#section-a">📊 A. Dashboard</a>
+      <a href="#section-b">✅ B. Elegibilidade</a>
+      <a href="#section-c">💡 C. Projeto Proposto</a>
+      <a href="#section-d">💰 D. Orçamento Detalhado</a>
+      <a href="#section-e">📊 E. Scoring de Mérito</a>
+      <a href="#section-f">📅 F. Cronograma</a>
+      <a href="#section-g">💳 G. Plano Pagamentos</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN REPORT WRAPPER -->
+  <div class="report-wrapper" id="reportWrapper">
+
+    <!-- HERO PAGE -->
+    <div class="hero-page" id="hero">
+      <div class="hero-container">
+        <div class="status-badge">
+          <div class="status-emoji">{{STATUS_EMOJI}}</div>
+          <div class="status-text">{{STATUS_TEXT}}</div>
+        </div>
+        <h1 class="company-name">{{COMPANY_NAME}}</h1>
+        <p class="company-subtitle">{{CAE_DESCRIPTION}}</p>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon">📈</div>
+            <div class="metric-label">Score Mérito</div>
+            <div class="metric-value">{{SCORE}}/10</div>
+            <div class="metric-subvalue">Classe {{CLASS}}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">📋</div>
+            <div class="metric-label">Aviso</div>
+            <div class="metric-value">03/C05-i14.01/2025</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">🏭</div>
+            <div class="metric-label">CAE</div>
+            <div class="metric-value">{{CAE_CODE}}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">💰</div>
+            <div class="metric-label">Investimento</div>
+            <div class="metric-value">{{INVESTMENT}}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">💶</div>
+            <div class="metric-label">Incentivo</div>
+            <div class="metric-value">{{INCENTIVE}}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">⏰</div>
+            <div class="metric-label">Prazo</div>
+            <div class="metric-value">12 meses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE SUMMARY PAGE -->
+    <div class="summary-page" id="summary">
+      <div class="page-container">
+        <div class="page-header">
+          <span class="page-header-icon">🎯</span>
+          <h2 class="page-title">Sumário Executivo</h2>
+          <span class="page-number">1 Página</span>
+        </div>
+        <div class="verdict-box">
+          <div class="verdict-emoji-large">{{STATUS_EMOJI}}</div>
+          <div class="verdict-status">{{STATUS_TEXT}}</div>
+          <div class="verdict-scores">
+            <div class="verdict-score-item">
+              <div class="verdict-score-label">Score</div>
+              <div class="verdict-score-value">{{SCORE}}/10</div>
+            </div>
+            <div class="verdict-score-item">
+              <div class="verdict-score-label">Probabilidade</div>
+              <div class="verdict-score-value">{{PROBABILITY}}%</div>
+            </div>
+          </div>
+        </div>
+        <div class="two-columns">
+          <div class="section-card">
+            <div class="section-header">
+              <span class="section-icon">⚡</span>
+              <h3 class="section-title">Top 3 Ações Críticas</h3>
+            </div>
+            {{ACTIONS_HTML}}
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 2rem;">
+            <div class="section-card">
+              <div class="section-header">
+                <span class="section-icon">⏰</span>
+                <h3 class="section-title">Timeline Decisão</h3>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot active">📝</div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Submissão</div>
+                  <div class="timeline-date">Candidaturas contínuas</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot">⏳</div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Decisão Estimada</div>
+                  <div class="timeline-date">50 dias úteis (~10 semanas)</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot">🚀</div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Início Projeto</div>
+                  <div class="timeline-date">30 dias após decisão</div>
+                </div>
+              </div>
+            </div>
+            <div class="section-card">
+              <div class="section-header">
+                <span class="section-icon">📊</span>
+                <h3 class="section-title">Score Mérito Visual</h3>
+              </div>
+              <div class="score-gauge-container">
+                <div class="score-gauge-visual">
+                  <svg class="gauge-svg" viewBox="0 0 200 200">
+                    <defs>
+                      <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0EA5E9;stop-opacity:1" />
+                      </linearGradient>
+                    </defs>
+                    <circle class="gauge-bg" cx="100" cy="100" r="90"/>
+                    <circle class="gauge-fill" cx="100" cy="100" r="90"
+                      stroke-dasharray="565.48"
+                      stroke-dashoffset="{{GAUGE_OFFSET}}"/>
+                  </svg>
+                  <div class="gauge-center-text">
+                    <div class="gauge-score">{{SCORE}}<span class="gauge-max">/10</span></div>
+                  </div>
+                </div>
+                <div class="gauge-label">Score Mérito</div>
+                <div class="gauge-caption">Visualização interativa do score de mérito do projeto (0-10 escala).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS PAGE -->
+    <div class="charts-page" id="budget">
+      <div class="page-container">
+        <div class="page-header">
+          <span class="page-header-icon">💰</span>
+          <h2 class="page-title">Breakdown Orçamento</h2>
+          <span class="page-number">2 Página</span>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">Distribuição percentual do investimento por categoria de despesa.</h3>
+            <div class="chart-badge">Total Investimento: €{{INVESTMENT}}</div>
+          </div>
+          <div id="budget-chart" class="chart-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT PAGES (Sections A-G) -->
+    {{CONTENT_PAGES}}
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      <div class="footer-logo">⚡ Archon Knowledge Engine</div>
+      <div class="footer-meta">Powered by Claude Sonnet 4.5 | Ultra-Premium Analysis</div>
+      <div class="footer-meta">Generated: {{GENERATED_DATE}} {{GENERATED_TIME}} UTC</div>
+      <div class="footer-meta">© 2025 Archon Intelligence Systems | All Rights Reserved</div>
+    </div>
+
+  </div>
+
+  <!-- ApexCharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <script>
+    // Show TOC after hero page
+    window.addEventListener('scroll', () => {
+      const hero = document.getElementById('hero');
+      const heroBottom = hero.offsetTop + hero.offsetHeight;
+      const toc = document.getElementById('toc');
+      const wrapper = document.getElementById('reportWrapper');
+
+      if (window.scrollY > heroBottom - 100) {
+        toc.classList.add('visible');
+        wrapper.classList.add('with-toc');
+      } else {
+        toc.classList.remove('visible');
+        wrapper.classList.remove('with-toc');
+      }
+    });
+
+    // Scroll-spy for TOC
+    const observerOptions = {
+      rootMargin: '-100px 0px -66%',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.toc-nav a').forEach(a => a.classList.remove('active'));
+          const id = entry.target.id;
+          const link = document.querySelector(`.toc-nav a[href="#${id}"]`);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    document.querySelectorAll('[id]').forEach(section => observer.observe(section));
+
+    // Smooth scroll
+    document.querySelectorAll('.toc-nav a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Budget Chart
+    const budgetOptions = {
+      series: [{{BUDGET_SAAS_PERCENT}}, {{BUDGET_CONSULTING_PERCENT}}, {{BUDGET_TRAINING_PERCENT}}, {{BUDGET_HR_PERCENT}}, {{BUDGET_ROC_PERCENT}}],
+      chart: {
+        type: 'donut',
+        height: 350,
+        fontFamily: 'Inter, sans-serif'
+      },
+      labels: ['SaaS/Software', 'Consultoria', 'Formação', 'RH Dedicados', 'Outros'],
+      colors: ['#10B981', '#0EA5E9', '#F59E0B', '#8B5CF6', '#64748B'],
+      legend: { position: 'bottom', fontSize: '14px' },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '65%',
+            labels: {
+              show: true,
+              total: {
+                show: true,
+                label: 'Total Investimento',
+                formatter: () => '€{{INVESTMENT}}'
+              }
+            }
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val) => val.toFixed(0) + '%'
+      }
+    };
+
+    const budgetChart = new ApexCharts(document.querySelector("#budget-chart"), budgetOptions);
+    budgetChart.render();
+  </script>
+
+</body>
+</html>
