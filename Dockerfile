@@ -44,6 +44,7 @@ COPY --from=frontend-build /app/frontend/dist /var/www/html
 # Set environment variables
 ENV PYTHONPATH="/app"
 ENV HOST=0.0.0.0
+ENV ARCHON_BUILD_VERSION="7.0.1-fix-404"
 
 # Expose port
 EXPOSE 8080
