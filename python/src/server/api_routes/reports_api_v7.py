@@ -210,8 +210,34 @@ async def generate_report(
     if request.questionnaire_data:
         questionnaire = request.questionnaire_data
     else:
-        # TODO: Load from database
-        raise HTTPException(status_code=400, detail="questionnaire_id lookup not implemented yet")
+        # Load from database using questionnaire_id
+        try:
+            supabase = credential_service._get_supabase_client()
+            result = supabase.table("archon_questionnaires") \
+                .select("data") \
+                .eq("id", request.questionnaire_id) \
+                .execute()
+
+            if not result.data or len(result.data) == 0:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"Questionnaire not found: {request.questionnaire_id}"
+                )
+
+            # Parse JSONB data into DiagnosticQuestionnaire object
+            questionnaire_data = result.data[0]["data"]
+            questionnaire = DiagnosticQuestionnaire(**questionnaire_data)
+
+            logger.info(f"Loaded questionnaire {request.questionnaire_id} from database")
+
+        except HTTPException:
+            raise
+        except Exception as e:
+            logger.error(f"Error loading questionnaire from database: {e}", exc_info=True)
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error loading questionnaire: {str(e)}"
+            )
 
     # Progress callback
     async def progress_callback(progress: ProgressUpdate):
