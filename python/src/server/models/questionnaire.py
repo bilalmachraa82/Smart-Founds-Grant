@@ -25,14 +25,71 @@ from pydantic import BaseModel, Field, validator
 
 # ===== ENUMS =====
 
-class TechStack(str, Enum):
-    """Technology ecosystem identification"""
-    MICROSOFT = "microsoft"
-    GOOGLE = "google"
-    AWS = "aws"
-    AZURE = "azure"
-    HYBRID = "hybrid"
+# Category-Specific Tech Stack Enums (v7.0 Fix)
+class EmailProvider(str, Enum):
+    """Email systems used by Portuguese SMEs"""
+    GMAIL = "gmail"
+    MICROSOFT_365 = "microsoft_365"
+    ZOHO_MAIL = "zoho_mail"
+    CUSTOM_DOMAIN = "custom_domain"
     OTHER = "other"
+    NONE = "none"
+
+
+class CloudStorage(str, Enum):
+    """Cloud storage solutions"""
+    GOOGLE_DRIVE = "google_drive"
+    ONEDRIVE = "onedrive"
+    DROPBOX = "dropbox"
+    LOCAL_NAS = "local_nas"
+    OTHER = "other"
+    NONE = "none"
+
+
+class ProductivitySuite(str, Enum):
+    """Office productivity suites"""
+    MICROSOFT_365 = "microsoft_365"
+    GOOGLE_WORKSPACE = "google_workspace"
+    LIBREOFFICE = "libreoffice"
+    APPLE_IWORK = "apple_iwork"
+    OTHER = "other"
+    NONE = "none"
+
+
+class CRMSystem(str, Enum):
+    """Customer relationship management systems"""
+    SALESFORCE = "salesforce"
+    HUBSPOT = "hubspot"
+    PIPEDRIVE = "pipedrive"
+    ZOHO_CRM = "zoho_crm"
+    EXCEL_SHEETS = "excel_sheets"
+    OTHER = "other"
+    NONE = "none"
+
+
+class ProjectManagement(str, Enum):
+    """Project management tools"""
+    TRELLO = "trello"
+    ASANA = "asana"
+    MONDAY = "monday"
+    JIRA = "jira"
+    MICROSOFT_PROJECT = "microsoft_project"
+    CLICKUP = "clickup"
+    NOTION = "notion"
+    OTHER = "other"
+    NONE = "none"
+
+
+class CommunicationPlatform(str, Enum):
+    """Team communication platforms"""
+    MICROSOFT_TEAMS = "microsoft_teams"
+    SLACK = "slack"
+    WHATSAPP_BUSINESS = "whatsapp_business"
+    ZOOM = "zoom"
+    GOOGLE_MEET = "google_meet"
+    DISCORD = "discord"
+    OTHER = "other"
+    NONE = "none"
 
 
 class CompanySize(str, Enum):
@@ -102,26 +159,36 @@ class DiagnosticQuestionnaire(BaseModel):
         - investment_range (from desired_investment)
     """
 
-    # ===== SECTION A: TECH STACK (Q1-4) =====
+    # ===== SECTION A: TECH STACK (Q1-6) - v7.0 Fixed =====
 
-    email_system: TechStack = Field(
+    email_system: EmailProvider = Field(
         ...,
-        description="Q1: Sistema de email principal (Google Workspace, Microsoft 365, outro)"
+        description="Q1: Sistema de email principal (Gmail, Outlook, Zoho, etc)"
     )
 
-    cloud_storage: TechStack = Field(
+    cloud_storage: CloudStorage = Field(
         ...,
-        description="Q2: Cloud storage primário (Google Drive, OneDrive, AWS S3, Azure Blob)"
+        description="Q2: Armazenamento cloud (Google Drive, OneDrive, Dropbox, etc)"
     )
 
-    productivity_suite: TechStack = Field(
+    productivity_suite: ProductivitySuite = Field(
         ...,
-        description="Q3: Suite produtividade (Google Docs, MS Office, ambas)"
+        description="Q3: Suite de produtividade (Microsoft 365, Google Workspace, etc)"
     )
 
-    videoconference_platform: str = Field(
+    crm_system: CRMSystem = Field(
         ...,
-        description="Q4: Plataforma videoconferência (Meet, Teams, Zoom, outro)"
+        description="Q4: Sistema CRM (Salesforce, HubSpot, Pipedrive, etc)"
+    )
+
+    project_management: ProjectManagement = Field(
+        ...,
+        description="Q5: Gestão de projetos (Trello, Asana, Jira, etc)"
+    )
+
+    communication_platform: CommunicationPlatform = Field(
+        ...,
+        description="Q6: Plataforma de comunicação (Teams, Slack, Zoom, etc)"
     )
 
     # ===== SECTION B: COMPANY PROFILE (Q5-10) =====
@@ -340,10 +407,12 @@ class DiagnosticQuestionnaire(BaseModel):
         validate_assignment = True
         json_schema_extra = {
             "example": {
-                "email_system": "google",
-                "cloud_storage": "google",
-                "productivity_suite": "google",
-                "videoconference_platform": "Google Meet",
+                "email_system": "gmail",
+                "cloud_storage": "google_drive",
+                "productivity_suite": "microsoft_365",
+                "crm_system": "hubspot",
+                "project_management": "trello",
+                "communication_platform": "microsoft_teams",
                 "company_name": "CodeLab Portugal Lda",
                 "nif": "123456789",
                 "cae_code": "62010",
