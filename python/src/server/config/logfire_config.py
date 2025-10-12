@@ -18,7 +18,7 @@ Usage:
 import logging
 import os
 from contextlib import contextmanager
-from typing import Any, Optional
+from typing import Any, Optional, Set
 
 # Try to import logfire (optional dependency)
 LOGFIRE_AVAILABLE = False

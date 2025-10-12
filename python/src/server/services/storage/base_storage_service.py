@@ -11,7 +11,7 @@ Provides common functionality for all document storage operations including:
 import re
 from abc import ABC, abstractmethod
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
 from ...config.logfire_config import get_logger, safe_span

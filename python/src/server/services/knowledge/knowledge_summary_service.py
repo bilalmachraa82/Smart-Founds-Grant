@@ -5,7 +5,7 @@ Provides lightweight summary data for knowledge items to minimize data transfer.
 Optimized for frequent polling and card displays.
 """
 
-from typing import Any, Optional
+from typing import Any, Optional, Dict, List
 
 from ...config.logfire_config import safe_logfire_info, safe_logfire_error
 

@@ -37,6 +37,8 @@ from uuid import uuid4
 from fastapi import APIRouter, HTTPException, Depends
 from datetime import datetime
 
+from fastapi.encoders import jsonable_encoder
+
 from ..models.questionnaire import (
     DiagnosticQuestionnaire,
     QuestionnaireResponse,
@@ -175,7 +177,7 @@ async def submit_questionnaire(questionnaire: DiagnosticQuestionnaire):
             "id": questionnaire_id,
             "company_name": questionnaire.company_name,
             "nif": questionnaire.nif,
-            "data": questionnaire.dict(),  # Full questionnaire as JSONB
+            "data": jsonable_encoder(questionnaire),  # Full questionnaire as JSONB
             "rag_queries": rag_queries,
             "status": "pending_processing",
             "created_at": datetime.utcnow().isoformat(),

@@ -3,6 +3,7 @@ Sitemap Crawling Strategy
 
 Handles crawling of URLs from XML sitemaps.
 """
+from typing import List, Optional
 import asyncio
 from collections.abc import Callable
 from xml.etree import ElementTree

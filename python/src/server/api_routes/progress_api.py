@@ -10,7 +10,7 @@ from ..config.logfire_config import get_logger, logfire
 from ..models.progress_models import create_progress_response
 from ..utils.etag_utils import check_etag, generate_etag
 from ..utils.progress import ProgressTracker
-from typing import Optional
+from typing import Optional, List, Set
 
 
 logger = get_logger(__name__)

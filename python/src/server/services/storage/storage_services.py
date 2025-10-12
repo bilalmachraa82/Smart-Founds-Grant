@@ -5,7 +5,7 @@ This module contains all storage service classes that handle document and data s
 These services extend the base storage functionality with specific implementations.
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional, Tuple
 
 from ...config.logfire_config import get_logger, safe_span
 from .base_storage_service import BaseStorageService

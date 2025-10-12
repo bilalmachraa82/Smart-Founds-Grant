@@ -11,7 +11,7 @@ Strategy combines:
 3. Returns union of both result sets for maximum coverage
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from supabase import Client
 

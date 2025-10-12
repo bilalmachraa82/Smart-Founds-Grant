@@ -6,7 +6,7 @@ Handles crawling of individual web pages.
 import asyncio
 import traceback
 from collections.abc import Awaitable, Callable
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 from crawl4ai import CacheMode, CrawlerRunConfig
 

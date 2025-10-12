@@ -6,7 +6,7 @@ This avoids circular imports by providing a service-level access to the crawler.
 """
 
 import os
-from typing import Optional
+from typing import Optional, Set
 
 try:
     from crawl4ai import AsyncWebCrawler, BrowserConfig

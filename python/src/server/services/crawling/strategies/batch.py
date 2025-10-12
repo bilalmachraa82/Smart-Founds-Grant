@@ -6,7 +6,7 @@ Handles batch crawling of multiple URLs in parallel.
 
 import asyncio
 from collections.abc import Awaitable, Callable
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from crawl4ai import CacheMode, CrawlerRunConfig, MemoryAdaptiveDispatcher
 

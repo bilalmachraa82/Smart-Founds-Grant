@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 
 # Removed direct logging import - using unified config
 from enum import Enum
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import psutil
 

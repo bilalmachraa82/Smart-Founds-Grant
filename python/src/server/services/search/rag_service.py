@@ -13,7 +13,7 @@ Multiple strategies can be enabled simultaneously and work together.
 """
 
 import os
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional, Tuple
 
 from ...config.logfire_config import get_logger, safe_span
 from ...utils import get_supabase_client

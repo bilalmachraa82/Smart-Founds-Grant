@@ -418,7 +418,6 @@ class DiagnosticQuestionnaire(BaseModel):
 
     class Config:
         """Pydantic config"""
-        use_enum_values = True
         validate_assignment = True
         json_schema_extra = {
             "example": {

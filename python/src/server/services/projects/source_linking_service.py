@@ -6,7 +6,7 @@ handling both technical and business source associations.
 """
 
 # Removed direct logging import - using unified config
-from typing import Any, Optional, Dict
+from typing import Any, Optional, Dict, List, Tuple
 
 from src.server.utils import get_supabase_client
 

@@ -16,7 +16,7 @@ Endpoints:
 @license MIT
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from uuid import UUID, uuid4
 from datetime import datetime
 

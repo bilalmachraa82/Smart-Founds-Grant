@@ -11,6 +11,7 @@ Modules:
 - projects_api: Project and task management with streaming
 """
 
+from typing import Set
 import logging
 import os
 from contextlib import asynccontextmanager

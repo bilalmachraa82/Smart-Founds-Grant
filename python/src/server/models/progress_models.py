@@ -1,6 +1,6 @@
 """Standardized progress response models for consistent API responses."""
 
-from typing import Any, Literal, Optional, List
+from typing import Any, Literal, Optional, List, Dict
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 

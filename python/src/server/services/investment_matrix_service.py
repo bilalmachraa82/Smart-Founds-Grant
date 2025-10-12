@@ -213,7 +213,6 @@ class InvestmentMatrixService:
             items.append(InvestmentItem(
                 category=InvestmentCategory.ROC,
                 tool_or_service="Certificação ROC (Revisor Oficial Contas)",
-                amount_eur=roc_budget,
                 amount_eur=min(roc_budget, 2500),  # HARD LIMIT
                 objective="Validação financeira projeto (obrigatório regulamento)",
                 capability_gained="Compliance Aviso 03/C05 Art. 6.1.e",

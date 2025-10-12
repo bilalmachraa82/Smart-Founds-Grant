@@ -27,7 +27,7 @@ from typing import List, Dict, Optional
 from pydantic import BaseModel, Field
 from enum import Enum
 
-from ..models.questionnaire import DiagnosticQuestionnaire, TechStack
+from ..models.questionnaire import DiagnosticQuestionnaire, EmailProvider
 from ..config.logfire_config import get_logger
 
 logger = get_logger(__name__)
@@ -224,7 +224,7 @@ class SaaSRecommendationEngine:
 
         # ===== AI ASSISTANT (Primary) =====
 
-        if questionnaire.email_system == TechStack.GOOGLE:
+        if questionnaire.email_system == EmailProvider.GMAIL:
             # Google ecosystem → Gemini Business
             tool_data = SAAS_CATALOG_2025["gemini_business"]
             users = min(questionnaire.num_employees, 50)  # Cap at 50 for MVP
@@ -248,7 +248,7 @@ class SaaSRecommendationEngine:
                 alternatives=["ChatGPT Business (€25/user, best reasoning)", "Claude Team (€25/user, 200k context)"]
             ))
 
-        elif questionnaire.email_system == TechStack.MICROSOFT:
+        elif questionnaire.email_system == EmailProvider.MICROSOFT_365:
             # Microsoft ecosystem → M365 Copilot
             tool_data = SAAS_CATALOG_2025["microsoft_365_copilot"]
 
@@ -375,7 +375,7 @@ class SaaSRecommendationEngine:
                 justification=f"Equipa {questionnaire.num_developers} developers: GitHub Copilot aumenta 55% velocidade tarefas coding. 30% code acceptance rate.",
                 roi_calculation=f"30% dev velocity × {users} devs × €{avg_dev_salary/12:,.0f}/mês salary = €{productivity_gain_eur:,.0f}/mês gain (vs €{monthly_cost:,.0f} cost) = {roi_multiple:.1f}x ROI",
                 benchmark_source="GitHub Copilot Impact Study (55% faster tasks) 2024",
-                native_integration=True if questionnaire.email_system == TechStack.MICROSOFT else False,
+                native_integration=True if questionnaire.email_system == EmailProvider.MICROSOFT_365 else False,
                 integration_notes="Integra VS Code, JetBrains, Visual Studio, Neovim. SSO via GitHub Enterprise.",
                 alternatives=["Cursor Pro (€20/user, AI-first IDE)", "Replit AI (€15/user, web-based)"]
             ))

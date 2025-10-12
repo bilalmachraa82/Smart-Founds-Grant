@@ -8,7 +8,7 @@ separating business logic from transport-specific code.
 
 # Removed direct logging import - using unified config
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any, Dict, List, Tuple
 
 from src.server.utils import get_supabase_client
 

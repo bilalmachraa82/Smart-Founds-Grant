@@ -9,7 +9,7 @@ batch crawling, recursive crawling, and overall orchestration with progress trac
 import asyncio
 import uuid
 from collections.abc import Awaitable, Callable
-from typing import Any, Optional, List
+from typing import Any, Optional, List, Dict, Set, Tuple
 
 from ...config.logfire_config import get_logger, safe_logfire_error, safe_logfire_info
 from ...utils import get_supabase_client

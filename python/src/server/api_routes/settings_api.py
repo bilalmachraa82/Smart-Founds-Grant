@@ -8,7 +8,7 @@ Handles:
 """
 
 from datetime import datetime
-from typing import Any, Optional, Dict
+from typing import Any, Optional, Dict, List
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel

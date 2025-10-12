@@ -7,7 +7,7 @@ Extracted from crawl_orchestration_service.py for better modularity.
 
 import asyncio
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Dict, List, Optional, Set
 
 from ...config.logfire_config import get_logger, safe_logfire_error, safe_logfire_info
 from ..source_management_service import extract_source_summary, update_source_info

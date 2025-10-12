@@ -5,6 +5,7 @@ Simple and effective keyword extraction for improved search capabilities.
 Uses lightweight Python string operations without heavy NLP dependencies.
 """
 
+from typing import List
 import re
 
 # Common stop words to filter out

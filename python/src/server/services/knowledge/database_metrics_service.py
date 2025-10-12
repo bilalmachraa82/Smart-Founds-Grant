@@ -5,7 +5,7 @@ Handles retrieval of database statistics and metrics.
 """
 
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict
 
 from ...config.logfire_config import safe_logfire_error, safe_logfire_info
 

@@ -6,7 +6,7 @@ Handles recursive crawling of websites by following internal links.
 
 import asyncio
 from collections.abc import Awaitable, Callable
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 from urllib.parse import urldefrag
 
 from crawl4ai import CacheMode, CrawlerRunConfig, MemoryAdaptiveDispatcher

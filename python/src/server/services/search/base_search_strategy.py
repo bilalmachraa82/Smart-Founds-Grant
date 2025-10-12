@@ -5,7 +5,7 @@ Implements the foundational vector similarity search that all other strategies b
 This is the core semantic search functionality.
 """
 
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from supabase import Client
 

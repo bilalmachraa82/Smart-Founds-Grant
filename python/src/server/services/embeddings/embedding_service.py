@@ -7,7 +7,7 @@ Handles all OpenAI embedding operations with proper rate limiting and error hand
 import asyncio
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 import openai
 

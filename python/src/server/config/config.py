@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from urllib.parse import urlparse
 
 from jose import jwt
-from typing import Tuple
+from typing import Tuple, Optional
 
 
 

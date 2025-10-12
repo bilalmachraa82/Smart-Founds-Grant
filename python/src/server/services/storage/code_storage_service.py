@@ -11,7 +11,7 @@ import re
 from collections import defaultdict, deque
 from collections.abc import Callable
 from difflib import SequenceMatcher
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
 from supabase import Client

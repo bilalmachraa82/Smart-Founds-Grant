@@ -4,7 +4,7 @@ Knowledge Item Service
 Handles all knowledge item CRUD operations and data transformations.
 """
 
-from typing import Any, Optional
+from typing import Any, Optional, Dict, List, Tuple
 
 from ...config.logfire_config import safe_logfire_error, safe_logfire_info
 

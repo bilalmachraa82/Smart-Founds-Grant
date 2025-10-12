@@ -6,6 +6,7 @@ Includes proper rate limiting for OpenAI API calls.
 """
 
 import os
+from typing import List, Optional, Tuple
 
 import openai
 

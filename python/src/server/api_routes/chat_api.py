@@ -7,7 +7,7 @@ Wraps existing RAG functionality with Lovable-compatible request/response format
 
 import hashlib
 from datetime import datetime
-from typing import Any
+from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field

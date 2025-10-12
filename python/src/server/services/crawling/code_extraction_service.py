@@ -7,7 +7,7 @@ Handles extraction, processing, and storage of code examples from documents.
 import asyncio
 import re
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Dict, List, Optional, Tuple
 
 from ...config.logfire_config import safe_logfire_error, safe_logfire_info
 from ...services.credential_service import credential_service
