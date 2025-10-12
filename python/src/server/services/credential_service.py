@@ -12,7 +12,7 @@ import time
 from dataclasses import dataclass
 
 # Removed direct logging import - using unified config
-from typing import Any, List
+from typing import Any, List, Optional
 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
