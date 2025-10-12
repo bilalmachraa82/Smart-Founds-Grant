@@ -263,9 +263,9 @@ class DiagnosticQuestionnaire(BaseModel):
 
     desired_investment: float = Field(
         ...,
-        ge=20_000,
+        ge=5_000,
         le=500_000,
-        description="Q14: Montante investimento desejado em € (€20k-500k Aviso 03/C05)"
+        description="Q14: Montante investimento desejado em € (€5k-500k Aviso 03/C05)"
     )
 
     current_tools_paid: bool = Field(

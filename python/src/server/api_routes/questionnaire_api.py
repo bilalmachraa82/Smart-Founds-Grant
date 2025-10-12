@@ -41,7 +41,12 @@ from ..models.questionnaire import (
     DiagnosticQuestionnaire,
     QuestionnaireResponse,
     CompanyData,
-    TechStack,
+    EmailProvider,
+    CloudStorage,
+    ProductivitySuite,
+    CRMSystem,
+    ProjectManagement,
+    CommunicationPlatform,
     InvestmentRange
 )
 from ..services.credential_service import credential_service
@@ -72,23 +77,16 @@ def construct_rag_queries(questionnaire: DiagnosticQuestionnaire) -> List[str]:
 
     queries = []
 
-    # Query 1: SaaS Recommendations (ecosystem-driven)
-    if questionnaire.email_system == TechStack.GOOGLE:
+    # Query 1: SaaS Recommendations (ecosystem-driven using new enums)
+    if questionnaire.email_system == EmailProvider.GMAIL:
         queries.append(
             f"Melhores ferramentas SaaS 2025 Google Workspace integration "
-            f"Gemini Business pricing {questionnaire.num_employees} users "
-            f"casos uso {', '.join(questionnaire.use_cases)}"
+            f"Gemini Business pricing {questionnaire.num_employees} users"
         )
-    elif questionnaire.email_system == TechStack.MICROSOFT:
+    elif questionnaire.email_system == EmailProvider.MICROSOFT_365:
         queries.append(
             f"Microsoft 365 Copilot SaaS tools 2025 pricing Azure integration "
-            f"{questionnaire.num_employees} users Office 365 "
-            f"casos uso {', '.join(questionnaire.use_cases)}"
-        )
-    elif questionnaire.email_system == TechStack.AWS:
-        queries.append(
-            f"AWS AI services SaaS tools 2025 Bedrock SageMaker pricing "
-            f"best-of-breed ChatGPT Claude Copilot {questionnaire.num_employees} users"
+            f"{questionnaire.num_employees} users Office 365"
         )
     else:
         queries.append(
