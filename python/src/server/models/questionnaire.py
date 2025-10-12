@@ -191,6 +191,43 @@ class DiagnosticQuestionnaire(BaseModel):
         description="Q6: Plataforma de comunicação (Teams, Slack, Zoom, etc)"
     )
 
+    # Optional detail fields when "OTHER" is selected
+    email_system_other: Optional[str] = Field(
+        None,
+        max_length=200,
+        description="Detalhe se email_system='other'"
+    )
+
+    cloud_storage_other: Optional[str] = Field(
+        None,
+        max_length=200,
+        description="Detalhe se cloud_storage='other'"
+    )
+
+    productivity_suite_other: Optional[str] = Field(
+        None,
+        max_length=200,
+        description="Detalhe se productivity_suite='other'"
+    )
+
+    crm_system_other: Optional[str] = Field(
+        None,
+        max_length=200,
+        description="Detalhe se crm_system='other'"
+    )
+
+    project_management_other: Optional[str] = Field(
+        None,
+        max_length=200,
+        description="Detalhe se project_management='other'"
+    )
+
+    communication_platform_other: Optional[str] = Field(
+        None,
+        max_length=200,
+        description="Detalhe se communication_platform='other'"
+    )
+
     # ===== SECTION B: COMPANY PROFILE (Q5-10) =====
 
     company_name: str = Field(
