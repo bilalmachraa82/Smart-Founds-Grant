@@ -268,6 +268,21 @@ class DiagnosticQuestionnaire(BaseModel):
         description="Q14: Montante investimento desejado em € (€5k-500k Aviso 03/C05)"
     )
 
+    # RH Dedicados (IFIC Requirement)
+    rh_dedicados_count: int = Field(
+        default=0,
+        ge=0,
+        le=2,
+        description="Q14a: Número de postos RH dedicados (máximo 2 - IFIC)"
+    )
+
+    rh_custo_por_posto: float = Field(
+        default=0,
+        ge=0,
+        le=80_000,
+        description="Q14b: Custo por posto RH dedicado/ano (máximo €80k - IFIC)"
+    )
+
     current_tools_paid: bool = Field(
         ...,
         description="Q15: Já utiliza ferramentas IA pagas? (não / free only / algumas pagas / enterprise)"
