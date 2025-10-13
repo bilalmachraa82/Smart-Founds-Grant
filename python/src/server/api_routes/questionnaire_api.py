@@ -54,15 +54,10 @@ from ..models.questionnaire import (
 from ..services.credential_service import credential_service
 from ..services.llm_provider_service import get_llm_client
 from ..config.logfire_config import get_logger
-from slowapi import Limiter
-from slowapi.util import get_remote_address
 
 logger = get_logger(__name__)
 
 router = APIRouter(prefix="/api/questionnaire", tags=["questionnaire"])
-
-# Initialize rate limiter
-limiter = Limiter(key_func=get_remote_address)
 
 
 # ===== HELPER: RAG QUERY CONSTRUCTION =====
@@ -146,7 +141,6 @@ def construct_rag_queries(questionnaire: DiagnosticQuestionnaire) -> List[str]:
 # ===== ENDPOINTS =====
 
 @router.post("/submit", response_model=QuestionnaireResponse)
-@limiter.limit("5/minute")  # SECURITY: Rate limit to prevent DoS and LLM abuse
 async def submit_questionnaire(request: Request, questionnaire: DiagnosticQuestionnaire):
     """
     Submit diagnostic questionnaire and trigger personalized analysis.
@@ -185,7 +179,7 @@ async def submit_questionnaire(request: Request, questionnaire: DiagnosticQuesti
             "id": questionnaire_id,
             "company_name": questionnaire.company_name,
             "nif": questionnaire.nif,
-            "data": jsonable_encoder(questionnaire),  # Full questionnaire as JSONB
+            "data": questionnaire.model_dump(mode='json'),  # FIX: Preserve all Optional fields
             "rag_queries": rag_queries,
             "status": "pending_processing",
             "created_at": datetime.utcnow().isoformat(),

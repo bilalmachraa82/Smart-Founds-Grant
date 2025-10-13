@@ -212,6 +212,23 @@ app.include_router(bug_report_router)
 app.include_router(questionnaire_router)  # v7.0 IFIC questionnaire system
 app.include_router(reports_v7_router)  # v7.0 McKinsey-level reports
 
+# Apply rate limiting to specific endpoints
+@app.middleware("http")
+async def rate_limit_middleware(request, call_next):
+    """Apply rate limiting to questionnaire submission endpoint."""
+    if request.url.path == "/api/questionnaire/submit" and request.method == "POST":
+        # Rate limit: 5 requests per minute
+        try:
+            await limiter.check_limit(request, "5/minute")
+        except Exception as e:
+            from fastapi.responses import JSONResponse
+            return JSONResponse(
+                status_code=429,
+                content={"detail": "Rate limit exceeded. Please try again later."},
+                headers={"Retry-After": "60"}
+            )
+    return await call_next(request)
+
 # Mount static files for frontend (if directory exists)
 import os
 static_dir = "/var/www/html"

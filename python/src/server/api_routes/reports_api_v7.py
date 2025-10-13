@@ -329,6 +329,7 @@ async def get_report_html(report_id: UUID):
 
 
 @router.get("/{report_id}/metadata")
+@router.get("/{report_id}/meta")  # Alias for compatibility with frontend
 async def get_report_metadata(report_id: UUID) -> Dict[str, Any]:
     """
     Get report metadata without full HTML.
@@ -343,6 +344,7 @@ async def get_report_metadata(report_id: UUID) -> Dict[str, Any]:
 
     Example:
         GET /api/v7/reports/550e8400-e29b-41d4-a716-446655440000/metadata
+        GET /api/v7/reports/550e8400-e29b-41d4-a716-446655440000/meta (alias)
 
         Response:
         {

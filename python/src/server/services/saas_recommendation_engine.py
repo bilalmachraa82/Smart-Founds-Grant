@@ -73,6 +73,9 @@ class SaaSRecommendation(BaseModel):
     # Alternatives
     alternatives: List[str] = Field(default=[], description="Alternative tools if budget/preference changes")
 
+    # RAG Citation (for LLM-enhanced recommendations)
+    rag_citation: Optional[str] = Field(None, description="RAG knowledge base citation supporting this recommendation")
+
     class Config:
         use_enum_values = True
 
