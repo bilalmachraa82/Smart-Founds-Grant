@@ -16,9 +16,12 @@ import logging
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 from .api_routes.agent_chat_api import router as agent_chat_router
 from .api_routes.bug_report_api import router as bug_report_router
@@ -152,10 +155,26 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Configure CORS
+# Initialize rate limiter
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Configure CORS - SECURITY FIX: Whitelist specific origins
+ALLOWED_ORIGINS = [
+    "https://archon.aiparati.com",  # Production frontend
+    "https://aiparati.com",  # Main site
+    "http://localhost:5173",  # Local dev
+    "http://localhost:3737",  # Archon UI local
+]
+
+# Allow all origins in development mode
+if os.getenv("PROD", "false").lower() != "true":
+    ALLOWED_ORIGINS.append("*")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

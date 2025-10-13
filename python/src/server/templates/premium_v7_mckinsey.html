@@ -146,6 +146,144 @@
         <archon-page-break></archon-page-break>
 
         <!-- ═══════════════════════════════════════════════════════
+             SECTION 02A: TECH STACK ECOSYSTEM
+             ═══════════════════════════════════════════════════════ -->
+
+        <section class="report-section" data-section="tech-stack" data-read-time="4 min">
+            <header class="section-header">
+                <span class="section-number">02A</span>
+                <h2 class="section-title">Tech Stack Ecosystem Analysis</h2>
+                <span class="section-meta">Current Infrastructure & Integration Opportunities</span>
+            </header>
+
+            <p class="section-intro">
+                Comprehensive mapping of your current technology infrastructure to identify AI integration points and compatibility requirements.
+            </p>
+
+            <div class="tech-stack-grid">
+                <!-- Email System -->
+                <div class="tech-card">
+                    <div class="tech-icon">📧</div>
+                    <h4>Email System</h4>
+                    <p class="tech-value">{{email_system}}</p>
+                    {% if email_system_other %}
+                    <p class="tech-detail">Detalhe: {{email_system_other}}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Cloud Storage -->
+                <div class="tech-card">
+                    <div class="tech-icon">☁️</div>
+                    <h4>Cloud Storage</h4>
+                    <p class="tech-value">{{cloud_storage}}</p>
+                    {% if cloud_storage_other %}
+                    <p class="tech-detail">Detalhe: {{cloud_storage_other}}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Productivity Suite -->
+                <div class="tech-card">
+                    <div class="tech-icon">📝</div>
+                    <h4>Productivity Suite</h4>
+                    <p class="tech-value">{{productivity_suite}}</p>
+                    {% if productivity_suite_other %}
+                    <p class="tech-detail">Detalhe: {{productivity_suite_other}}</p>
+                    {% endif %}
+                </div>
+
+                <!-- CRM System -->
+                <div class="tech-card">
+                    <div class="tech-icon">👥</div>
+                    <h4>CRM System</h4>
+                    <p class="tech-value">{{crm_system}}</p>
+                    {% if crm_system_other %}
+                    <p class="tech-detail">Detalhe: {{crm_system_other}}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Project Management -->
+                <div class="tech-card">
+                    <div class="tech-icon">📊</div>
+                    <h4>Project Management</h4>
+                    <p class="tech-value">{{project_management}}</p>
+                    {% if project_management_other %}
+                    <p class="tech-detail">Detalhe: {{project_management_other}}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Communication Platform -->
+                <div class="tech-card">
+                    <div class="tech-icon">💬</div>
+                    <h4>Communication Platform</h4>
+                    <p class="tech-value">{{communication_platform}}</p>
+                    {% if communication_platform_other %}
+                    <p class="tech-detail">Detalhe: {{communication_platform_other}}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Company Details -->
+            <div class="company-details-panel">
+                <h3>Company Identification & Compliance</h3>
+                <dl class="data-list">
+                    <dt>NIF (Tax ID)</dt>
+                    <dd>{{nif}}</dd>
+
+                    <dt>CAE Code</dt>
+                    <dd>{{cae_code}}</dd>
+
+                    <dt>AI Usage Intensity</dt>
+                    <dd>
+                        <span class="intensity-badge intensity-{{intensity_level}}">{{intensity_level}}</span>
+                        {% if intensity_level == 'light' %}
+                        <span class="intensity-desc">Occasional use (few times per week)</span>
+                        {% elif intensity_level == 'moderate' %}
+                        <span class="intensity-desc">Regular use (daily, non-critical)</span>
+                        {% elif intensity_level == 'intense' %}
+                        <span class="intensity-desc">Intensive daily use (multiple times per day)</span>
+                        {% elif intensity_level == 'mission_critical' %}
+                        <span class="intensity-desc">Mission Critical (core business dependency)</span>
+                        {% endif %}
+                    </dd>
+
+                    <dt>RGPD Sensitive Data</dt>
+                    <dd>
+                        {% if rgpd_sensitive_data %}
+                        <span class="badge badge-warning">⚠️ Yes - Processes sensitive data</span>
+                        <p class="compliance-note">Requires enhanced data protection measures and GDPR compliance verification.</p>
+                        {% else %}
+                        <span class="badge badge-success">✓ No sensitive data processing</span>
+                        {% endif %}
+                    </dd>
+
+                    <dt>Current Paid AI Tools</dt>
+                    <dd>
+                        {% if current_tools_paid %}
+                        <span class="badge badge-info">✓ Currently using paid AI tools</span>
+                        {% else %}
+                        <span class="badge badge-neutral">Not currently using paid AI tools</span>
+                        {% endif %}
+                    </dd>
+
+                    <dt>Training Priority</dt>
+                    <dd>
+                        {% if training_priority %}
+                        <span class="badge badge-urgent">🎯 HIGH PRIORITY - >50% team needs upskilling</span>
+                        {% else %}
+                        <span class="badge badge-normal">Standard training needs</span>
+                        {% endif %}
+                    </dd>
+                </dl>
+            </div>
+
+            <archon-callout type="info" title="Integration Opportunities">
+                Based on your tech stack ecosystem, we've identified {{saas_recommendations|length}} AI tools with native integrations to your existing infrastructure. This will minimize deployment friction and accelerate time-to-value.
+            </archon-callout>
+        </section>
+
+        <archon-page-break></archon-page-break>
+
+        <!-- ═══════════════════════════════════════════════════════
              SECTION 03: SAAS RECOMMENDATIONS
              ═══════════════════════════════════════════════════════ -->
 

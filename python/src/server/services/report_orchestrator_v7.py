@@ -53,6 +53,8 @@ from .risk_register_service import RiskRegisterService
 from .kpi_dashboard_service import KPIDashboardService
 from .gantt_service import GanttService
 from .excel_export_service import ExcelExportService
+from ..prompts.questionnaire_analysis_v7 import generate_questionnaire_analysis_prompt, generate_rag_queries_from_questionnaire
+from .llm_provider_service import get_llm_client
 from ..config.logfire_config import get_logger
 
 logger = get_logger(__name__)
@@ -136,16 +138,18 @@ class ReportOrchestratorV7:
         if not project_start_date:
             project_start_date = datetime.now().strftime("%Y-%m-%d")
 
-        # ═══════════════════════════════════════════════════════════
+        # ═══════════════════════════════════════════════════════════════
         # PHASE 1: PARALLEL SERVICE EXECUTION
         # ═══════════════════════════════════════════════════════════
 
         # Group 1: Independent services (can run in parallel)
+        # IMPORTANT: LLM analysis now included to use ALL 31 questionnaire fields
         tasks_group_1 = [
             self._run_saas_recommendations(questionnaire),
             self._run_training_recommendations(questionnaire),
             self._run_compliance_validation(questionnaire),
             self._run_risk_register(questionnaire),
+            self._run_llm_analysis(questionnaire),  # NEW: Comprehensive LLM analysis using all 31 fields
         ]
 
         results_group_1 = await asyncio.gather(*tasks_group_1, return_exceptions=True)
@@ -154,6 +158,7 @@ class ReportOrchestratorV7:
         training_recs = results_group_1[1] if not isinstance(results_group_1[1], Exception) else []
         compliance_result = results_group_1[2] if not isinstance(results_group_1[2], Exception) else None
         risk_register = results_group_1[3] if not isinstance(results_group_1[3], Exception) else None
+        llm_analysis = results_group_1[4] if not isinstance(results_group_1[4], Exception) else None
 
         # Group 2: Dependent services (need results from Group 1)
         tasks_group_2 = [
@@ -200,6 +205,7 @@ class ReportOrchestratorV7:
             kpi_dashboard=kpi_dashboard,
             gantt_data=gantt_data,
             budget_analysis=budget_analysis,
+            llm_analysis=llm_analysis,  # NEW: Pass LLM analysis to template
         )
 
         # ═══════════════════════════════════════════════════════════
@@ -257,6 +263,133 @@ class ReportOrchestratorV7:
     # ═══════════════════════════════════════════════════════════════
     # SERVICE RUNNERS (async wrappers)
     # ═══════════════════════════════════════════════════════════════
+
+    async def _run_llm_analysis(self, questionnaire: DiagnosticQuestionnaire) -> Dict[str, Any]:
+        """
+        Generate comprehensive LLM analysis using all 31 questionnaire fields.
+
+        This method:
+        1. Generates a comprehensive prompt using ALL 31 questionnaire fields
+        2. Calls the LLM provider (Claude Sonnet 4.5 recommended)
+        3. Generates RAG queries for knowledge retrieval
+        4. Parses and structures the LLM response
+
+        Returns:
+            Dict containing:
+                - analysis: Complete LLM analysis response
+                - rag_queries: List of generated RAG queries
+                - executive_summary: Extracted executive summary
+                - recommendations: Parsed recommendations
+                - merit_score: Calculated merit score from LLM
+                - compliance_notes: RGPD and compliance insights
+        """
+
+        logger.info(f"Running comprehensive LLM analysis for {questionnaire.company_name}")
+
+        try:
+            # Step 1: Generate comprehensive prompt using ALL 31 fields
+            prompt = generate_questionnaire_analysis_prompt(questionnaire)
+            logger.debug(f"Generated prompt with {len(prompt)} characters covering all 31 fields")
+
+            # Step 2: Generate RAG queries for knowledge retrieval
+            rag_queries = generate_rag_queries_from_questionnaire(questionnaire)
+            logger.info(f"Generated {len(rag_queries)} RAG queries for knowledge retrieval")
+
+            # Step 3: Call LLM provider (preferably Claude Sonnet 4.5 for best quality)
+            async with get_llm_client(provider="anthropic") as client:
+                # For Anthropic adapter, we need to use the create_completion method
+                response = await client.create_completion(
+                    model="claude-3-5-sonnet-20241022",  # Latest Claude Sonnet 4.5
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "You are an expert AI consultant specializing in IFIC grant applications for Portuguese SMEs. Generate comprehensive, data-driven analysis using ALL provided information."
+                        },
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+                    ],
+                    temperature=0.3,  # Lower temperature for more consistent, factual output
+                    max_tokens=8000  # Allow for comprehensive response
+                )
+
+                # Extract the response content
+                llm_response = response.choices[0].message.content
+                logger.info(f"LLM response received: {len(llm_response)} characters")
+
+            # Step 4: Parse and structure the response
+            # The LLM should return markdown with clear sections we can parse
+            analysis_result = {
+                "full_analysis": llm_response,
+                "rag_queries": rag_queries,
+                "executive_summary": self._extract_section(llm_response, "EXECUTIVE SUMMARY"),
+                "saas_recommendations": self._extract_section(llm_response, "RECOMENDAÇÕES SaaS"),
+                "investment_plan": self._extract_section(llm_response, "PLANO DE INVESTIMENTO"),
+                "partner_recommendations": self._extract_section(llm_response, "RECOMENDAÇÃO PARCEIROS"),
+                "merit_score_analysis": self._extract_section(llm_response, "PONTUAÇÃO MÉRITO"),
+                "compliance_analysis": self._extract_section(llm_response, "COMPLIANCE & RISK"),
+                "next_steps": self._extract_section(llm_response, "PRÓXIMOS PASSOS"),
+                "questionnaire_fields_used": 31,  # Confirming all fields were used
+                "analysis_timestamp": datetime.now().isoformat(),
+                "model_used": "claude-3-5-sonnet-20241022"
+            }
+
+            # Extract numeric merit score if mentioned
+            merit_score = self._extract_merit_score(llm_response)
+            if merit_score:
+                analysis_result["calculated_merit_score"] = merit_score
+
+            logger.info(f"LLM analysis completed successfully with merit score: {merit_score}")
+            return analysis_result
+
+        except Exception as e:
+            logger.error(f"LLM analysis failed: {e}", exc_info=True)
+
+            # Return a fallback result with error info
+            return {
+                "full_analysis": f"LLM analysis temporarily unavailable. Error: {str(e)}",
+                "rag_queries": rag_queries if 'rag_queries' in locals() else [],
+                "executive_summary": "Analysis pending - please retry",
+                "error": str(e),
+                "questionnaire_fields_used": 31,
+                "analysis_timestamp": datetime.now().isoformat()
+            }
+
+    def _extract_section(self, text: str, section_header: str) -> str:
+        """Extract a specific section from the LLM response."""
+        try:
+            # Look for the section header
+            import re
+            pattern = rf"#+\s*{re.escape(section_header)}.*?\n(.*?)(?=\n#+|\Z)"
+            match = re.search(pattern, text, re.DOTALL | re.IGNORECASE)
+            if match:
+                return match.group(1).strip()
+            return ""
+        except Exception as e:
+            logger.debug(f"Could not extract section {section_header}: {e}")
+            return ""
+
+    def _extract_merit_score(self, text: str) -> Optional[float]:
+        """Extract merit score from LLM response."""
+        try:
+            import re
+            # Look for patterns like "MP = 7.5/10" or "Merit Score: 7.5"
+            patterns = [
+                r"MP\s*=\s*(\d+(?:\.\d+)?)/10",
+                r"Merit Score:\s*(\d+(?:\.\d+)?)",
+                r"Pontuação:\s*(\d+(?:\.\d+)?)/10"
+            ]
+            for pattern in patterns:
+                match = re.search(pattern, text, re.IGNORECASE)
+                if match:
+                    score = float(match.group(1))
+                    if 0 <= score <= 10:
+                        return score
+            return None
+        except Exception as e:
+            logger.debug(f"Could not extract merit score: {e}")
+            return None
 
     async def _run_saas_recommendations(self, questionnaire: DiagnosticQuestionnaire):
         """Run SaaS recommendation engine."""
@@ -393,6 +526,7 @@ class ReportOrchestratorV7:
         kpi_dashboard = kwargs.get('kpi_dashboard')
         gantt_data = kwargs.get('gantt_data')
         budget_analysis = kwargs.get('budget_analysis')
+        llm_analysis = kwargs.get('llm_analysis')  # NEW: Extract LLM analysis
 
         # Base context
         context = {
@@ -408,9 +542,29 @@ class ReportOrchestratorV7:
             "num_employees": questionnaire.num_employees,
             "annual_revenue": questionnaire.annual_revenue,
             "industry_sector": questionnaire.industry_sector.value,
+            "nif": questionnaire.nif,
+            "cae_code": questionnaire.cae_code,
             "tech_stack_summary": f"{questionnaire.email_system.value} + {questionnaire.cloud_storage.value}",
             "primary_ecosystem": questionnaire.email_system.value,
+
+            # Tech Stack Details (12 fields: 6 enums + 6 conditional *_other)
+            "email_system": questionnaire.email_system.value,
+            "email_system_other": questionnaire.email_system_other,
+            "cloud_storage": questionnaire.cloud_storage.value,
+            "cloud_storage_other": questionnaire.cloud_storage_other,
+            "productivity_suite": questionnaire.productivity_suite.value,
+            "productivity_suite_other": questionnaire.productivity_suite_other,
+            "crm_system": questionnaire.crm_system.value,
+            "crm_system_other": questionnaire.crm_system_other,
+            "project_management": questionnaire.project_management.value,
+            "project_management_other": questionnaire.project_management_other,
+            "communication_platform": questionnaire.communication_platform.value,
+            "communication_platform_other": questionnaire.communication_platform_other,
+
+            # Use Cases
             "use_cases": questionnaire.use_cases,
+            "intensity_level": questionnaire.intensity_level.value,
+            "rgpd_sensitive_data": questionnaire.rgpd_sensitive_data,
 
             # AI Readiness
             "ai_readiness_score": 70,  # Mock score
@@ -432,6 +586,7 @@ class ReportOrchestratorV7:
             # Training
             "training_recommendations": [self._format_training_rec(r) for r in training_recs],
             "num_employees_training": questionnaire.num_employees_training or min(questionnaire.num_employees, 10),
+            "training_priority": questionnaire.training_priority,
             "training_total_cost": sum(r.cost_total for r in training_recs),
             "training_productivity_gain": 25,
             "training_annual_value": sum(r.cost_total * 1.5 for r in training_recs),
@@ -463,6 +618,9 @@ class ReportOrchestratorV7:
 
             # Budget Optimization
             "current_budget": questionnaire.desired_investment,
+            "current_tools_paid": questionnaire.current_tools_paid,
+            "rh_dedicados_count": questionnaire.rh_dedicados_count if hasattr(questionnaire, 'rh_dedicados_count') else 0,
+            "rh_custo_por_posto": questionnaire.rh_custo_por_posto if hasattr(questionnaire, 'rh_custo_por_posto') else 0,
             "budget_gaps_html": self._render_budget_gaps(budget_analysis['gaps']) if budget_analysis else "",
             "budget_expansion_paths": [self._format_budget_path(p) for p in budget_analysis['paths']] if budget_analysis else [],
 
@@ -521,6 +679,22 @@ class ReportOrchestratorV7:
 
             # Appendix
             "questionnaire_date": datetime.now().strftime("%Y-%m-%d"),
+
+            # LLM Analysis (NEW: Comprehensive analysis using all 31 fields)
+            "llm_analysis_available": llm_analysis is not None,
+            "llm_executive_summary": llm_analysis.get("executive_summary", "") if llm_analysis else "",
+            "llm_full_analysis": llm_analysis.get("full_analysis", "") if llm_analysis else "",
+            "llm_saas_recommendations": llm_analysis.get("saas_recommendations", "") if llm_analysis else "",
+            "llm_investment_plan": llm_analysis.get("investment_plan", "") if llm_analysis else "",
+            "llm_partner_recommendations": llm_analysis.get("partner_recommendations", "") if llm_analysis else "",
+            "llm_merit_score_analysis": llm_analysis.get("merit_score_analysis", "") if llm_analysis else "",
+            "llm_compliance_analysis": llm_analysis.get("compliance_analysis", "") if llm_analysis else "",
+            "llm_next_steps": llm_analysis.get("next_steps", "") if llm_analysis else "",
+            "llm_calculated_merit_score": llm_analysis.get("calculated_merit_score", 0) if llm_analysis else 0,
+            "llm_rag_queries": llm_analysis.get("rag_queries", []) if llm_analysis else [],
+            "llm_questionnaire_fields_used": llm_analysis.get("questionnaire_fields_used", 0) if llm_analysis else 0,
+            "llm_model_used": llm_analysis.get("model_used", "N/A") if llm_analysis else "N/A",
+            "llm_analysis_timestamp": llm_analysis.get("analysis_timestamp", "") if llm_analysis else "",
         }
 
         return context

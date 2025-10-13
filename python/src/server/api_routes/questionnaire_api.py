@@ -34,7 +34,7 @@ Example:
 
 from typing import Dict, List, Any
 from uuid import uuid4
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from datetime import datetime
 
 from fastapi.encoders import jsonable_encoder
@@ -54,10 +54,15 @@ from ..models.questionnaire import (
 from ..services.credential_service import credential_service
 from ..services.llm_provider_service import get_llm_client
 from ..config.logfire_config import get_logger
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 logger = get_logger(__name__)
 
 router = APIRouter(prefix="/api/questionnaire", tags=["questionnaire"])
+
+# Initialize rate limiter
+limiter = Limiter(key_func=get_remote_address)
 
 
 # ===== HELPER: RAG QUERY CONSTRUCTION =====
@@ -141,7 +146,8 @@ def construct_rag_queries(questionnaire: DiagnosticQuestionnaire) -> List[str]:
 # ===== ENDPOINTS =====
 
 @router.post("/submit", response_model=QuestionnaireResponse)
-async def submit_questionnaire(questionnaire: DiagnosticQuestionnaire):
+@limiter.limit("5/minute")  # SECURITY: Rate limit to prevent DoS and LLM abuse
+async def submit_questionnaire(request: Request, questionnaire: DiagnosticQuestionnaire):
     """
     Submit diagnostic questionnaire and trigger personalized analysis.
 
@@ -156,6 +162,8 @@ async def submit_questionnaire(questionnaire: DiagnosticQuestionnaire):
         - RAG search + LLM synthesis happens asynchronously
         - Use GET /api/questionnaire/{id} to poll for results
         - Estimated completion: 45-60 seconds
+
+    Rate Limit: 5 requests per minute per IP (prevents DoS and LLM abuse)
     """
 
     try:

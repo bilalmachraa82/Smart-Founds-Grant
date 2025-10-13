@@ -1310,3 +1310,174 @@
     background: hsl(var(--color-midnight-800));
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   TECH STACK SECTION STYLES - v7.0 New Addition
+   ═══════════════════════════════════════════════════════════════ */
+
+@layer components {
+  .tech-stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .tech-card {
+    background: hsl(var(--color-surface-elevated));
+    border: 1px solid hsl(var(--color-border-subtle));
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .tech-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px hsla(var(--color-midnight-950) / 0.15);
+    border-color: hsl(var(--color-executive-blue));
+  }
+
+  .tech-icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tech-card h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: hsl(var(--color-text-secondary));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .tech-value {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: hsl(var(--color-text-primary));
+    margin: 0;
+  }
+
+  .tech-detail {
+    font-size: 0.875rem;
+    color: hsl(var(--color-text-tertiary));
+    font-style: italic;
+    margin-top: 0.5rem;
+  }
+
+  .company-details-panel {
+    background: hsl(var(--color-surface-elevated));
+    border: 1px solid hsl(var(--color-border-default));
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+  }
+
+  .company-details-panel h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: hsl(var(--color-text-primary));
+    margin-bottom: 1.5rem;
+  }
+
+  .intensity-badge {
+    display: inline-block;
+    padding: 0.375rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .intensity-badge.intensity-light {
+    background: hsl(var(--color-info-light));
+    color: hsl(var(--color-info-dark));
+  }
+
+  .intensity-badge.intensity-moderate {
+    background: hsl(var(--color-success-light));
+    color: hsl(var(--color-success-dark));
+  }
+
+  .intensity-badge.intensity-intense {
+    background: hsl(var(--color-warning-light));
+    color: hsl(var(--color-warning-dark));
+  }
+
+  .intensity-badge.intensity-mission_critical {
+    background: hsl(var(--color-danger-light));
+    color: hsl(var(--color-danger-dark));
+  }
+
+  .intensity-desc {
+    display: block;
+    font-size: 0.875rem;
+    color: hsl(var(--color-text-secondary));
+    margin-top: 0.5rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.875rem;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  .badge-success {
+    background: hsl(var(--color-success-light));
+    color: hsl(var(--color-success-dark));
+  }
+
+  .badge-warning {
+    background: hsl(var(--color-warning-light));
+    color: hsl(var(--color-warning-dark));
+  }
+
+  .badge-info {
+    background: hsl(var(--color-info-light));
+    color: hsl(var(--color-info-dark));
+  }
+
+  .badge-neutral {
+    background: hsl(var(--color-surface-elevated));
+    color: hsl(var(--color-text-secondary));
+    border: 1px solid hsl(var(--color-border-default));
+  }
+
+  .badge-urgent {
+    background: hsl(var(--color-danger-light));
+    color: hsl(var(--color-danger-dark));
+  }
+
+  .badge-normal {
+    background: hsl(var(--color-success-light));
+    color: hsl(var(--color-success-dark));
+  }
+
+  .compliance-note {
+    font-size: 0.875rem;
+    color: hsl(var(--color-text-tertiary));
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  @media print {
+    .tech-stack-grid {
+      grid-template-columns: repeat(3, 1fr);
+      page-break-inside: avoid;
+    }
+
+    .tech-card {
+      page-break-inside: avoid;
+    }
+
+    .company-details-panel {
+      page-break-inside: avoid;
+    }
+  }
+}
